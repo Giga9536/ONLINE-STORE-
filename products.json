@@ -1,24 +1,24 @@
 [
   {
     "id": 1,
-    "name": "blue suit",
+    "name": "ब्लू सूट कलेक्शन",
     "price": "₹899",
     "image": "images/kurti1.jpg",
     "category": "Kurti"
   },
   {
     "id": 2,
-    "name": "premium colection",
+    "name": "प्रीमियम कलेक्शन सूट",
     "price": "₹1,299",
-    "image": "IMG_20260528_163105",
+    "image": "images/IMG_20260528_163105.jpg",
     "category": "Suit"
   },
   {
     "id": 3,
-    "name": "premium orange",
-    "price": "₹1399",
-    "image": "IMG_20260528_163123",
-    "category": "Dupatta"
+    "name": "प्रीमियम ऑरेंज सूट",
+    "price": "₹1,399",
+    "image": "images/IMG_20260528_163041.jpg",
+    "category": "Suit"
   },
   {
     "id": 4,
@@ -29,16 +29,9 @@
   },
   {
     "id": 5,
-    "name": "डेली वियर रेयन कुर्ती",
-    "price": "₹499",
-    "image": "images/kurti2.jpg",
-    "category": "Kurti"
-  },
-  {
-    "id": 6,
-    "name": "पटियाला सूट कलेक्शन",
-    "price": "₹1,499",
-    "image": "images/suit2.jpg",
+    "name": "जेमिनी प्रीमियम ऑउटफिट",
+    "price": "₹1,999",
+    "image": "images/Gemini.jpg",
     "category": "Suit"
   }
 ]
