@@ -22,14 +22,12 @@ window.addEventListener('DOMContentLoaded', () => {
     loadOrdersFromStorage();
     updateCartCount();
     
-    // Check if we are on cart.html page
     if (document.getElementById('cart-items')) {
         displayCart();
         displayOrderHistory();
     }
 });
 
-// Quantity handlers (+ / - buttons)
 function changeQuantity(event, change) {
     const input = event.target.parentElement.querySelector('.quantity-input');
     if (input) {
@@ -40,7 +38,6 @@ function changeQuantity(event, change) {
     }
 }
 
-// Global Helper function to find product
 function getProductById(productId) {
     for (let category in products) {
         const product = products[category].find(p => p.id === productId);
@@ -49,7 +46,6 @@ function getProductById(productId) {
     return null;
 }
 
-// Add to Cart Function (FIXED: Added image fallback support)
 function addToCart(productId) {
     const product = getProductById(productId);
     if (!product) return;
@@ -66,7 +62,7 @@ function addToCart(productId) {
             id: product.id,
             name: product.name,
             price: product.price,
-            image: product.image || '', // FIXED: Passing image path to checkout
+            image: product.image || '',
             quantity: quantity
         });
     }
@@ -78,7 +74,6 @@ function addToCart(productId) {
     alert(`${quantity} ${product.name}(s) added to cart!`);
 }
 
-// Display items inside cart page (FIXED: Replaced emoji with images)
 function displayCart() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartEmpty = document.getElementById('cart-empty');
@@ -100,7 +95,6 @@ function displayCart() {
         const row = document.createElement('tr');
         row.style.borderBottom = "1px solid #eee";
         
-        // Image render code
         const imgHtml = item.image 
             ? `<img src="${item.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 0.5rem; vertical-align: middle;">`
             : `<span style="font-size: 1.5rem; margin-right: 0.5rem;">🛍️</span>`;
@@ -161,7 +155,7 @@ function loadCartFromStorage() {
     }
 }
 
-// FIXED: Cleaned closing brackets handling
+// FIXED CLOSING BRACKET REMOVED FROM BOTTOM
 function loadOrdersFromStorage() {
     const savedOrders = localStorage.getItem('orders');
     if (savedOrders) {
@@ -169,7 +163,6 @@ function loadOrdersFromStorage() {
     }
 }
 
-// Display Order history (FIXED: Handled image rendering instead of emoji)
 function displayOrderHistory() {
     const section = document.getElementById('orders-history-section');
     const listContainer = document.getElementById('orders-list');
@@ -214,7 +207,6 @@ function displayOrderHistory() {
     });
 }
 
-// Order Form Action with Form Error Prevention
 function placeOrder(event) {
     event.preventDefault();
     
@@ -251,9 +243,6 @@ function placeOrder(event) {
         orderHistory.push(newOrder);
         localStorage.setItem('orders', JSON.stringify(orderHistory));
         
-        // ==========================================
-        // 📲 व्हाट्सएप नंबर (सुरक्षित तरीके से सेट)
-        // ==========================================
         const MY_WHATSAPP_NUMBER = "919870708753"; 
         
         const message = `🛍️ *NEW ORDER PLACED!* 🛍️\n\n` +
