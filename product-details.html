@@ -273,8 +273,8 @@
             event.preventDefault();
             
             // ⚠️ 1. अपना असली व्हाट्सएप नंबर और अपनी असली UPI ID यहाँ डालें:
-            const myWhatsAppNumber = "91XXXXXXXXXX"; 
-            const myUPIID = "yourid@upi"; // उदाहरण: deepanshi@oksbi, 9876543210@paytm आदि
+            const myWhatsAppNumber = "919870708753"; 
+            const myUPIID = "tusharc299-3@okhdfcbank"; // उदाहरण: deepanshi@oksbi, 9876543210@paytm आदि
             
             const name = document.getElementById('cust-name').value;
             const phone = document.getElementById('cust-phone').value;
@@ -302,7 +302,7 @@
                                 `------------------------------------------\n` +
                                 `कृपया इस ऑर्डर की पुष्टि करें! ✨`;
 
-                const whatsappURL = `https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(message)}`;
+                const whatsappURL = `https://api.whatsapp.com/send?phone=${919870708753}&text=${encodeURIComponent(message)}`;
                 window.open(whatsappURL, '_blank');
             };
 
@@ -336,7 +336,7 @@
         }
 
         function directWhatsApp(productName, productPrice) {
-            const whatsappNumber = "91XXXXXXXXXX"; 
+            const whatsappNumber = "919870708753"; 
             const message = `नमस्ते *दीपांशी फैशन वर्ल्ड*,\n\nमुझे यह पसंद आया है:\n📌 *नाम:* ${productName}\n💰 *कीमत:* ${productPrice}`;
             window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`, '_blank');
         }
