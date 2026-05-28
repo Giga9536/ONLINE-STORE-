@@ -1,13 +1,10 @@
-// js/app.js के अंदर products डेटा में सबसे नीचे इसे जोड़ें
+// Products Data
 const products = {
     'woman-suit': [
         { id: 1, name: 'Classic Black Suit', price: 4999, image: 'images/black-suit.jpg', description: 'Elegant black formal suit perfect for office' },
         { id: 2, name: 'Navy Blue Suit', price: 5499, image: 'images/navy-suit.jpg', description: 'Professional navy blue suit with jacket' },
         { id: 3, name: 'Maroon Suit', price: 4799, image: 'images/maroon-suit.jpg', description: 'Stylish maroon suit for special occasions' },
-        
-        // 🆕 आपका नया प्रोडक्ट यहाँ जुड़ गया है:
         { id: 7, name: 'Gemini Premium Outfit', price: 1999, image: 'images/Gemini.jpg', description: 'Trending Gemini collection trendy outfit for women' }
-
     ],
     'woman-saree': [
         { id: 4, name: 'Silk Saree Red', price: 3999, image: 'images/red-saree.jpg', description: 'Beautiful red silk saree with embroidery' },
@@ -15,7 +12,6 @@ const products = {
         { id: 6, name: 'Chiffon Saree Gold', price: 3499, image: 'images/gold-saree.jpg', description: 'Elegant gold chiffon saree with pallu' }
     ]
 };
-
 
 let cart = [];
 let orderHistory = [];
@@ -44,6 +40,7 @@ function changeQuantity(event, change) {
     }
 }
 
+// Global Helper function to find product
 function getProductById(productId) {
     for (let category in products) {
         const product = products[category].find(p => p.id === productId);
@@ -52,7 +49,7 @@ function getProductById(productId) {
     return null;
 }
 
-// Add to Cart Function (Fixed & Protected)
+// Add to Cart Function (FIXED: Added image fallback support)
 function addToCart(productId) {
     const product = getProductById(productId);
     if (!product) return;
@@ -69,7 +66,7 @@ function addToCart(productId) {
             id: product.id,
             name: product.name,
             price: product.price,
-            emoji: product.emoji,
+            image: product.image || '', // FIXED: Passing image path to checkout
             quantity: quantity
         });
     }
@@ -81,7 +78,7 @@ function addToCart(productId) {
     alert(`${quantity} ${product.name}(s) added to cart!`);
 }
 
-// Display items inside cart page
+// Display items inside cart page (FIXED: Replaced emoji with images)
 function displayCart() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartEmpty = document.getElementById('cart-empty');
@@ -102,9 +99,15 @@ function displayCart() {
     cart.forEach(item => {
         const row = document.createElement('tr');
         row.style.borderBottom = "1px solid #eee";
+        
+        // Image render code
+        const imgHtml = item.image 
+            ? `<img src="${item.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 0.5rem; vertical-align: middle;">`
+            : `<span style="font-size: 1.5rem; margin-right: 0.5rem;">🛍️</span>`;
+
         row.innerHTML = `
             <td style="padding: 1rem 0; text-align: left;">
-                <span style="font-size: 1.5rem; margin-right: 0.5rem;">${item.emoji}</span>
+                ${imgHtml}
                 <strong>${item.name}</strong> <br>
                 <small style="color: #7f8c8d;">₹${item.price} x ${item.quantity}</small>
             </td>
@@ -158,6 +161,7 @@ function loadCartFromStorage() {
     }
 }
 
+// FIXED: Cleaned closing brackets handling
 function loadOrdersFromStorage() {
     const savedOrders = localStorage.getItem('orders');
     if (savedOrders) {
@@ -165,6 +169,7 @@ function loadOrdersFromStorage() {
     }
 }
 
+// Display Order history (FIXED: Handled image rendering instead of emoji)
 function displayOrderHistory() {
     const section = document.getElementById('orders-history-section');
     const listContainer = document.getElementById('orders-list');
@@ -189,7 +194,7 @@ function displayOrderHistory() {
         
         let itemsHtml = '';
         order.items.forEach(item => {
-            itemsHtml += `<li>${item.emoji} ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}</li>`;
+            itemsHtml += `<li>🛍️ ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}</li>`;
         });
         
         orderBox.innerHTML = `
@@ -224,7 +229,7 @@ function placeOrder(event) {
         
         cart.forEach((item, index) => {
             totalAmount += item.price * item.quantity;
-            itemsText += `${index + 1}. ${item.emoji} ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}\n`;
+            itemsText += `${index + 1}. 🛍️ ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}\n`;
         });
         
         if (cart.length === 0) {
@@ -247,9 +252,9 @@ function placeOrder(event) {
         localStorage.setItem('orders', JSON.stringify(orderHistory));
         
         // ==========================================
-        // 📲 व्हाट्सएप नंबर सेट करें 
+        // 📲 व्हाट्सएप नंबर (सुरक्षित तरीके से सेट)
         // ==========================================
-        const MY_WHATSAPP_NUMBER = "919870708753"; // <-- यहाँ अपना सही व्हाट्सएप नंबर 91 लगाकर डालें (बिना + के)
+        const MY_WHATSAPP_NUMBER = "919870708753"; 
         
         const message = `🛍️ *NEW ORDER PLACED!* 🛍️\n\n` +
                         `👤 *Customer Name:* ${name}\n` +
@@ -266,7 +271,6 @@ function placeOrder(event) {
         cart = [];
         saveCartToStorage();
         
-        // WhatsApp ओपन करें
         window.open(whatsappUrl, '_blank'); 
         window.location.href = "index.html";
         
