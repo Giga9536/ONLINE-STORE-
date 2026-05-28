@@ -160,6 +160,31 @@ body {
     border: 1px solid #eef2f3;
 }
 
+/* 🆕 नए प्रोडक्ट इमेज बॉक्स का स्टाइल (डेस्कटॉप व्यू के लिए) */
+.product-image-box {
+    width: 100%;
+    height: 280px; /* कंप्यूटर और बड़ी स्क्रीन पर परफेक्ट हाइट */
+    overflow: hidden;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* 🆕 असली इमेज (.p-img) के लिए परफेक्ट फिटिंग रूल */
+.p-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* इससे पूरी ड्रेस बिना कटे बॉक्स में सिमट जाएगी */
+    padding: 8px; /* किनारों से थोड़ी जगह छोड़ने के लिए ताकि फोटो साफ दिखे */
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .p-img {
+    transform: scale(1.03); /* टच या होवर करने पर हल्का सा सुंदर ज़ूम */
+}
+
 .product-emoji {
     font-size: 3rem;
     text-align: center;
@@ -320,6 +345,15 @@ body {
     .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         gap: 0.8rem;
+    }
+
+    /* 🆕 मोबाइल स्क्रीन पर इमेज बॉक्स को छोटा और सुव्यवस्थित रखने के लिए */
+    .product-image-box {
+        height: 200px; /* मोबाइल के दो-कॉलम लेआउट के लिए बेस्ट हाइट */
+    }
+
+    .p-img {
+        padding: 4px; /* मोबाइल पर हल्का सा स्पेस */
     }
     
     .product-emoji {
