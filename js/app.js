@@ -1,269 +1,80 @@
-// Products Data
-const products = {
-    'woman-suit': [
-        { id: 1, name: 'Classic Black Suit', price: 4999, image: 'images/black-suit.jpg', description: 'Elegant black formal suit perfect for office' },
-        { id: 2, name: 'Navy Blue Suit', price: 5499, image: 'images/navy-suit.jpg', description: 'Professional navy blue suit with jacket' },
-        { id: 3, name: 'Maroon Suit', price: 4799, image: 'images/maroon-suit.jpg', description: 'Stylish maroon suit for special occasions' },
-        { id: 7, name: 'Gemini Premium Outfit', price: 1999, image: 'images/Gemini.jpg', description: 'Trending Gemini collection trendy outfit for women' }
-    ],
-    'woman-saree': [
-        { id: 4, name: 'Silk Saree Red', price: 3999, image: 'images/red-saree.jpg', description: 'Beautiful red silk saree with embroidery' },
-        { id: 5, name: 'Cotton Saree Blue', price: 2499, image: 'images/blue-saree.jpg', description: 'Comfortable cotton saree in blue color' },
-        { id: 6, name: 'Chiffon Saree Gold', price: 3499, image: 'images/gold-saree.jpg', description: 'Elegant gold chiffon saree with pallu' }
-    ]
-};
+/**
+ * दीपांशी फैशन वर्ल्ड - मुख्य जावास्क्रिप्ट फ़ाइल
+ * यह कोड बिना मुख्य फ़ाइल को बदले 'products.json' से प्रोडक्ट्स लोड करता है।
+ */
 
-let cart = [];
-let orderHistory = [];
-
-// Page Load initialization
-window.addEventListener('DOMContentLoaded', () => {
-    loadCartFromStorage();
-    loadOrdersFromStorage();
-    updateCartCount();
-    
-    if (document.getElementById('cart-items')) {
-        displayCart();
-        displayOrderHistory();
-    }
-});
-
-function changeQuantity(event, change) {
-    const input = event.target.parentElement.querySelector('.quantity-input');
-    if (input) {
-        let value = parseInt(input.value) + change;
-        if (value >= 1) {
-            input.value = value;
-        }
-    }
-}
-
-function getProductById(productId) {
-    for (let category in products) {
-        const product = products[category].find(p => p.id === productId);
-        if (product) return product;
-    }
-    return null;
-}
-
-function addToCart(productId) {
-    const product = getProductById(productId);
-    if (!product) return;
-    
-    const quantityInput = document.getElementById(`qty-${productId}`);
-    const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
-    
-    const existingItem = cart.find(item => item.id === productId);
-    
-    if (existingItem) {
-        existingItem.quantity += quantity;
-    } else {
-        cart.push({
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            image: product.image || '',
-            quantity: quantity
-        });
-    }
-    
-    if (quantityInput) quantityInput.value = 1;
-    
-    saveCartToStorage();
-    updateCartCount();
-    alert(`${quantity} ${product.name}(s) added to cart!`);
-}
-
-function displayCart() {
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartEmpty = document.getElementById('cart-empty');
-    const cartContent = document.getElementById('cart-content');
-    
-    if (!cartItemsContainer) return;
-
-    if (cart.length === 0) {
-        cartEmpty.style.display = 'block';
-        cartContent.style.display = 'none';
-        return;
-    }
-    
-    cartEmpty.style.display = 'none';
-    cartContent.style.display = 'grid';
-    cartItemsContainer.innerHTML = '';
-    
-    cart.forEach(item => {
-        const row = document.createElement('tr');
-        row.style.borderBottom = "1px solid #eee";
-        
-        const imgHtml = item.image 
-            ? `<img src="${item.image}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 0.5rem; vertical-align: middle;">`
-            : `<span style="font-size: 1.5rem; margin-right: 0.5rem;">🛍️</span>`;
-
-        row.innerHTML = `
-            <td style="padding: 1rem 0; text-align: left;">
-                ${imgHtml}
-                <strong>${item.name}</strong> <br>
-                <small style="color: #7f8c8d;">₹${item.price} x ${item.quantity}</small>
-            </td>
-            <td style="text-align: right; padding: 1rem 0;">
-                <strong>₹${(item.price * item.quantity).toFixed(2)}</strong> <br>
-                <button onclick="removeFromCart(${item.id})" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 0.85rem; margin-top: 0.5rem;">🗑️ Remove</button>
-            </td>
-        `;
-        cartItemsContainer.appendChild(row);
-    });
-    
-    updateCartSummary();
-}
-
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
-    saveCartToStorage();
-    updateCartCount();
-    displayCart();
-}
-
-function updateCartSummary() {
-    let subtotal = 0;
-    cart.forEach(item => {
-        subtotal += item.price * item.quantity;
-    });
-    
-    const subtotalEl = document.getElementById('subtotal');
-    const totalEl = document.getElementById('total');
-    
-    if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toFixed(2)}`;
-    if (totalEl) totalEl.textContent = `₹${subtotal.toFixed(2)}`;
-}
-
-function updateCartCount() {
-    const cartCount = document.getElementById('cart-count');
-    if (cartCount) {
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        cartCount.textContent = totalItems;
-    }
-}
-
-function saveCartToStorage() {
-    localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-function loadCartFromStorage() {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-        cart = JSON.parse(savedCart);
-    }
-}
-
-// FIXED CLOSING BRACKET REMOVED FROM BOTTOM
-function loadOrdersFromStorage() {
-    const savedOrders = localStorage.getItem('orders');
-    if (savedOrders) {
-        orderHistory = JSON.parse(savedOrders);
-    }
-}
-
-function displayOrderHistory() {
-    const section = document.getElementById('orders-history-section');
-    const listContainer = document.getElementById('orders-list');
-    
-    if (!section || !listContainer) return;
-    
-    if (orderHistory.length === 0) {
-        section.style.display = 'none';
-        return;
-    }
-    
-    section.style.display = 'block';
-    listContainer.innerHTML = '';
-    
-    orderHistory.slice().reverse().forEach((order, index) => {
-        const orderBox = document.createElement('div');
-        orderBox.style.border = "1px solid #ddd";
-        orderBox.style.padding = "1rem";
-        orderBox.style.borderRadius = "6px";
-        orderBox.style.marginBottom = "1rem";
-        orderBox.style.backgroundColor = "#fcfcfc";
-        
-        let itemsHtml = '';
-        order.items.forEach(item => {
-            itemsHtml += `<li>🛍️ ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}</li>`;
-        });
-        
-        orderBox.innerHTML = `
-            <div style="display: flex; justify-content: space-between; font-weight: bold; color: #27ae60; margin-bottom: 0.5rem;">
-                <span>Order #${orderHistory.length - index}</span>
-                <span>Status: Processing (COD)</span>
-            </div>
-            <p style="font-size: 0.9rem; color: #555; margin-bottom: 0.5rem;"><strong>Address:</strong> ${order.address}, ${order.city}</p>
-            <ul style="padding-left: 1.2rem; font-size: 0.95rem; margin-bottom: 0.5rem; text-align: left;">
-                ${itemsHtml}
-            </ul>
-            <div style="text-align: right; font-weight: bold; border-top: 1px dashed #ddd; padding-top: 0.5rem;">
-                Total Paid: ₹${order.totalAmount.toFixed(2)}
-            </div>
-        `;
-        listContainer.appendChild(orderBox);
-    });
-}
-
-function placeOrder(event) {
-    event.preventDefault();
-    
+// 1. JSON फाइल से प्रोडक्ट्स का डेटा लोड करने वाला मुख्य फंक्शन
+async function loadProducts() {
     try {
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const city = document.getElementById('city').value;
+        // 'products.json' फ़ाइल से डेटा खींचना (Fetch करना)
+        const response = await fetch('products.json');
         
-        let totalAmount = 0;
-        let itemsText = ''; 
+        // अगर फ़ाइल लोड होने में कोई समस्या हो तो एरर दिखाएँ
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // डेटा को JSON फॉर्मेट में बदलना
+        const products = await response.json();
         
-        cart.forEach((item, index) => {
-            totalAmount += item.price * item.quantity;
-            itemsText += `${index + 1}. 🛍️ ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}\n`;
-        });
+        // HTML के उस हिस्से (Container) को चुनना जहाँ प्रोडक्ट्स दिखाने हैं
+        const productContainer = document.getElementById('product-list');
         
-        if (cart.length === 0) {
-            alert("Your cart is empty!");
+        // सुरक्षा के लिए पहले से मौजूद पुराना कंटेंट साफ़ करना
+        productContainer.innerHTML = ''; 
+
+        // यदि कोई प्रोडक्ट न मिले तो स्क्रीन पर मैसेज दिखाना
+        if (products.length === 0) {
+            productContainer.innerHTML = '<p class="no-products">फिलहाल कोई प्रोडक्ट उपलब्ध नहीं है।</p>';
             return;
         }
 
-        const newOrder = {
-            id: Date.now(),
-            customerName: name,
-            phone: phone,
-            address: address,
-            city: city,
-            items: [...cart],
-            totalAmount: totalAmount,
-            date: new Date().toLocaleDateString()
-        };
-        
-        orderHistory.push(newOrder);
-        localStorage.setItem('orders', JSON.stringify(orderHistory));
-        
-        const MY_WHATSAPP_NUMBER = "919870708753"; 
-        
-        const message = `🛍️ *NEW ORDER PLACED!* 🛍️\n\n` +
-                        `👤 *Customer Name:* ${name}\n` +
-                        `📞 *Customer Phone:* ${phone}\n` +
-                        `📍 *Shipping Address:* ${address}, ${city}\n\n` +
-                        `📦 *Items Ordered:* \n${itemsText}\n` +
-                        `💰 *Total Amount:* ₹${totalAmount.toFixed(2)} (COD)`;
-                        
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodedMessage}`;
-        
-        alert(`Thank you, ${name}! Click OK to send your order on WhatsApp.`);
-        
-        cart = [];
-        saveCartToStorage();
-        
-        window.open(whatsappUrl, '_blank'); 
-        window.location.href = "index.html";
-        
+        // हर एक प्रोडक्ट के लिए ऑटोमैटिक HTML कार्ड (Design) तैयार करना
+        products.forEach(product => {
+            const productCard = `
+                <div class="product-card" data-category="${product.category || 'all'}">
+                    <div class="product-img-box">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">${product.price}</p>
+                        <button class="buy-btn" onclick="orderOnWhatsApp('${product.name}', '${product.price}')">
+                            अभी खरीदें
+                        </button>
+                    </div>
+                </div>
+            `;
+            // तैयार कार्ड को वेबसाइट के पेज पर एक-एक करके जोड़ते जाना
+            productContainer.innerHTML += productCard;
+        });
+
+        console.log("सभी प्रोडक्ट्स सफलतापूर्वक लोड हो गए हैं!");
+
     } catch (error) {
-        console.error("Error placing order:", error);
+        console.error("प्रॉडक्ट लोड करने में समस्या आई:", error);
+        // यूजर को स्क्रीन पर एरर मैसेज दिखाना ताकि वेबसाइट खाली न लगे
+        const productContainer = document.getElementById('product-list');
+        if (productContainer) {
+            productContainer.innerHTML = '<p class="error-msg">प्रोडक्ट्स लोड करने में कुछ तकनीकी दिक्कत आ रही है। कृपया बाद में प्रयास करें।</p>';
+        }
     }
 }
+
+// 2. (वैकल्पिक) व्हाट्सएप पर ऑर्डर भेजने का एक प्रोफेशनल फंक्शन
+function orderOnWhatsApp(productName, productPrice) {
+    // यहाँ अपना बिज़नेस व्हाट्सएप नंबर डालें (बिना + या 0 के, जैसे: 919876543210)
+    const whatsappNumber = "91XXXXXXXXXX"; 
+    
+    // व्हाट्सएप पर जाने वाला ऑटोमैटिक मैसेज
+    const message = `नमस्ते दीपांशी फैशन वर्ल्ड, मुझे यह प्रोडक्ट खरीदना है:\n\n📌 नाम: ${productName}\n💰 कीमत: ${productPrice}\n\nकृपया इसकी उपलब्धता की पुष्टि करें।`;
+    
+    // लिंक को सही फॉर्मेट में एनकोड करना
+    const whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
+    
+    // नए टैब में व्हाट्सएप चैट खोलना
+    window.open(whatsappURL, '_blank');
+}
+
+// 3. वेबसाइट का पेज जैसे ही पूरी तरह लोड होगा, यह कोड अपने आप रन हो जाएगा
+document.addEventListener('DOMContentLoaded', loadProducts);
