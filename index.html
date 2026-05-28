@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store - Shop Now!</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">🛒 Online Store</div>
@@ -22,3 +31,134 @@
             </a>
         </div>
     </nav>
+
+    <div class="container">
+        <div class="header" id="home">
+            <h1>Welcome to Our Online Store!</h1>
+            <p>Browse our amazing collection of products</p>
+        </div>
+
+        <div id="woman-suit" class="category-section">
+            <h2 class="category-title">👗 Woman Suit</h2>
+            <div class="products-grid" id="woman-suit-products">
+                <div class="product-card">
+                    <div class="product-emoji">👗</div>
+                    <div class="product-info">
+                        <h3 class="product-name">Classic Black Suit</h3>
+                        <p class="product-description">Elegant black formal suit perfect for office and formal events.</p>
+                        <div class="product-price">₹4,999.00</div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" id="qty-1">
+                            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="addToCart(1)">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">👗</div>
+                    <div class="product-info">
+                        <h3 class="product-name">Navy Blue Suit</h3>
+                        <p class="product-description">Professional navy blue suit with premium fabric and stylish jacket.</p>
+                        <div class="product-price">₹5,499.00</div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" id="qty-2">
+                            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="addToCart(2)">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">👗</div>
+                    <div class="product-info">
+                        <h3 class="product-name">Maroon Designer Suit</h3>
+                        <p class="product-description">Stylish maroon suit with beautiful embroidery for festival wear.</p>
+                        <div class="product-price">₹4,799.00</div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" id="qty-3">
+                            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="addToCart(3)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="woman-saree" class="category-section">
+            <h2 class="category-title">🎀 Woman Saree</h2>
+            <div class="products-grid" id="woman-saree-products">
+                <div class="product-card">
+                    <div class="product-emoji">🎀</div>
+                    <div class="product-info">
+                        <h3 class="product-name">Silk Saree Red</h3>
+                        <p class="product-description">Gorgeous red silk saree woven with golden zari borders.</p>
+                        <div class="product-price">₹3,999.00</div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" id="qty-4">
+                            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="addToCart(4)">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">🎀</div>
+                    <div class="product-info">
+                        <h3 class="product-name">Cotton Saree Blue</h3>
+                        <p class="product-description">Lightweight and comfortable pure cotton saree for casual wear.</p>
+                        <div class="product-price">₹2,499.00</div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" id="qty-5">
+                            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="addToCart(5)">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">🎀</div>
+                    <div class="product-info">
+                        <h3 class="product-name">Chiffon Saree Gold</h3>
+                        <p class="product-description">Elegant gold chiffon saree with shiny sequence work for parties.</p>
+                        <div class="product-price">₹3,499.00</div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" id="qty-6">
+                            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="addToCart(6)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="about" class="about-section">
+            <h2>About Us</h2>
+            <p>Welcome to our online store! We offer the finest collection of traditional and modern clothing for women. Our mission is to provide high-quality products at affordable prices.</p>
+            <p>We believe in quality, style, and customer satisfaction. Thank you for shopping with us!</p>
+        </div>
+
+        <div id="category" class="category-info-section">
+            <h2>Our Categories</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <h3>👗 Woman Suit</h3>
+                    <p>Modern and traditional suits for every occasion</p>
+                </div>
+                <div class="category-card">
+                    <h3>🎀 Woman Saree</h3>
+                    <p>Elegant sarees in various designs and colors</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Online Store. All rights reserved. Built with HTML, CSS & JavaScript</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
