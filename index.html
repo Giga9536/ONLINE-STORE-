@@ -10,7 +10,6 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">🛍️ Deepanshi Fashion World</div>
-
             
             <input type="checkbox" id="menu-toggle" class="menu-toggle">
             <label for="menu-toggle" class="hamburger">
@@ -20,13 +19,13 @@
             </label>
 
             <div class="nav-menu">
-    <a href="index.html#home" class="nav-link active">Home</a>
-    <a href="index.html#woman-suit" class="nav-link">Woman Suit</a>
-    <a href="index.html#woman-saree" class="nav-link">Woman Saree</a>
-    <a href="cart.html" class="nav-link">My Orders</a> <a href="index.html#about" class="nav-link">About Us</a>
-    <a href="index.html#category" class="nav-link">Category</a>
-</div>
-
+                <a href="index.html#home" class="nav-link active">Home</a>
+                <a href="index.html#woman-suit" class="nav-link">Woman Suit</a>
+                <a href="index.html#woman-saree" class="nav-link">Woman Saree</a>
+                <a href="cart.html" class="nav-link">My Orders</a> 
+                <a href="index.html#about" class="nav-link">About Us</a>
+                <a href="index.html#category" class="nav-link">Category</a>
+            </div>
 
             <a href="cart.html" class="cart-link">
                 🛒 Cart <span id="cart-count" class="cart-count">0</span>
@@ -42,130 +41,164 @@
 
         <div id="woman-suit" class="category-section">
             <h2 class="category-title">👗 Woman Suit</h2>
-            <div class="product-card">
-    <a href="product-details.html?id=1" style="text-decoration: none; color: inherit;">
-        <div class="product-image-box">
-            <img src="images/black-suit.jpg" alt="Classic Black Suit" class="p-img">
-        </div>
-    </a>
-    
-    <div class="product-info">
-        <a href="product-details.html?id=1" style="text-decoration: none; color: inherit;">
-            <h3 class="product-name">Classic Black Suit</h3>
-        </a>
-        <p class="product-description">Elegant black formal suit perfect for office</p>
-        <div class="product-price">₹4999</div>
-        
-        <div class="product-quantity">
-            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
-            <input type="text" class="quantity-input" id="qty-1" value="1" readonly>
-            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
-        </div>
-        
-        <button class="btn btn-primary" onclick="addToCart(1)">Add to Cart</button>
-    </div>
-</div>
+            <div class="products-grid"> <div class="product-card">
+                    <a href="product-details.html?id=1" style="text-decoration: none; color: inherit;">
+                        <div class="product-image-box">
+                            <img src="images/black-suit.jpg" alt="Classic Black Suit" class="p-img">
+                        </div>
+                    </a>
+                    <div class="product-info">
+                        <a href="product-details.html?id=1" style="text-decoration: none; color: inherit;">
+                            <h3 class="product-name">Classic Black Suit</h3>
+                        </a>
+                        <p class="product-description">Elegant black formal suit perfect for office and formal events.</p>
+                        <div class="product-price">₹4,999.00</div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                            <input type="text" class="quantity-input" id="qty-1" value="1" readonly>
+                            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="addToCart(1)">Add to Cart</button>
+                    </div>
+                </div>
 
                 <div class="product-card">
-                    <div class="product-emoji">👗</div>
+                    <a href="product-details.html?id=2" style="text-decoration: none; color: inherit;">
+                        <div class="product-image-box">
+                            <img src="images/navy-suit.jpg" alt="Navy Blue Suit" class="p-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="product-emoji" style="display:none; padding: 2rem 0;">👗</div>
+                        </div>
+                    </a>
                     <div class="product-info">
-                        <h3 class="product-name">Navy Blue Suit</h3>
+                        <a href="product-details.html?id=2" style="text-decoration: none; color: inherit;">
+                            <h3 class="product-name">Navy Blue Suit</h3>
+                        </a>
                         <p class="product-description">Professional navy blue suit with premium fabric and stylish jacket.</p>
                         <div class="product-price">₹5,499.00</div>
                         <div class="product-quantity">
                             <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1" id="qty-2">
+                            <input type="text" class="quantity-input" id="qty-2" value="1" readonly>
                             <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
                         </div>
                         <button class="btn btn-primary" onclick="addToCart(2)">Add to Cart</button>
                     </div>
                 </div>
+
                 <div class="product-card">
-                    <div class="product-emoji">👗</div>
+                    <a href="product-details.html?id=3" style="text-decoration: none; color: inherit;">
+                        <div class="product-image-box">
+                            <img src="images/maroon-suit.jpg" alt="Maroon Designer Suit" class="p-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="product-emoji" style="display:none; padding: 2rem 0;">👗</div>
+                        </div>
+                    </a>
                     <div class="product-info">
-                        <h3 class="product-name">Maroon Designer Suit</h3>
+                        <a href="product-details.html?id=3" style="text-decoration: none; color: inherit;">
+                            <h3 class="product-name">Maroon Designer Suit</h3>
+                        </a>
                         <p class="product-description">Stylish maroon suit with beautiful embroidery for festival wear.</p>
                         <div class="product-price">₹4,799.00</div>
                         <div class="product-quantity">
                             <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1" id="qty-3">
+                            <input type="text" class="quantity-input" id="qty-3" value="1" readonly>
                             <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
                         </div>
                         <button class="btn btn-primary" onclick="addToCart(3)">Add to Cart</button>
                     </div>
                 </div>
             
-            </div><div class="product-card">
-    <a href="product-details.html?id=7" style="text-decoration: none; color: inherit;">
-        <div class="product-image-box">
-            <img src="images/gemini.jpg" alt="Gemini Premium Outfit" class="p-img">
-        </div>
-    </a>
-    
-    <div class="product-info">
-        <a href="product-details.html?id=7" style="text-decoration: none; color: inherit;">
-            <h3 class="product-name">Gemini Premium Outfit</h3>
-        </a>
-        <p class="product-description">Trending Gemini collection trendy outfit for women</p>
-        <div class="product-price">₹1,999.00</div>
-        
-        <div class="product-quantity">
-            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
-            <input type="text" class="quantity-input" id="qty-7" value="1" readonly>
-            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
-        </div>
-        
-        <button class="btn btn-primary" onclick="addToCart(7)">Add to Cart</button>
-    </div>
-</div>
+                <div class="product-card">
+                    <a href="product-details.html?id=7" style="text-decoration: none; color: inherit;">
+                        <div class="product-image-box">
+                            <img src="images/gemini.jpg" alt="Gemini Premium Outfit" class="p-img">
+                        </div>
+                    </a>
+                    <div class="product-info">
+                        <a href="product-details.html?id=7" style="text-decoration: none; color: inherit;">
+                            <h3 class="product-name">Gemini Premium Outfit</h3>
+                        </a>
+                        <p class="product-description">Trending Gemini collection trendy outfit for women</p>
+                        <div class="product-price">₹1,999.00</div>
+                        <div class="product-quantity">
+                            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                            <input type="text" class="quantity-input" id="qty-7" value="1" readonly>
+                            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="addToCart(7)">Add to Cart</button>
+                    </div>
+                </div>
 
-        </div>
+            </div> </div>
 
         <div id="woman-saree" class="category-section">
             <h2 class="category-title">🎀 Woman Saree</h2>
             <div class="products-grid" id="woman-saree-products">
+                
                 <div class="product-card">
-                    <div class="product-emoji">🎀</div>
+                    <a href="product-details.html?id=4" style="text-decoration: none; color: inherit;">
+                        <div class="product-image-box">
+                            <img src="images/red-saree.jpg" alt="Silk Saree Red" class="p-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="product-emoji" style="display:none; padding: 2rem 0;">🎀</div>
+                        </div>
+                    </a>
                     <div class="product-info">
-                        <h3 class="product-name">Silk Saree Red</h3>
+                        <a href="product-details.html?id=4" style="text-decoration: none; color: inherit;">
+                            <h3 class="product-name">Silk Saree Red</h3>
+                        </a>
                         <p class="product-description">Gorgeous red silk saree woven with golden zari borders.</p>
                         <div class="product-price">₹3,999.00</div>
                         <div class="product-quantity">
                             <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1" id="qty-4">
+                            <input type="text" class="quantity-input" id="qty-4" value="1" readonly>
                             <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
                         </div>
                         <button class="btn btn-primary" onclick="addToCart(4)">Add to Cart</button>
                     </div>
                 </div>
+
                 <div class="product-card">
-                    <div class="product-emoji">🎀</div>
+                    <a href="product-details.html?id=5" style="text-decoration: none; color: inherit;">
+                        <div class="product-image-box">
+                            <img src="images/blue-saree.jpg" alt="Cotton Saree Blue" class="p-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="product-emoji" style="display:none; padding: 2rem 0;">🎀</div>
+                        </div>
+                    </a>
                     <div class="product-info">
-                        <h3 class="product-name">Cotton Saree Blue</h3>
+                        <a href="product-details.html?id=5" style="text-decoration: none; color: inherit;">
+                            <h3 class="product-name">Cotton Saree Blue</h3>
+                        </a>
                         <p class="product-description">Lightweight and comfortable pure cotton saree for casual wear.</p>
                         <div class="product-price">₹2,499.00</div>
                         <div class="product-quantity">
                             <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1" id="qty-5">
+                            <input type="text" class="quantity-input" id="qty-5" value="1" readonly>
                             <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
                         </div>
                         <button class="btn btn-primary" onclick="addToCart(5)">Add to Cart</button>
                     </div>
                 </div>
+
                 <div class="product-card">
-                    <div class="product-emoji">🎀</div>
+                    <a href="product-details.html?id=6" style="text-decoration: none; color: inherit;">
+                        <div class="product-image-box">
+                            <img src="images/gold-saree.jpg" alt="Chiffon Saree Gold" class="p-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="product-emoji" style="display:none; padding: 2rem 0;">🎀</div>
+                        </div>
+                    </a>
                     <div class="product-info">
-                        <h3 class="product-name">Chiffon Saree Gold</h3>
+                        <a href="product-details.html?id=6" style="text-decoration: none; color: inherit;">
+                            <h3 class="product-name">Chiffon Saree Gold</h3>
+                        </a>
                         <p class="product-description">Elegant gold chiffon saree with shiny sequence work for parties.</p>
                         <div class="product-price">₹3,499.00</div>
                         <div class="product-quantity">
                             <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1" id="qty-6">
+                            <input type="text" class="quantity-input" id="qty-6" value="1" readonly>
                             <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
                         </div>
                         <button class="btn btn-primary" onclick="addToCart(6)">Add to Cart</button>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -191,9 +224,8 @@
     </div>
 
     <footer class="footer">
-    <p>&copy; 2026 Deepanshi Fashion World. All rights reserved. Built with HTML, CSS & JavaScript</p>
-</footer>
-
+        <p>&copy; 2026 Deepanshi Fashion World. All rights reserved. Built with HTML, CSS & JavaScript</p>
+    </footer>
 
     <script src="js/app.js"></script>
 </body>
