@@ -1,23 +1,44 @@
 [
   {
     "id": 1,
-    "name": "फैंसी कुर्ती",
-    "price": "₹999",
+    "name": "blue suit",
+    "price": "₹899",
     "image": "images/kurti1.jpg",
     "category": "Kurti"
   },
   {
     "id": 2,
-    "name": "डिजाइनर सूट",
-    "price": "₹1,499",
-    "image": "images/suit2.jpg",
+    "name": "premium colection",
+    "price": "₹1,299",
+    "image": "IMG_20260528_163105",
     "category": "Suit"
   },
   {
     "id": 3,
-    "name": "दुपट्टा कलेक्शन",
-    "price": "₹299",
-    "image": "images/dupatta3.jpg",
-    "category": "Accessories"
+    "name": "premium orange",
+    "price": "₹1399",
+    "image": "IMG_20260528_163123",
+    "category": "Dupatta"
+  },
+  {
+    "id": 4,
+    "name": "जॉर्जेट पार्टी वियर गाउन",
+    "price": "₹1,899",
+    "image": "images/gown1.jpg",
+    "category": "Gown"
+  },
+  {
+    "id": 5,
+    "name": "डेली वियर रेयन कुर्ती",
+    "price": "₹499",
+    "image": "images/kurti2.jpg",
+    "category": "Kurti"
+  },
+  {
+    "id": 6,
+    "name": "पटियाला सूट कलेक्शन",
+    "price": "₹1,499",
+    "image": "images/suit2.jpg",
+    "category": "Suit"
   }
 ]
