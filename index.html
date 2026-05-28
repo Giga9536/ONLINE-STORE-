@@ -42,21 +42,30 @@
 
         <div id="woman-suit" class="category-section">
             <h2 class="category-title">👗 Woman Suit</h2>
-            <div class="products-grid" id="woman-suit-products">
-                <div class="product-card">
-                    <div class="product-emoji">👗</div>
-                    <div class="product-info">
-                        <h3 class="product-name">Classic Black Suit</h3>
-                        <p class="product-description">Elegant black formal suit perfect for office and formal events.</p>
-                        <div class="product-price">₹4,999.00</div>
-                        <div class="product-quantity">
-                            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1" id="qty-1">
-                            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
-                        </div>
-                        <button class="btn btn-primary" onclick="addToCart(1)">Add to Cart</button>
-                    </div>
-                </div>
+            <div class="product-card">
+    <a href="product-details.html?id=1" style="text-decoration: none; color: inherit;">
+        <div class="product-image-box">
+            <img src="images/black-suit.jpg" alt="Classic Black Suit" class="p-img">
+        </div>
+    </a>
+    
+    <div class="product-info">
+        <a href="product-details.html?id=1" style="text-decoration: none; color: inherit;">
+            <h3 class="product-name">Classic Black Suit</h3>
+        </a>
+        <p class="product-description">Elegant black formal suit perfect for office</p>
+        <div class="product-price">₹4999</div>
+        
+        <div class="product-quantity">
+            <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+            <input type="text" class="quantity-input" id="qty-1" value="1" readonly>
+            <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+        </div>
+        
+        <button class="btn btn-primary" onclick="addToCart(1)">Add to Cart</button>
+    </div>
+</div>
+
                 <div class="product-card">
                     <div class="product-emoji">👗</div>
                     <div class="product-info">
