@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Deepanshi Fashion World</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .product-detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .detail-image-box {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+        }
+        .detail-image-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .detail-info-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .detail-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        .detail-price {
+            font-size: 1.8rem;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        .detail-desc {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        .btn-buy-now {
+            background-color: #27ae60;
+            color: white;
+        }
+        @media (max-width: 768px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+            .detail-title { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">🛍️ Deepanshi Fashion World</a>
+            <a href="index.html" class="nav-link">← Back to Shop</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="product-detail-content" class="product-detail-container">
+            <p style="text-align: center; grid-column: span 2;">Loading product details...</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Deepanshi Fashion World. All rights reserved.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        // इस पेज पर आते ही सही प्रोडक्ट की जानकारी लोड करने का लॉजिक
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = parseInt(urlParams.get('id'));
+            
+            if (productId) {
+                // app.js के फंक्शन से प्रोडक्ट का डेटा निकालें
+                const product = getProductById(productId);
+                
+                if (product) {
+                    const detailContainer = document.getElementById('product-detail-content');
+                    
+                    // अगर इमेज पाथ सेट है तो वह दिखेगा, नहीं तो इमोजी दिखेगा
+                    const mediaHtml = product.image 
+                        ? `<img src="${product.image}" alt="${product.name}">`
+                        : `<div style="font-size: 8rem; text-align: center; padding: 3rem;">${product.emoji}</div>`;
+
+                    detailContainer.innerHTML = `
+                        <div class="detail-image-box">
+                            ${mediaHtml}
+                        </div>
+                        <div class="detail-info-box">
+                            <h1 class="detail-title">${product.name}</h1>
+                            <div class="detail-price">₹${product.price}</div>
+                            <p class="detail-desc">${product.description || 'No description available for this beautiful outfit.'}</p>
+                            
+                            <div class="product-quantity" style="margin-bottom: 1.5rem;">
+                                <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                                <input type="text" class="quantity-input" id="qty-${product.id}" value="1" readonly>
+                                <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" onclick="addToCart(${product.id})">🛒 Add to Cart</button>
+                                <button class="btn btn-buy-now" onclick="buyNow(${product.id})">⚡ Buy Now</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        });
+
+        // "Buy Now" बटन पर क्लिक करने का लॉजिक (डायरेक्ट कार्ट पेज पर ले जाएगा)
+        function buyNow(productId) {
+            addToCart(productId);
+            // थोड़ा सा रुककर ताकि कार्ट अपडेट हो जाए, फिर कार्ट पेज पर रीडायरेक्ट करें
+            setTimeout(() => {
+                window.location.href = "cart.html";
+            }, 500);
+        }
+    </script>
+</body>
+</html>
