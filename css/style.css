@@ -12,7 +12,7 @@ body {
     color: #333;
     line-height: 1.5;
     
-    /* 🎨 🆕 लाइट ऑरेंज और पीले का खूबसूरत प्रोफेशनल मिश्रण (Gradient Background) */
+    /* 🎨 लाइट ऑरेंज और पीले का खूबसूरत प्रोफेशनल मिश्रण (Gradient Background) */
     background: linear-gradient(135deg, #fff3e0 0%, #fffde7 50%, #ffe0b2 100%);
     background-attachment: fixed; /* इससे स्क्रोल करने पर भी बैकग्राउंड फिक्स रहेगा */
 }
@@ -166,7 +166,7 @@ body {
 /* नए प्रोडक्ट इमेज बॉक्स का स्टाइल (डेस्कटॉप व्यू के लिए) */
 .product-image-box {
     width: 100%;
-    height: 280px; /* कंप्यूटर और बड़ी स्क्रीन पर परफेक्ट हाइट */
+    height: 280px; /* कंप्यूटर और बड़ी स्क्रीन पर परफ़ेक्ट हाइट */
     overflow: hidden;
     background-color: #ffffff;
     display: flex;
@@ -175,12 +175,12 @@ body {
     border-bottom: 1px solid #f0f0f0;
 }
 
-/* असली इमेज (.p-img) के लिए परफेक्ट फिटिंग रूल */
+/* असली इमेज (.p-img) के लिए परफ़ेक्ट फिटिंग रूल */
 .p-img {
     width: 100%;
     height: 100%;
     object-fit: contain; /* इससे पूरी ड्रेस बिना कटे बॉक्स में सिमट जाएगी */
-    padding: 8px; /* किनारों से थोड़ी जगह छोड़ने के लिए ताकि फोटो साफ दिखे */
+    padding: 8px; /* किनारों से थोड़ी जगह छोड़ने के लिए */
     transition: transform 0.3s ease;
 }
 
@@ -261,6 +261,88 @@ body {
     color: white;
 }
 
+/* ==========================================================================
+   🆕 4. Product Details Thumbnail Gallery Styles (थंबनेल दाईं तरफ के लिए)
+   ========================================================================== */
+.product-detail-container {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2.5rem;
+    margin-top: 2rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* गैलरी रैपर: थंबनेल्स को मुख्य इमेज के राइट साइड (Right) में लाने का नियम */
+.gallery-wrapper {
+    display: flex;
+    flex-direction: row-reverse; /* 👈 इससे थंबनेल कॉलम दाईं तरफ शिफ्ट हो जाता है */
+    gap: 15px;
+}
+
+/* दाईं तरफ का थंबनेल कॉलम */
+.thumbnail-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 80px;
+    width: 100%;
+}
+
+.thumb-box {
+    width: 100%;
+    height: 90px;
+    border: 2px solid #eee;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    background: #f8f9fa;
+    transition: all 0.2s ease;
+}
+
+.thumb-box:hover, .thumb-box.active {
+    border-color: #e67e22; /* एक्टिव होने पर खूबसूरत ऑरेंज बॉर्डर */
+}
+
+.thumb-box img, .thumb-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* वीडियो थंबनेल के ऊपर प्ले का आइकॉन */
+.video-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+/* बीच का मुख्य डिस्प्ले बॉक्स */
+.main-display-box {
+    flex-grow: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f8f9fa;
+    border: 1px solid #f0f0f0;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-display-box img, .main-display-box video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 /* Other Sections */
 .about-section, .category-info-section {
     background: white;
@@ -294,7 +376,7 @@ body {
 }
 
 /* ==========================================================================
-   4. Mobile Responsive View (Max-width: 768px)
+   5. Mobile Responsive View (Max-width: 768px)
    ========================================================================== */
 @media (max-width: 768px) {
     .hamburger {
@@ -370,5 +452,24 @@ body {
     
     .product-price {
         font-size: 1.1rem;
+    }
+
+    /* 📱 मोबाइल लेआउट पर थंबनेल गैलरी को नीचे व्यवस्थित करने के लिए */
+    .gallery-wrapper {
+        flex-direction: column-reverse;
+    }
+    .thumbnail-column {
+        flex-direction: row;
+        max-width: 100%;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+    .thumb-box {
+        width: 70px;
+        height: 70px;
+        flex-shrink: 0;
+    }
+    .main-display-box {
+        height: 350px;
     }
 }
