@@ -3,25 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Online Store</title>
+    <title>Your Cart & Checkout - Deepanshi Fashion World</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* चेकआउट पेज के लिए विशेष स्टाइल */
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .billing-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
+
     <nav class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo">🛒 Online Store</a>
+            <a href="index.html" class="logo" style="text-decoration: none;">🛍️ Deepanshi Fashion World</a>
+            <a href="index.html" class="nav-link">← Back to Shop</a>
         </div>
     </nav>
 
     <div class="container">
         <div class="header">
-            <h1>Shopping Cart</h1>
+            <h1>Shopping Cart & Checkout</h1>
+            <p>Review your items and complete your order</p>
         </div>
-        <div id="cart-content"></div>
+
+        <div id="cart-empty" class="empty-cart" style="display: none;">
+            <p>Your cart is empty! 🛒</p>
+            <a href="index.html" class="btn btn-primary" style="display: inline-block; width: auto; padding: 0.8rem 2rem;">Shop Now</a>
+        </div>
+
+        <div id="cart-content" class="checkout-container" style="display: none;">
+            
+            <div class="billing-form">
+                <h2 style="margin-bottom: 1.5rem; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">🚚 Shipping Details</h2>
+                <form id="checkout-form" onsubmit="placeOrder(event)">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" required placeholder="Enter 10-digit mobile number">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Full Address</label>
+                        <input type="text" id="address" required placeholder="House No., Street, Area">
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" required placeholder="City name">
+                    </div>
+                    <div class="form-group">
+                        <label for="payment">Payment Mode</label>
+                        <select id="payment">
+                            <option value="COD">Cash on Delivery (COD)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn" style="background-color: #27ae60; color: white; font-size: 1.1rem; padding: 1rem; margin-top: 1rem;">Place Order (Confirm)</button>
+                </form>
+            </div>
+
+            <div>
+                <div class="cart-summary" style="max-width: 100%; margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">Order Summary</h3>
+                    
+                    <table class="cart-table" style="box-shadow: none; margin-bottom: 1rem;">
+                        <tbody id="cart-items">
+                            </tbody>
+                    </table>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery Charges</span>
+                        <span style="color: #27ae60; font-weight: bold;">FREE</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Amount</span>
+                        <span id="total">₹0.00</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <footer class="footer">
-        <p>&copy; 2026 Online Store.</p>
+        <p>&copy; 2026 Deepanshi Fashion World. All rights reserved.</p>
     </footer>
 
     <script src="js/app.js"></script>
