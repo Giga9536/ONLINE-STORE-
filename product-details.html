@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details & Checkout - Deepanshi Fashion World</title>
+    <title>Product Details & Secure Checkout - Deepanshi Fashion World</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         .product-detail-container {
@@ -79,7 +79,6 @@
             font-size: 1.1rem; font-weight: bold; border: none; border-radius: 8px;
             cursor: pointer; text-align: center;
         }
-        .btn-cart:hover { background-color: #2980b9; }
 
         /* 📋 कस्टमर डिटेल्स फॉर्म */
         .checkout-form-section {
@@ -88,7 +87,7 @@
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            display: none; /* कार्ट में ऐड होने के बाद खुलेगा */
+            display: none;
         }
         .form-title {
             font-size: 1.5rem; color: #2c3e50; margin-bottom: 1.5rem;
@@ -99,12 +98,36 @@
         .form-group input, .form-group select {
             width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;
         }
+        
+        /* 💳 पेमेंट प्रोसेसिंग स्क्रीन स्टाइल */
+        .payment-loader-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .payment-box {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 400px; width: 100%;
+        }
+        .loader-spinner {
+            border: 4px solid #f3f3f3; border-top: 4px solid #3498db;
+            border-radius: 50%; width: 40px; height: 40px;
+            animation: spin 1s linear infinite; margin: 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         .btn-submit-order {
             background-color: #e67e22; color: white; width: 100%; padding: 14px;
             font-size: 1.2rem; font-weight: bold; border: none; border-radius: 8px;
             cursor: pointer; margin-top: 10px;
         }
-        .btn-submit-order:hover { background-color: #d35400; }
 
         @media (max-width: 768px) {
             .product-detail-container { grid-template-columns: 1fr; gap: 1.5rem; padding: 1rem; }
@@ -149,11 +172,23 @@
                     <label for="payment-method">पेमेंट का तरीका (Payment Method) *</label>
                     <select id="payment-method" required>
                         <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
-                        <option value="Online Payment">Pay Online (GooglePay/PhonePe)</option>
+                        <option value="Online Payment">Pay Online (Google Pay / PhonePe / UPI)</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-submit-order">🚀 ऑर्डर कन्फर्म करें (Send on WhatsApp)</button>
+                <button type="submit" class="btn-submit-order">🚀 ऑर्डर कन्फर्म करें</button>
             </form>
+        </div>
+    </div>
+
+    <div id="payment-overlay" class="payment-loader-overlay">
+        <div class="payment-box">
+            <h2 style="color: #2c3e50;">🔒 Secure UPI Gateway</h2>
+            <p style="color: #7f8c8d; margin-top: 5px;" id="payment-status-text">पेमेंट पेज पर रीडायरेक्ट किया जा रहा है...</p>
+            <div class="loader-spinner"></div>
+            <p style="font-weight: bold; font-size: 1.2rem; color: #e74c3c; margin: 15px 0;" id="pay-amount-display">Amount: ₹0</p>
+            <p style="font-size: 0.85rem; color: #95a5a6;">कृपया पेमेंट पूरा करने के बाद वापस इसी ब्राउज़र पेज पर आएँ और व्हाट्सएप नोटिफिकेशन भेजें।</p>
+            <button id="retry-pay-btn" class="btn-submit-order" style="background: #3498db; display:none;">पेमेंट ऐप फिर से खोलें</button>
+            <button id="complete-order-btn" class="btn-submit-order" style="background: #27ae60; margin-top: 10px;">पेमेंट कर दिया, व्हाट्सएप पर ऑर्डर भेजें ✅</button>
         </div>
     </div>
 
@@ -177,7 +212,6 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = parseInt(urlParams.get('id'));
-
             if (!productId) return;
 
             try {
@@ -203,12 +237,10 @@
                                 <div class="product-slides">${slidesHTML}</div>
                                 <button class="slider-btn next" style="${showButtons}" onclick="moveSlide(1)">❯</button>
                             </div>
-
                             <div class="detail-info-box">
                                 <h1 class="detail-title">${activeProduct.name}</h1>
                                 <div class="detail-price">${activeProduct.price}</div>
                                 <p class="detail-desc">${activeProduct.description || 'दीपांशी फैशन वर्ल्ड का प्रीमियम कलेक्शन।'}</p>
-                                
                                 <div class="action-buttons">
                                     <button class="btn-whatsapp" onclick="directWhatsApp('${activeProduct.name}', '${activeProduct.price}')">
                                         💬 Buy directly via WhatsApp
@@ -221,67 +253,91 @@
                         </div>
                     `;
                 }
-            } catch (error) {
-                console.error(error);
-            }
+            } catch (error) { console.error(error); }
         });
 
-        // कार्ट में आइटम डालने का लॉजिक और फॉर्म खोलना
         function triggerAddToCart() {
             if (!activeProduct) return;
-            
-            // लोकल कार्ट एरे में आइटम पुश करना
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const exists = cart.find(item => item.id === activeProduct.id);
-            if (!exists) {
+            if (!cart.find(item => item.id === activeProduct.id)) {
                 cart.push(activeProduct);
                 localStorage.setItem('cart', JSON.stringify(cart));
             }
-            
             alert(`"${activeProduct.name}" कार्ट में जोड़ दिया गया है! कृपया नीचे अपना पता भरें।`);
-            
-            // फॉर्म को स्क्रीन पर दिखाना
             document.getElementById('checkout-form-section').style.display = 'block';
             document.getElementById('checkout-form-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 🆕 फॉर्म सबमिट होने पर पूरा डेटा व्हाट्सएप पर भेजने का लॉजिक
+        // 🚀 मुख्य आर्डर हैंडलर (COD और ऑनलाइन दोनों के लिए)
         function handleOrderSubmit(event) {
             event.preventDefault();
-
-            // ⚠️ यहाँ अपना असली 10 अंकों का व्हाट्सएप नंबर डालें
-            const whatsappNumber = "919870708753"; 
-
-            // फॉर्म से कस्टमर का डेटा निकालना
+            
+            // ⚠️ 1. अपना असली व्हाट्सएप नंबर और अपनी असली UPI ID यहाँ डालें:
+            const myWhatsAppNumber = "91XXXXXXXXXX"; 
+            const myUPIID = "yourid@upi"; // उदाहरण: deepanshi@oksbi, 9876543210@paytm आदि
+            
             const name = document.getElementById('cust-name').value;
             const phone = document.getElementById('cust-phone').value;
             const address = document.getElementById('cust-address').value;
             const pincode = document.getElementById('cust-pincode').value;
             const payment = document.getElementById('payment-method').value;
 
-            // खूबसूरत व्हाट्सएप मैसेज फॉर्मेट तैयार करना
-            const message = `🛍️ *नया ऑर्डर प्राप्त हुआ - दीपांशी फैशन वर्ल्ड* \n` +
-                            `------------------------------------------\n\n` +
-                            `📦 *प्रोडक्ट की जानकारी:* \n` +
-                            `📌 *नाम:* ${activeProduct.name}\n` +
-                            `💰 *कीमत:* ${activeProduct.price}\n\n` +
-                            `👤 *ग्राहक की जानकारी:* \n` +
-                            `📝 *नाम:* ${name}\n` +
-                            `📞 *मोबाइल:* ${phone}\n` +
-                            `🏠 *पता:* ${address}\n` +
-                            `📍 *पिन कोड:* ${pincode}\n\n` +
-                            `💳 *पेमेंट मोड:* *${payment}*\n` +
-                            `------------------------------------------\n` +
-                            `कृपया इस ऑर्डर की पुष्टि करें! ✨`;
+            // सिर्फ नंबर निकालने के लिए (जैसे ₹1,299 में से 1299 निकालना)
+            const cleanPrice = activeProduct.price.replace(/[^0-9]/g, '');
 
-            const whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
-            window.open(whatsappURL, '_blank');
+            // व्हाट्सएप मैसेज भेजने का कॉमन फंक्शन
+            window.sendWhatsAppNotification = function(paymentStatus) {
+                const message = `🛍️ *नया ऑर्डर प्राप्त हुआ - दीपांशी फैशन वर्ल्ड* \n` +
+                                `------------------------------------------\n\n` +
+                                `📦 *प्रोडक्ट की जानकारी:* \n` +
+                                `📌 *नाम:* ${activeProduct.name}\n` +
+                                `💰 *कीमत:* ${activeProduct.price}\n\n` +
+                                `👤 *ग्राहक की जानकारी:* \n` +
+                                `📝 *नाम:* ${name}\n` +
+                                `📞 *मोबाइल:* ${phone}\n` +
+                                `🏠 *पता:* ${address}\n` +
+                                `📍 *पिन कोड:* ${pincode}\n\n` +
+                                `💳 *पेमेंट मोड:* *${payment}*\n` +
+                                `⚡ *पेमेंट स्टेटस:* *${paymentStatus}*\n` +
+                                `------------------------------------------\n` +
+                                `कृपया इस ऑर्डर की पुष्टि करें! ✨`;
+
+                const whatsappURL = `https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(message)}`;
+                window.open(whatsappURL, '_blank');
+            };
+
+            // 🟢 केस ए: अगर कस्टमर ने 'Cash on Delivery' चुना है
+            if (payment === "Cash on Delivery (COD)") {
+                window.sendWhatsAppNotification("पेंडिंग (COD पर कलेक्ट करें)");
+            } 
+            // 🔵 केस बी: अगर कस्टमर ने 'Online Payment' चुना है
+            else {
+                document.getElementById('pay-amount-display').innerText = `Amount: ${activeProduct.price}`;
+                const overlay = document.getElementById('payment-overlay');
+                overlay.style.display = 'flex';
+
+                // यूनिवर्सल यूपीआई डीप लिंक (जो मोबाइल में सारे ऐप्स Google Pay, PhonePe, Paytm का ऑप्शन देगा)
+                const upiURL = `upi://pay?pa=${myUPIID}&pn=Deepanshi%20Fashion%20World&am=${cleanPrice}&cu=INR&tn=Order%20for%20${encodeURIComponent(activeProduct.name)}`;
+                
+                // पेमेंट ऐप खोलने की कोशिश करें
+                window.location.href = upiURL;
+
+                // बटन एक्शन्स सेट करना
+                document.getElementById('retry-pay-btn').style.display = 'inline-block';
+                document.getElementById('retry-pay-btn').onclick = function() {
+                    window.location.href = upiURL;
+                };
+
+                document.getElementById('complete-order-btn').onclick = function() {
+                    overlay.style.display = 'none';
+                    window.sendWhatsAppNotification("सफल (ऑनलाइन पेमेंट प्राप्त)");
+                };
+            }
         }
 
-        // डायरेक्ट व्हाट्सएप ऑर्डर (पुराना फंक्शन बैकअप के लिए)
         function directWhatsApp(productName, productPrice) {
             const whatsappNumber = "91XXXXXXXXXX"; 
-            const message = `नमस्ते *दीपांशी फैशन वर्ल्ड*,\n\nमुझे आपकी वेबसाइट से यह पसंद आया है:\n📌 *नाम:* ${productName}\n💰 *कीमत:* ${productPrice}\n\nकृपया उपलब्धता बताएं।`;
+            const message = `नमस्ते *दीपांशी फैशन वर्ल्ड*,\n\nमुझे यह पसंद आया है:\n📌 *नाम:* ${productName}\n💰 *कीमत:* ${productPrice}`;
             window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`, '_blank');
         }
     </script>
