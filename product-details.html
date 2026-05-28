@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details - Deepanshi Fashion World</title>
+    <title>Product Details & Checkout - Deepanshi Fashion World</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         .product-detail-container {
@@ -17,14 +17,13 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         
-        /* 📸 इमेज स्लाइडर का स्टाइल */
+        /* 📸 इमेज स्लाइडर */
         .slider-container {
             position: relative;
             width: 100%;
             border-radius: 8px;
             overflow: hidden;
             background-color: #f8f9fa;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .product-slides {
             display: flex;
@@ -47,70 +46,68 @@
             border: none;
             padding: 10px 15px;
             cursor: pointer;
-            font-size: 1.2rem;
             border-radius: 50%;
             z-index: 10;
         }
         .slider-btn.prev { left: 10px; }
         .slider-btn.next { right: 10px; }
         
-        /* 📝 प्रोडक्ट इनफार्मेशन बॉक्स */
+        /* 📝 इनफार्मेशन बॉक्स */
         .detail-info-box {
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
-        .detail-title {
-            font-size: 2.2rem;
-            color: #2c3e50;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-        }
-        .detail-price {
-            font-size: 2rem;
-            color: #e74c3c;
-            font-weight: bold;
-            margin-bottom: 1.2rem;
-        }
-        .detail-desc {
-            color: #555;
-            margin-bottom: 2rem;
-            line-height: 1.7;
-            font-size: 1.1rem;
-        }
+        .detail-title { font-size: 2.2rem; color: #2c3e50; margin-bottom: 0.8rem; }
+        .detail-price { font-size: 2rem; color: #e74c3c; font-weight: bold; margin-bottom: 1.2rem; }
+        .detail-desc { color: #555; margin-bottom: 2rem; line-height: 1.7; }
         
-        /* 🟢 व्हाट्सएप बाय बटन */
-        .btn-whatsapp-buy {
-            background-color: #25D366;
-            color: white;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+        /* 🔘 बटन्स स्टाइल */
+        .action-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            max-width: 300px;
-            transition: background 0.3s;
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 1.5rem;
         }
-        .btn-whatsapp-buy:hover {
-            background-color: #128C7E;
+        .btn-whatsapp {
+            background-color: #25D366; color: white; padding: 12px;
+            font-size: 1.1rem; font-weight: bold; border: none; border-radius: 8px;
+            cursor: pointer; text-align: center; text-decoration: none;
         }
+        .btn-cart {
+            background-color: #3498db; color: white; padding: 12px;
+            font-size: 1.1rem; font-weight: bold; border: none; border-radius: 8px;
+            cursor: pointer; text-align: center;
+        }
+        .btn-cart:hover { background-color: #2980b9; }
+
+        /* 📋 कस्टमर डिटेल्स फॉर्म */
+        .checkout-form-section {
+            margin-top: 2.5rem;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: none; /* कार्ट में ऐड होने के बाद खुलेगा */
+        }
+        .form-title {
+            font-size: 1.5rem; color: #2c3e50; margin-bottom: 1.5rem;
+            border-bottom: 2px solid #3498db; padding-bottom: 8px;
+        }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;
+        }
+        .btn-submit-order {
+            background-color: #e67e22; color: white; width: 100%; padding: 14px;
+            font-size: 1.2rem; font-weight: bold; border: none; border-radius: 8px;
+            cursor: pointer; margin-top: 10px;
+        }
+        .btn-submit-order:hover { background-color: #d35400; }
 
         @media (max-width: 768px) {
-            .product-detail-container {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-                padding: 1rem;
-            }
-            .detail-title { font-size: 1.6rem; }
-            .detail-price { font-size: 1.5rem; }
+            .product-detail-container { grid-template-columns: 1fr; gap: 1.5rem; padding: 1rem; }
         }
     </style>
 </head>
@@ -128,6 +125,36 @@
     <div class="container">
         <div id="product-detail-display">
             </div>
+
+        <div id="checkout-form-section" class="checkout-form-section">
+            <h2 class="form-title">📝 डिलीवरी की जानकारी भरें (Delivery Details)</h2>
+            <form id="whatsapp-order-form" onsubmit="handleOrderSubmit(event)">
+                <div class="form-group">
+                    <label for="cust-name">आपका नाम (Full Name) *</label>
+                    <input type="text" id="cust-name" required placeholder="अपना पूरा नाम लिखें">
+                </div>
+                <div class="form-group">
+                    <label for="cust-phone">मोबाइल नंबर (Mobile No.) *</label>
+                    <input type="tel" id="cust-phone" required placeholder="10 अंकों का मोबाइल नंबर">
+                </div>
+                <div class="form-group">
+                    <label for="cust-address">पूरा पता (Full Address) *</label>
+                    <input type="text" id="cust-address" required placeholder="मकान नंबर, गली, इलाका">
+                </div>
+                <div class="form-group">
+                    <label for="cust-pincode">पिन कोड (Pincode) *</label>
+                    <input type="number" id="cust-pincode" required placeholder="6 अंकों का पिनकोड">
+                </div>
+                <div class="form-group">
+                    <label for="payment-method">पेमेंट का तरीका (Payment Method) *</label>
+                    <select id="payment-method" required>
+                        <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+                        <option value="Online Payment">Pay Online (GooglePay/PhonePe)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit-order">🚀 ऑर्डर कन्फर्म करें (Send on WhatsApp)</button>
+            </form>
+        </div>
     </div>
 
     <footer class="footer">
@@ -136,16 +163,14 @@
 
     <script>
         let currentSlideIndex = 0;
+        let activeProduct = null;
 
         function moveSlide(direction) {
             const slides = document.querySelector('.product-slides');
             const totalSlides = document.querySelectorAll('.product-slides img').length;
-            
             currentSlideIndex += direction;
-            
             if (currentSlideIndex >= totalSlides) { currentSlideIndex = 0; }
             if (currentSlideIndex < 0) { currentSlideIndex = totalSlides - 1; }
-            
             slides.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
         }
 
@@ -153,68 +178,111 @@
             const urlParams = new URLSearchParams(window.location.search);
             const productId = parseInt(urlParams.get('id'));
 
-            if (!productId) {
-                document.getElementById('product-detail-display').innerHTML = '<p class="error-msg">उत्पाद नहीं मिला।</p>';
-                return;
-            }
+            if (!productId) return;
 
             try {
                 const response = await fetch('products.json');
                 const products = await response.json();
-                const product = products.find(p => p.id === productId);
+                activeProduct = products.find(p => p.id === productId);
 
-                if (product) {
+                if (activeProduct) {
                     const displayContainer = document.getElementById('product-detail-display');
-                    
-                    // अगर भविष्य में आप एक से ज़्यादा इमेजेस डालना चाहें (Array के रूप में)
-                    // नहीं तो यह सिंगल इमेज को ही स्लाइडर में दिखाएगा
-                    const imagesArray = Array.isArray(product.images) ? product.images : [product.image];
+                    const imagesArray = Array.isArray(activeProduct.images) ? activeProduct.images : [activeProduct.image];
                     
                     let slidesHTML = '';
                     imagesArray.forEach(imgUrl => {
-                        slidesHTML += `<img src="${imgUrl}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';">`;
+                        slidesHTML += `<img src="${imgUrl}" onerror="this.src='images/Gemini.jpg';">`;
                     });
 
-                    // बटन छिपाने का लॉजिक अगर केवल 1 ही इमेज हो
                     const showButtons = imagesArray.length > 1 ? '' : 'display:none;';
 
                     displayContainer.innerHTML = `
                         <div class="product-detail-container">
                             <div class="slider-container">
                                 <button class="slider-btn prev" style="${showButtons}" onclick="moveSlide(-1)">❮</button>
-                                <div class="product-slides">
-                                    ${slidesHTML}
-                                </div>
+                                <div class="product-slides">${slidesHTML}</div>
                                 <button class="slider-btn next" style="${showButtons}" onclick="moveSlide(1)">❯</button>
                             </div>
 
                             <div class="detail-info-box">
-                                <h1 class="detail-title">${product.name}</h1>
-                                <div class="detail-price">${product.price}</div>
-                                <p class="detail-desc">${product.description || 'दीपांशी फैशन वर्ल्ड का प्रीमियम और खूबसूरत कलेक्शन। बेहतरीन क्वालिटी और आरामदायक कपड़ा जो आपको दे एकदम एलिगेंट लुक।'}</p>
+                                <h1 class="detail-title">${activeProduct.name}</h1>
+                                <div class="detail-price">${activeProduct.price}</div>
+                                <p class="detail-desc">${activeProduct.description || 'दीपांशी फैशन वर्ल्ड का प्रीमियम कलेक्शन।'}</p>
                                 
-                                <button class="btn-whatsapp-buy" onclick="orderOnWhatsApp('${product.name}', '${product.price}')">
-                                    💬 Buy on WhatsApp
-                                </button>
+                                <div class="action-buttons">
+                                    <button class="btn-whatsapp" onclick="directWhatsApp('${activeProduct.name}', '${activeProduct.price}')">
+                                        💬 Buy directly via WhatsApp
+                                    </button>
+                                    <button class="btn-cart" onclick="triggerAddToCart()">
+                                        🛒 Add to Cart & Fill Details
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     `;
-                } else {
-                    document.getElementById('product-detail-display').innerHTML = '<p class="error-msg">यह प्रोडक्ट अभी स्टॉक में उपलब्ध नहीं है।</p>';
                 }
             } catch (error) {
-                console.error("डेटा लोड करने में समस्या:", error);
-                document.getElementById('product-detail-display').innerHTML = '<p class="error-msg">तकनीकी खराबी के कारण डिटेल्स लोड नहीं हो सकीं।</p>';
+                console.error(error);
             }
         });
 
-        function orderOnWhatsApp(productName, productPrice) {
-            // ⚠️ यहाँ अपना असली 10 अंकों का व्हाट्सएप नंबर डालें 
-            const whatsappNumber = "91XXXXXXXXXX"; 
+        // कार्ट में आइटम डालने का लॉजिक और फॉर्म खोलना
+        function triggerAddToCart() {
+            if (!activeProduct) return;
             
-            const message = `नमस्ते *दीपांशी फैशन वर्ल्ड*,\n\nमुझे आपकी वेबसाइट से यह सूट/कुर्ती पसंद आई है और मैं इसे खरीदना चाहती हूँ:\n\n📌 *प्रोडक्ट का नाम:* ${productName}\n💰 *कीमत:* ${productPrice}\n\nकृपया मुझे इसके ऑर्डर की आगे की जानकारी दें।`;
+            // लोकल कार्ट एरे में आइटम पुश करना
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const exists = cart.find(item => item.id === activeProduct.id);
+            if (!exists) {
+                cart.push(activeProduct);
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+            
+            alert(`"${activeProduct.name}" कार्ट में जोड़ दिया गया है! कृपया नीचे अपना पता भरें।`);
+            
+            // फॉर्म को स्क्रीन पर दिखाना
+            document.getElementById('checkout-form-section').style.display = 'block';
+            document.getElementById('checkout-form-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 🆕 फॉर्म सबमिट होने पर पूरा डेटा व्हाट्सएप पर भेजने का लॉजिक
+        function handleOrderSubmit(event) {
+            event.preventDefault();
+
+            // ⚠️ यहाँ अपना असली 10 अंकों का व्हाट्सएप नंबर डालें
+            const whatsappNumber = "91XXXXXXXXXX"; 
+
+            // फॉर्म से कस्टमर का डेटा निकालना
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const address = document.getElementById('cust-address').value;
+            const pincode = document.getElementById('cust-pincode').value;
+            const payment = document.getElementById('payment-method').value;
+
+            // खूबसूरत व्हाट्सएप मैसेज फॉर्मेट तैयार करना
+            const message = `🛍️ *नया ऑर्डर प्राप्त हुआ - दीपांशी फैशन वर्ल्ड* \n` +
+                            `------------------------------------------\n\n` +
+                            `📦 *प्रोडक्ट की जानकारी:* \n` +
+                            `📌 *नाम:* ${activeProduct.name}\n` +
+                            `💰 *कीमत:* ${activeProduct.price}\n\n` +
+                            `👤 *ग्राहक की जानकारी:* \n` +
+                            `📝 *नाम:* ${name}\n` +
+                            `📞 *मोबाइल:* ${phone}\n` +
+                            `🏠 *पता:* ${address}\n` +
+                            `📍 *पिन कोड:* ${pincode}\n\n` +
+                            `💳 *पेमेंट मोड:* *${payment}*\n` +
+                            `------------------------------------------\n` +
+                            `कृपया इस ऑर्डर की पुष्टि करें! ✨`;
+
             const whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
             window.open(whatsappURL, '_blank');
+        }
+
+        // डायरेक्ट व्हाट्सएप ऑर्डर (पुराना फंक्शन बैकअप के लिए)
+        function directWhatsApp(productName, productPrice) {
+            const whatsappNumber = "91XXXXXXXXXX"; 
+            const message = `नमस्ते *दीपांशी फैशन वर्ल्ड*,\n\nमुझे आपकी वेबसाइट से यह पसंद आया है:\n📌 *नाम:* ${productName}\n💰 *कीमत:* ${productPrice}\n\nकृपया उपलब्धता बताएं।`;
+            window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`, '_blank');
         }
     </script>
 </body>
