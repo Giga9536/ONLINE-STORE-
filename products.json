@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "फैंसी कुर्ती",
+    "price": "₹999",
+    "image": "images/kurti1.jpg",
+    "category": "Kurti"
+  },
+  {
+    "id": 2,
+    "name": "डिजाइनर सूट",
+    "price": "₹1,499",
+    "image": "images/suit2.jpg",
+    "category": "Suit"
+  },
+  {
+    "id": 3,
+    "name": "दुपट्टा कलेक्शन",
+    "price": "₹299",
+    "image": "images/dupatta3.jpg",
+    "category": "Accessories"
+  }
+]
