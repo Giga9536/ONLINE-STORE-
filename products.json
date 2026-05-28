@@ -18,7 +18,13 @@
     "name": "प्रीमियम ऑरेंज सूट",
     "price": "₹1,399",
     "image": "images/IMG_20260528_163041.jpg",
-    "category": "Suit"
+    "category": "Suit",
+    "description": "दीपांशी फैशन वर्ल्ड का एलिगेंट ऑरेंज मलमल कॉटन सूट। खूबसूरत फूलों की कढ़ाई के साथ फेस्टिवल और कैजुअल वियर के लिए परफेक्ट ऑउटफिट जो आपको दे एकदम एलिगेंट लुक।",
+    "media": [
+      { "type": "image", "url": "images/IMG_20260528_163041.jpg" },
+      { "type": "image", "url": "images/IMG_20260528_163105.jpg" },
+      { "type": "image", "url": "images/Gemini.jpg" }
+    ]
   },
   {
     "id": 4,
