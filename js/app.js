@@ -1,9 +1,11 @@
 /**
  * दीपांशी फैशन वर्ल्ड - मुख्य जावास्क्रिप्ट फ़ाइल
+ * प्रोडक्ट कार्ड में "View More" बटन के साथ
  */
 
 async function loadProducts() {
     try {
+        // 'products.json' फ़ाइल से डेटा खींचना
         const response = await fetch('products.json');
         
         if (!response.ok) {
@@ -14,42 +16,40 @@ async function loadProducts() {
         const productContainer = document.getElementById('product-list');
         
         if (productContainer) {
-            productContainer.innerHTML = ''; 
+            productContainer.innerHTML = ''; // पुराना कंटेंट साफ़ करना
 
             if (products.length === 0) {
                 productContainer.innerHTML = '<p class="no-products">फिलहाल कोई प्रोडक्ट उपलब्ध नहीं है।</p>';
                 return;
             }
 
+            // हर एक प्रोडक्ट के लिए कार्ड तैयार करना
             products.forEach(product => {
                 const productCard = `
                     <div class="product-card" data-category="${product.category || 'all'}">
                         <div class="product-image-box">
-                            <img src="${product.image}" alt="${product.name}" class="p-img" loading="lazy" onerror="this.src='images/Gemini.jpg';">
+                            <a href="product-details.html?id=${product.id}">
+                                <img src="${product.image}" alt="${product.name}" class="p-img" loading="lazy" onerror="this.src='images/Gemini.jpg';">
+                            </a>
                         </div>
                         <div class="product-info">
                             <h3 class="product-name">${product.name}</h3>
                             <p class="product-price">${product.price}</p>
-                            <button class="btn btn-primary" onclick="orderOnWhatsApp('${product.name}', '${product.price}')">
-                                अभी खरीदें
-                            </button>
+                            
+                            <a href="product-details.html?id=${product.id}" class="btn btn-primary" style="text-decoration: none; display: inline-block; text-align: center;">
+                                View More
+                            </a>
                         </div>
                     </div>
                 `;
                 productContainer.innerHTML += productCard;
             });
-            console.log("सभी प्रोडक्ट्स लोड हो गए!");
+            console.log("सभी प्रोडक्ट्स 'View More' बटन के साथ लोड हो गए हैं!");
         }
     } catch (error) {
         console.error("प्रॉडक्ट लोड करने में समस्या आई:", error);
     }
 }
 
-function orderOnWhatsApp(productName, productPrice) {
-    const whatsappNumber = "91XXXXXXXXXX"; // यहाँ अपना असली नंबर डालें
-    const message = `नमस्ते दीपांशी फैशन वर्ल्ड, मुझे यह प्रोडक्ट खरीदना है:\n\n📌 नाम: ${productName}\n💰 कीमत: ${productPrice}\n\nकृपया इसकी उपलब्धता की पुष्टि करें।`;
-    const whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, '_blank');
-}
-
+// पेज लोड होते ही फंक्शन को रन करना
 document.addEventListener('DOMContentLoaded', loadProducts);
