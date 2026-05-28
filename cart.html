@@ -6,7 +6,6 @@
     <title>Your Cart & Checkout - Deepanshi Fashion World</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* चेकआउट पेज के लिए विशेष स्टाइल */
         .checkout-container {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -18,6 +17,7 @@
             padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
         }
         .form-group {
             margin-bottom: 1.2rem;
@@ -59,12 +59,6 @@
 
         <div id="cart-empty" class="empty-cart" style="display: none;">
             <p>Your cart is empty! 🛒</p>
-            <div id="orders-history-section" class="billing-form" style="margin-top: 2rem; display: none;">
-    <h2 style="margin-bottom: 1.5rem; color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 0.5rem;">📦 My Orders History</h2>
-    <div id="orders-list">
-        </div>
-</div>
-
             <a href="index.html" class="btn btn-primary" style="display: inline-block; width: auto; padding: 0.8rem 2rem;">Shop Now</a>
         </div>
 
@@ -102,27 +96,31 @@
             <div>
                 <div class="cart-summary" style="max-width: 100%; margin-bottom: 1.5rem;">
                     <h3 style="margin-bottom: 1rem; color: #2c3e50;">Order Summary</h3>
-                    
-                    <table class="cart-table" style="box-shadow: none; margin-bottom: 1rem;">
+                    <table class="cart-table" style="box-shadow: none; margin-bottom: 1rem; width: 100%;">
                         <tbody id="cart-items">
                             </tbody>
                     </table>
 
-                    <div class="summary-row">
+                    <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span>Subtotal</span>
                         <span id="subtotal">₹0.00</span>
                     </div>
-                    <div class="summary-row">
+                    <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span>Delivery Charges</span>
                         <span style="color: #27ae60; font-weight: bold;">FREE</span>
                     </div>
-                    <div class="summary-row total">
+                    <div class="summary-row total" style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem; border-top: 1px solid #eee; padding-top: 0.5rem; margin-top: 0.5rem;">
                         <span>Total Amount</span>
                         <span id="total">₹0.00</span>
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div id="orders-history-section" class="billing-form" style="margin-top: 2rem; display: none;">
+            <h2 style="margin-bottom: 1.5rem; color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 0.5rem;">📦 My Orders History</h2>
+            <div id="orders-list">
+                </div>
         </div>
     </div>
 
