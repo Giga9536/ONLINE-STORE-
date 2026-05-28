@@ -6,7 +6,8 @@ const products = {
         { id: 3, name: 'Maroon Suit', price: 4799, image: 'images/maroon-suit.jpg', description: 'Stylish maroon suit for special occasions' },
         
         // 🆕 आपका नया प्रोडक्ट यहाँ जुड़ गया है:
-        { id: 7, name: 'Gemini Premium Outfit', price: 1999, image: 'images/gemini.jpg', description: 'Trending Gemini collection trendy outfit for women' }
+        { id: 7, name: 'Gemini Premium Outfit', price: 1999, image: 'images/Gemini.jpg', description: 'Trending Gemini collection trendy outfit for women' }
+
     ],
     'woman-saree': [
         { id: 4, name: 'Silk Saree Red', price: 3999, image: 'images/red-saree.jpg', description: 'Beautiful red silk saree with embroidery' },
