@@ -13,15 +13,18 @@ const products = {
 };
 
 let cart = [];
+let orderHistory = []; // ऑर्डर्स सेव करने के लिए एरे
 
-// Page Load check
+// Page Load Check
 window.addEventListener('DOMContentLoaded', () => {
     loadCartFromStorage();
+    loadOrdersFromStorage(); // पुराने ऑर्डर्स लोड करें
     updateCartCount();
     
-    // Check if we are on index.html or cart.html
+    // Check if we are on cart.html page
     if (document.getElementById('cart-items')) {
-        displayCart(); // If on cart page, show checkout details
+        displayCart();
+        displayOrderHistory(); // ऑर्डर्स को स्क्रीन पर दिखाएं
     }
 });
 
@@ -126,7 +129,7 @@ function updateCartSummary() {
     const totalEl = document.getElementById('total');
     
     if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toFixed(2)}`;
-    if (totalEl) totalEl.textContent = `₹${subtotal.toFixed(2)}`; // Free Delivery
+    if (totalEl) totalEl.textContent = `₹${subtotal.toFixed(2)}`;
 }
 
 function updateCartCount() {
@@ -137,6 +140,7 @@ function updateCartCount() {
     }
 }
 
+// Save & Load Data From LocalStorage
 function saveCartToStorage() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
@@ -148,17 +152,91 @@ function loadCartFromStorage() {
     }
 }
 
-// Order Form Action
+function loadOrdersFromStorage() {
+    const savedOrders = localStorage.getItem('orders');
+    if (savedOrders) {
+        orderHistory = JSON.parse(savedOrders);
+    }
+}
+
+// NEW FUNCTION: Display Placed Orders History
+function displayOrderHistory() {
+    const section = document.getElementById('orders-history-section');
+    const listContainer = document.getElementById('orders-list');
+    
+    if (!section || !listContainer) return;
+    
+    if (orderHistory.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+    
+    section.style.display = 'block';
+    listContainer.innerHTML = '';
+    
+    // Show latest order on top
+    orderHistory.slice().reverse().forEach((order, index) => {
+        const orderBox = document.createElement('div');
+        orderBox.style.border = "1px solid #ddd";
+        orderBox.style.padding = "1rem";
+        orderBox.style.borderRadius = "6px";
+        orderBox.style.marginBottom = "1rem";
+        orderBox.style.backgroundColor = "#fcfcfc";
+        
+        let itemsHtml = '';
+        order.items.forEach(item => {
+            itemsHtml += `<li>${item.emoji} ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}</li>`;
+        });
+        
+        orderBox.innerHTML = `
+            <div style="display: flex; justify-content: space-between; font-weight: bold; color: #27ae60; margin-bottom: 0.5rem;">
+                <span>Order #${orderHistory.length - index}</span>
+                <span>Status: Processing (COD)</span>
+            </div>
+            <p style="font-size: 0.9rem; color: #555; margin-bottom: 0.5rem;"><strong>Address:</strong> ${order.address}, ${order.city}</p>
+            <ul style="padding-left: 1.2rem; font-size: 0.95rem; margin-bottom: 0.5rem;">
+                ${itemsHtml}
+            </ul>
+            <div style="text-align: right; font-weight: bold; border-top: 1px dashed #ddd; padding-top: 0.5rem;">
+                Total Paid: ₹${order.totalAmount.toFixed(2)}
+            </div>
+        `;
+        listContainer.appendChild(orderBox);
+    });
+}
+
+// Action when Place Order is clicked
 function placeOrder(event) {
     event.preventDefault();
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
+    const city = document.getElementById('city').value;
     
-    alert(`Thank you, ${name}! Your order has been placed successfully via Cash on Delivery.\nWe will contact you on ${phone}.`);
+    let totalAmount = 0;
+    cart.forEach(item => totalAmount += item.price * item.quantity);
     
-    // Clear Cart after success
+    // Save current cart items to order history before clearing
+    const newOrder = {
+        id: Date.now(),
+        customerName: name,
+        phone: phone,
+        address: address,
+        city: city,
+        items: [...cart],
+        totalAmount: totalAmount,
+        date: new Date().toLocaleDateString()
+    };
+    
+    orderHistory.push(newOrder);
+    localStorage.setItem('orders', JSON.stringify(orderHistory)); // Save orders to memory
+    
+    alert(`Thank you, ${name}! Your order has been placed successfully via Cash on Delivery.`);
+    
+    // Clear Cart
     cart = [];
     saveCartToStorage();
-    window.location.href = "index.html";
+    
+    // Reload page to show order instantly in history
+    window.location.reload();
 }
