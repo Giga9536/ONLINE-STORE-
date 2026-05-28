@@ -204,24 +204,27 @@ function displayOrderHistory() {
         listContainer.appendChild(orderBox);
     });
 }
-
-// Action when Place Order is clicked (WhatsApp Integration)
+// Action when Place Order is clicked (100% Working WhatsApp Code)
 function placeOrder(event) {
+    // 1. फॉर्म को सबमिट होने और पेज रीलोड होने से रोकें
     event.preventDefault();
+    
+    // 2. फॉर्म से कस्टमर की डिटेल्स निकालें
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
     const city = document.getElementById('city').value;
     
     let totalAmount = 0;
-    let itemsText = ''; // व्हाट्सएप मैसेज के लिए सामान की लिस्ट
+    let itemsText = ''; 
     
+    // 3. कार्ट के सामान की लिस्ट बनाएं
     cart.forEach((item, index) => {
         totalAmount += item.price * item.quantity;
         itemsText += `${index + 1}. ${item.emoji} ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}\n`;
     });
     
-    // Save current cart items to order history
+    // 4. लोकल स्टोरेज (My Orders) में डेटा सेव करें
     const newOrder = {
         id: Date.now(),
         customerName: name,
@@ -237,32 +240,37 @@ function placeOrder(event) {
     localStorage.setItem('orders', JSON.stringify(orderHistory));
     
     // ==========================================
-    // 📲 WHATSAPP NOTIFICATION LOGIC
+    // 📲 यहाँ अपना 10 अंकों का नंबर 91 के साथ डालें
     // ==========================================
-    const MY_WHATSAPP_NUMBER = "91XXXXXXXXXX"; // <-- यहाँ अपना 10 अंकों का मोबाइल नंबर कंट्री कोड (91) के साथ लिखें (उदा: 919876543210)
+    const MY_WHATSAPP_NUMBER = "91XXXXXXXXXX"; // <-- XXXXXXXXXX की जगह अपना नंबर डालें (उदा: 919876543210)
     
-    // मैसेज का फॉर्मेट तैयार करना
+    // 5. व्हाट्सएप मैसेज का सुंदर टेक्स्ट फॉर्मेट
     const message = `🛍️ *NEW ORDER PLACED!* 🛍️\n\n` +
                     `👤 *Customer Name:* ${name}\n` +
-                    `📞 *Phone:* ${phone}\n` +
-                    `📍 *Address:* ${address}, ${city}\n\n` +
-                    `📦 *Products Ordered:* \n${itemsText}\n` +
+                    `📞 *Customer Phone:* ${phone}\n` +
+                    `📍 *Shipping Address:* ${address}, ${city}\n\n` +
+                    `📦 *Items Ordered:* \n${itemsText}\n` +
                     `💰 *Total Amount:* ₹${totalAmount.toFixed(2)} (COD)`;
                     
-    // टेक्स्ट को URL सुरक्षित बनाना
+    // 6. मैसेज को यूआरएल के लिए सुरक्षित (Encode) करें
     const encodedMessage = encodeURIComponent(message);
     
-    // व्हाट्सएप एपीआई लिंक
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=${919870708753}&text=${encodedMessage}`;
+    // 7. व्हाट्सएप का सही एपीआई लिंक
+    const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodedMessage}`;
     
-    alert(`Thank you, ${name}! Your order has been placed. Click OK to send order details on WhatsApp.`);
+    // 8. यूजर को बताएं और कार्ट खाली करें
+    alert(`Thank you, ${name}! Redirecting to WhatsApp to send your order...`);
     
-    // कार्ट खाली करना
     cart = [];
     saveCartToStorage();
     
-    // कस्टमर को सीधे व्हाट्सएप पर रीडायरेक्ट करना
-    window.location.href = whatsappUrl;
+    // 9. कस्टमर को तुरंत व्हाट्सएप ऐप या वेब पर भेजें
+    window.open(whatsappUrl, '_blank'); 
+    
+    // 10. वापस होम पेज पर भेजें
+    window.location.href = "index.html";
 }
+
+
 
 }
