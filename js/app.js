@@ -1,16 +1,20 @@
-// Products Data
+// js/app.js के अंदर products डेटा में सबसे नीचे इसे जोड़ें
 const products = {
     'woman-suit': [
-        { id: 1, name: 'Classic Black Suit', price: 4999, emoji: '👗', description: 'Elegant black formal suit perfect for office' },
-        { id: 2, name: 'Navy Blue Suit', price: 5499, emoji: '👗', description: 'Professional navy blue suit with jacket' },
-        { id: 3, name: 'Maroon Suit', price: 4799, emoji: '👗', description: 'Stylish maroon suit for special occasions' }
+        { id: 1, name: 'Classic Black Suit', price: 4999, image: 'images/black-suit.jpg', description: 'Elegant black formal suit perfect for office' },
+        { id: 2, name: 'Navy Blue Suit', price: 5499, image: 'images/navy-suit.jpg', description: 'Professional navy blue suit with jacket' },
+        { id: 3, name: 'Maroon Suit', price: 4799, image: 'images/maroon-suit.jpg', description: 'Stylish maroon suit for special occasions' },
+        
+        // 🆕 आपका नया प्रोडक्ट यहाँ जुड़ गया है:
+        { id: 7, name: 'Gemini Premium Outfit', price: 1999, image: 'images/gemini.jpg', description: 'Trending Gemini collection trendy outfit for women' }
     ],
     'woman-saree': [
-        { id: 4, name: 'Silk Saree Red', price: 3999, emoji: '🎀', description: 'Beautiful red silk saree with embroidery' },
-        { id: 5, name: 'Cotton Saree Blue', price: 2499, emoji: '🎀', description: 'Comfortable cotton saree in blue color' },
-        { id: 6, name: 'Chiffon Saree Gold', price: 3499, emoji: '🎀', description: 'Elegant gold chiffon saree with pallu' }
+        { id: 4, name: 'Silk Saree Red', price: 3999, image: 'images/red-saree.jpg', description: 'Beautiful red silk saree with embroidery' },
+        { id: 5, name: 'Cotton Saree Blue', price: 2499, image: 'images/blue-saree.jpg', description: 'Comfortable cotton saree in blue color' },
+        { id: 6, name: 'Chiffon Saree Gold', price: 3499, image: 'images/gold-saree.jpg', description: 'Elegant gold chiffon saree with pallu' }
     ]
 };
+
 
 let cart = [];
 let orderHistory = [];
