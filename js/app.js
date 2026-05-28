@@ -13,27 +13,29 @@ const products = {
 };
 
 let cart = [];
-let orderHistory = []; // ऑर्डर्स सेव करने के लिए एरे
+let orderHistory = [];
 
-// Page Load Check
+// Page Load initialization
 window.addEventListener('DOMContentLoaded', () => {
     loadCartFromStorage();
-    loadOrdersFromStorage(); // पुराने ऑर्डर्स लोड करें
+    loadOrdersFromStorage();
     updateCartCount();
     
     // Check if we are on cart.html page
     if (document.getElementById('cart-items')) {
         displayCart();
-        displayOrderHistory(); // ऑर्डर्स को स्क्रीन पर दिखाएं
+        displayOrderHistory();
     }
 });
 
-// Change quantity on home page
+// Quantity handlers (+ / - buttons)
 function changeQuantity(event, change) {
     const input = event.target.parentElement.querySelector('.quantity-input');
-    let value = parseInt(input.value) + change;
-    if (value >= 1) {
-        input.value = value;
+    if (input) {
+        let value = parseInt(input.value) + change;
+        if (value >= 1) {
+            input.value = value;
+        }
     }
 }
 
@@ -45,7 +47,7 @@ function getProductById(productId) {
     return null;
 }
 
-// Add to Cart Function
+// Add to Cart Function (Fixed & Protected)
 function addToCart(productId) {
     const product = getProductById(productId);
     if (!product) return;
@@ -74,7 +76,7 @@ function addToCart(productId) {
     alert(`${quantity} ${product.name}(s) added to cart!`);
 }
 
-// Display Live Items on Checkout/Cart Page
+// Display items inside cart page
 function displayCart() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartEmpty = document.getElementById('cart-empty');
@@ -96,7 +98,7 @@ function displayCart() {
         const row = document.createElement('tr');
         row.style.borderBottom = "1px solid #eee";
         row.innerHTML = `
-            <td style="padding: 1rem 0;">
+            <td style="padding: 1rem 0; text-align: left;">
                 <span style="font-size: 1.5rem; margin-right: 0.5rem;">${item.emoji}</span>
                 <strong>${item.name}</strong> <br>
                 <small style="color: #7f8c8d;">₹${item.price} x ${item.quantity}</small>
@@ -140,7 +142,6 @@ function updateCartCount() {
     }
 }
 
-// Save & Load Data From LocalStorage
 function saveCartToStorage() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
@@ -159,7 +160,6 @@ function loadOrdersFromStorage() {
     }
 }
 
-// NEW FUNCTION: Display Placed Orders History
 function displayOrderHistory() {
     const section = document.getElementById('orders-history-section');
     const listContainer = document.getElementById('orders-list');
@@ -174,7 +174,6 @@ function displayOrderHistory() {
     section.style.display = 'block';
     listContainer.innerHTML = '';
     
-    // Show latest order on top
     orderHistory.slice().reverse().forEach((order, index) => {
         const orderBox = document.createElement('div');
         orderBox.style.border = "1px solid #ddd";
@@ -194,7 +193,7 @@ function displayOrderHistory() {
                 <span>Status: Processing (COD)</span>
             </div>
             <p style="font-size: 0.9rem; color: #555; margin-bottom: 0.5rem;"><strong>Address:</strong> ${order.address}, ${order.city}</p>
-            <ul style="padding-left: 1.2rem; font-size: 0.95rem; margin-bottom: 0.5rem;">
+            <ul style="padding-left: 1.2rem; font-size: 0.95rem; margin-bottom: 0.5rem; text-align: left;">
                 ${itemsHtml}
             </ul>
             <div style="text-align: right; font-weight: bold; border-top: 1px dashed #ddd; padding-top: 0.5rem;">
@@ -204,73 +203,69 @@ function displayOrderHistory() {
         listContainer.appendChild(orderBox);
     });
 }
-// Action when Place Order is clicked (100% Working WhatsApp Code)
+
+// Order Form Action with Form Error Prevention
 function placeOrder(event) {
-    // 1. फॉर्म को सबमिट होने और पेज रीलोड होने से रोकें
     event.preventDefault();
     
-    // 2. फॉर्म से कस्टमर की डिटेल्स निकालें
-    const name = document.getElementById('name').value;
-    const phone = document.getElementById('phone').value;
-    const address = document.getElementById('address').value;
-    const city = document.getElementById('city').value;
-    
-    let totalAmount = 0;
-    let itemsText = ''; 
-    
-    // 3. कार्ट के सामान की लिस्ट बनाएं
-    cart.forEach((item, index) => {
-        totalAmount += item.price * item.quantity;
-        itemsText += `${index + 1}. ${item.emoji} ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}\n`;
-    });
-    
-    // 4. लोकल स्टोरेज (My Orders) में डेटा सेव करें
-    const newOrder = {
-        id: Date.now(),
-        customerName: name,
-        phone: phone,
-        address: address,
-        city: city,
-        items: [...cart],
-        totalAmount: totalAmount,
-        date: new Date().toLocaleDateString()
-    };
-    
-    orderHistory.push(newOrder);
-    localStorage.setItem('orders', JSON.stringify(orderHistory));
-    
-    // ==========================================
-    // 📲 यहाँ अपना 10 अंकों का नंबर 91 के साथ डालें
-    // ==========================================
-    const MY_WHATSAPP_NUMBER = "919870708753"; // <-- XXXXXXXXXX की जगह अपना नंबर डालें (उदा: 919876543210)
-    
-    // 5. व्हाट्सएप मैसेज का सुंदर टेक्स्ट फॉर्मेट
-    const message = `🛍️ *NEW ORDER PLACED!* 🛍️\n\n` +
-                    `👤 *Customer Name:* ${name}\n` +
-                    `📞 *Customer Phone:* ${phone}\n` +
-                    `📍 *Shipping Address:* ${address}, ${city}\n\n` +
-                    `📦 *Items Ordered:* \n${itemsText}\n` +
-                    `💰 *Total Amount:* ₹${totalAmount.toFixed(2)} (COD)`;
-                    
-    // 6. मैसेज को यूआरएल के लिए सुरक्षित (Encode) करें
-    const encodedMessage = encodeURIComponent(message);
-    
-    // 7. व्हाट्सएप का सही एपीआई लिंक
-    const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodedMessage}`;
-    
-    // 8. यूजर को बताएं और कार्ट खाली करें
-    alert(`Thank you, ${name}! Redirecting to WhatsApp to send your order...`);
-    
-    cart = [];
-    saveCartToStorage();
-    
-    // 9. कस्टमर को तुरंत व्हाट्सएप ऐप या वेब पर भेजें
-    window.open(whatsappUrl, '_blank'); 
-    
-    // 10. वापस होम पेज पर भेजें
-    window.location.href = "index.html";
-}
+    try {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+        const city = document.getElementById('city').value;
+        
+        let totalAmount = 0;
+        let itemsText = ''; 
+        
+        cart.forEach((item, index) => {
+            totalAmount += item.price * item.quantity;
+            itemsText += `${index + 1}. ${item.emoji} ${item.name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}\n`;
+        });
+        
+        if (cart.length === 0) {
+            alert("Your cart is empty!");
+            return;
+        }
 
-
-
+        const newOrder = {
+            id: Date.now(),
+            customerName: name,
+            phone: phone,
+            address: address,
+            city: city,
+            items: [...cart],
+            totalAmount: totalAmount,
+            date: new Date().toLocaleDateString()
+        };
+        
+        orderHistory.push(newOrder);
+        localStorage.setItem('orders', JSON.stringify(orderHistory));
+        
+        // ==========================================
+        // 📲 व्हाट्सएप नंबर सेट करें 
+        // ==========================================
+        const MY_WHATSAPP_NUMBER = "919876543210"; // <-- यहाँ अपना सही व्हाट्सएप नंबर 91 लगाकर डालें (बिना + के)
+        
+        const message = `🛍️ *NEW ORDER PLACED!* 🛍️\n\n` +
+                        `👤 *Customer Name:* ${name}\n` +
+                        `📞 *Customer Phone:* ${phone}\n` +
+                        `📍 *Shipping Address:* ${address}, ${city}\n\n` +
+                        `📦 *Items Ordered:* \n${itemsText}\n` +
+                        `💰 *Total Amount:* ₹${totalAmount.toFixed(2)} (COD)`;
+                        
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodedMessage}`;
+        
+        alert(`Thank you, ${name}! Click OK to send your order on WhatsApp.`);
+        
+        cart = [];
+        saveCartToStorage();
+        
+        // WhatsApp ओपन करें
+        window.open(whatsappUrl, '_blank'); 
+        window.location.href = "index.html";
+        
+    } catch (error) {
+        console.error("Error placing order:", error);
+    }
 }
