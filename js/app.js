@@ -88,7 +88,6 @@ function triggerProductDetailsRender() {
                          ▶️
                     </div>`;
             } else {
-                // ✅ फ़िक्स: थंबनेल के अंदर आने वाली इमेज एरर और अल्टरनेटिव पाथ की समस्या को 100% ठीक किया गया
                 thumbnailsHtml += `
                     <img src="${med.url}" 
                          alt="thumb-${idx}" 
@@ -154,10 +153,10 @@ function triggerProductDetailsRender() {
             </div>
             
             <div class="action-buttons" style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.5rem;">
-                <button class="btn btn-primary" onclick="addToCart(${product.id})" style="padding: 0.75rem; font-size: 1rem;">
+                <button class="btn btn-primary" onclick="addToCart(${product.id})" style="padding: 0.75rem; font-size: 1rem; cursor: pointer;">
                     🛒 Add to Cart
                 </button>
-                <button class="btn" onclick="buyDirectOnWhatsApp(${product.id})" style="background-color: #25D366; color: white; border: none; padding: 0.75rem; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <button class="btn" onclick="buyDirectOnWhatsApp(${product.id})" style="background-color: #25D366; color: white; border: none; padding: 0.75rem; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
                     💬 Buy on WhatsApp
                 </button>
             </div>
@@ -232,7 +231,9 @@ function buyDirectOnWhatsApp(productId) {
 
     const quantityInput = document.getElementById(`qty-${productId}`);
     const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
-    const selectedSize = localStorage.getItem('last_selected_size') || 'M';
+    
+    const activeSizeBtn = document.querySelector('.size-btn.selected');
+    const selectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'M';
 
     let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
     if (isNaN(purePrice)) purePrice = 1999;
@@ -279,12 +280,15 @@ function selectSize(element, size) {
     localStorage.setItem('last_selected_size', size);
 }
 
+// ✅ फ़िक्स: एड टू कार्ट करते ही तुरंत बिना किसी रुकावट के सीधे कार्ट वाले डिटेल्स फॉर्म (cart.html) पर ले जाने का स्पेशल फंक्शन
 function addToCart(productId) {
     let product = getProductById(productId);
     if (!product) return;
     const quantityInput = document.getElementById(`qty-${productId}`);
     const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
-    const currentSelectedSize = localStorage.getItem('last_selected_size') || 'M';
+    
+    const activeSizeBtn = document.querySelector('.size-btn.selected');
+    const currentSelectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'M';
     
     let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
     if (isNaN(purePrice)) purePrice = 1999;
@@ -309,7 +313,10 @@ function addToCart(productId) {
     if (detailsCartCount) {
         detailsCartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
     }
-    alert(`Product added to cart successfully!`);
+    
+    // फॉर्म को सीधे लाइव ट्रिगर करने के लिए डायरेक्ट रीडायरेक्शन रूल
+    alert(`"${product.name}" (Size: ${currentSelectedSize}) added to cart! Redirecting to Checkout Form... 🛒`);
+    window.location.href = 'cart.html';
 }
 
 function displayCart() {
