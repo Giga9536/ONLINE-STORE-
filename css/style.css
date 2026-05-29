@@ -128,6 +128,7 @@ body {
     justify-content: center;
 }
 
+/* इनपुट फील्ड स्टाइल सुधार */
 .quantity-input {
     width: 50px;
     height: 40px;
@@ -143,7 +144,7 @@ body {
 .product-quantity .quantity-btn:first-child { border-radius: 4px 0 0 4px; }
 .product-quantity .quantity-btn:last-child { border-radius: 0 4px 4px 0; }
 
-/* साइज बटन फिक्स */
+/* साइज बटन आकार सुधार फिक्स */
 .size-section { margin-top: 1.5rem; margin-bottom: 1.5rem; }
 .size-title { font-weight: 600; color: #2c3e50; margin-bottom: 0.6rem; font-size: 1rem; }
 .size-grid { display: flex; gap: 0.8rem; flex-wrap: wrap; }
@@ -159,7 +160,7 @@ body {
 .size-btn.selected { background-color: #2c3e50; color: #ffffff; border-color: #2c3e50; box-shadow: 0 3px 8px rgba(44, 62, 80, 0.3); }
 
 /* ==========================================================================
-   🛍️ फिक्स: प्रोडक्ट कार्ड्स का प्रीमियम और यूनिफॉर्म ग्रिड लुक
+   🛍️ प्रोडक्ट कार्ड्स ग्रिड व्यू अलाइनमेंट
    ========================================================================== */
 .products-grid {
     display: grid;
@@ -169,13 +170,13 @@ body {
 
 .product-card {
     background-color: #fff;
-    border-radius: 12px; /* अधिक स्मूथ कोने */
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06); /* क्लीनर सॉफ्ट शैडो */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     border: 1px solid rgba(0,0,0,0.03);
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-card:hover {
@@ -194,9 +195,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
 }
-.product-card:hover .p-img { transform: scale(1.04); }
 
 .product-info {
     padding: 1rem 0.8rem;
@@ -229,7 +228,6 @@ body {
     text-decoration: none;
     width: 100%;
     font-size: 0.9rem;
-    transition: background 0.2s ease;
 }
 
 .btn-primary { background-color: #2c3e50; color: #fff; border: none; }
@@ -238,14 +236,14 @@ body {
 /* Best Sellers */
 .bestseller-section { margin-top: 3rem; background: #fff; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .bestseller-title { font-size: 1.4rem; color: #2c3e50; margin-bottom: 1rem; border-left: 4px solid #e67e22; padding-left: 10px; }
-.bestseller-slider { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 10px; scroll-behavior: smooth; }
+.bestseller-slider { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 10px; }
 .bestseller-card { flex: 0 0 160px; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 0.5rem; text-align: center; text-decoration: none; color: #333; }
 .bestseller-img { width: 100%; height: 160px; object-fit: cover; border-radius: 6px; }
 .bestseller-name { font-size: 0.85rem; font-weight: 600; margin-top: 0.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bestseller-price { color: #e67e22; font-weight: bold; font-size: 0.95rem; }
 
 /* ==========================================================================
-   🔄 न्यू: व्यू मोर रिव्यूज स्लाइड स्मूथ एनीमेशन रूल्स
+   🌟 न्यू: फोटो रिव्यू गैलरी स्टाइल अलाइनमेंट रूल्स (इंग्लिश वर्जन)
    ========================================================================== */
 .reviews-section {
     margin-top: 2rem;
@@ -262,37 +260,124 @@ body {
 .review-stars { color: #f1c40f; font-size: 0.9rem; }
 .review-comment { color: #555; font-size: 0.9rem; line-height: 1.4; }
 
-/* हाइड/शो के लिए स्लाइडर इफेक्ट कंटेनर */
+/* ✅ नया: कस्टमर द्वारा खुद पोस्ट की गई इमेज गैलरी स्टाइल */
+.review-attached-images {
+    display: flex;
+    gap: 10px;
+    margin-top: 0.6rem;
+}
+
+.review-img {
+    width: 65px;
+    height: 85px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
 .extended-reviews-slide {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.5s cubic-bezier(0, 1, 0, 1); /* स्मूथ ओपनिंग */
+    transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
 }
 
-/* जावास्क्रिप्ट जब इस क्लास को जोड़ेगा तब स्लाइडर खुलेगा */
 .extended-reviews-slide.open {
-    max-height: 2000px; /* पर्याप्त लिमिट ताकि सारे रिव्यूज दिखें */
+    max-height: 3000px;
     transition: max-height 0.5s cubic-bezier(1, 0, 1, 0);
 }
 
 .view-more-btn {
-    background-color: #f8f9fa;
-    color: #2c3e50;
-    border: 1px solid #ccc;
-    padding: 0.5rem 1.5rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    background-color: #f8f9fa; color: #2c3e50; border: 1px solid #ccc;
+    padding: 0.5rem 1.5rem; font-size: 0.9rem; font-weight: 600;
+    border-radius: 20px; cursor: pointer; transition: all 0.2s ease;
 }
-.view-more-btn:hover {
-    background-color: #2c3e50;
-    color: white;
-    border-color: #2c3e50;
+.view-more-btn:hover { background-color: #2c3e50; color: white; border-color: #2c3e50; }
+
+/* ==========================================================================
+   🔒 न्यू: पेमेंट और इनवॉइस बिल गेटवे पॉप-अप मॉडल स्टाइल्स
+   ========================================================================== */
+.custom-payment-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: none; /* डिफ़ॉल्ट रूप से बंद */
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    padding: 1rem;
 }
 
-/* Base structural styles */
+.modal-content {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: modalSlideUp 0.3s ease;
+}
+
+.invoice-box-content {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid #ccc;
+    font-family: 'Courier New', Courier, monospace; /* बिलिंग लुक के लिए */
+}
+
+@keyframes modalSlideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.qr-placeholder {
+    margin: 1.2rem auto;
+    background: #f9f9f9;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.amount-badge {
+    background: #fff3e0;
+    color: #e67e22;
+    padding: 0.6rem 1.2rem;
+    font-weight: bold;
+    font-size: 1.15rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+}
+
+.modal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 1.2rem;
+}
+
+.modal-btn {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+.confirm-btn { background-color: #27ae60; color: white; }
+.cancel-btn { background-color: #e74c3c; color: white; }
+
+.invoice-meta p { font-size: 0.9rem; margin-bottom: 0.3rem; color: #333; }
+
+/* Structural grids */
 .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
 .header { text-align: center; margin-bottom: 2.5rem; background: rgba(255, 255, 255, 0.85); padding: 1.8rem 1rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .welcome-title { font-size: 1.6rem; color: #2c3e50; font-weight: 600; margin-bottom: 0.3rem; }
@@ -300,7 +385,7 @@ body {
 .about-section { background: rgba(255, 255, 255, 0.85); padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .footer { background-color: #2c3e50; color: #bdc3c7; text-align: center; padding: 1.5rem 1rem; margin-top: 4rem; font-size: 0.9rem; }
 
-/* मोबाइल नियंत्रण */
+/* Mobile controls */
 .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 1001; }
 .hamburger span { background-color: #fff; height: 3px; width: 25px; border-radius: 2px; }
 .menu-toggle { display: none; }
