@@ -11,12 +11,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (document.getElementById('cart-items')) {
         displayCart();
-        displayOrderHistory();
     }
     if (document.getElementById('product-detail-content')) {
         triggerProductDetailsRender();
     }
 });
+
+// लाइव पिनकोड डिलीवरी सर्विसिबिलिटी चेकर लॉजिक
+function checkPincodeService(pin) {
+    const statusText = document.getElementById('pincode-status');
+    if (!statusText) return;
+    
+    if (pin.length === 6) {
+        if (pin.startsWith('11') || pin.startsWith('20') || pin.startsWith('40') || pin.startsWith('50') || pin.startsWith('70')) {
+            statusText.style.color = '#27ae60';
+            statusText.textContent = '⚡ Standard Delivery Available (Expected: 3-5 Days)';
+        } else {
+            statusText.style.color = '#e67e22';
+            statusText.textContent = '✈️ Available via External Courier SpeedPost (Expected: 5-7 Days)';
+        }
+    } else {
+        statusText.textContent = '';
+    }
+}
 
 async function loadProducts() {
     try {
@@ -171,50 +188,35 @@ function triggerProductDetailsRender() {
             <h3 class="bestseller-title" style="border-left-color: #27ae60;">🌟 Customer Reviews (Feedback)</h3>
             
             <div class="review-box">
-                <div class="review-header"><span class="reviewer-name">प्रिया शर्मा</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                <p class="review-comment">कपड़े का फैब्रिक और कढ़ाई बहुत ही सुंदर है। फिटिंग एकदम परफेक्ट आई, थैंक यू दीपांशी फैशन वर्ल्ड!</p>
+                <div class="review-header"><span class="reviewer-name">Priya Sharma</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                <p class="review-comment">The fabric and embroidery are exceptionally beautiful. Fitting turned out to be perfect. Thank you Deepanshi Fashion World!</p>
+                <div class="review-attached-images" style="margin-top:0.5rem;">
+                    <img src="images/kurti1.jpg" style="width:65px; height:85px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
+                </div>
             </div>
             <div class="review-box">
-                <div class="review-header"><span class="reviewer-name">अंजलि वर्मा</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                <p class="review-comment">मैंने पहली बार वीडियो थंबनेल देखकर ऑर्डर किया था, जैसा वीडियो में सूट दिखा बिल्कुल वैसा ही मिला। बहुत बढ़िया सर्विस है।</p>
+                <div class="review-header"><span class="reviewer-name">Anjali Verma</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                <p class="review-comment">I ordered after checking the video thumbnail, the outfit looks exactly as shown. Highly recommended boutique service.</p>
+                <div class="review-attached-images" style="margin-top:0.5rem;">
+                    <img src="images/IMG_20260528_163105.jpg" style="width:65px; height:85px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
+                </div>
             </div>
 
             <div id="extended-reviews" class="extended-reviews-slide">
                 <div class="review-box">
-                    <div class="review-header"><span class="reviewer-name">रितु सिंह</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                    <p class="review-comment">सूट का कलर और डिज़ाइन फोटो से भी ज्यादा प्यारा है। फेस्टिवल के लिए बहुत ही बेस्ट कलेक्शन है। 👍</p>
+                    <div class="review-header"><span class="reviewer-name">Ritu Singh</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">The color saturation and design lines are more vibrant than photos. Absolutely wonderful collection for traditional festivals.</p>
+                    <div class="review-attached-images" style="margin-top:0.5rem;"><img src="images/IMG_20260528_163041.jpg" style="width:65px; height:85px; object-fit:cover; border-radius:4px; border:1px solid #ddd;"></div>
                 </div>
                 <div class="review-box">
-                    <div class="review-header"><span class="reviewer-name">संगीता यादव</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                    <p class="review-comment">डेलिवरी बहुत फ़ास्ट थी और कस्टमर सपोर्ट भी बहुत हेल्पफुल है। मैं और भी आर्डर करुँगी जल्द ही।</p>
+                    <div class="review-header"><span class="reviewer-name">Sangeeta Yadav</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">Express delivery was quick and support is helpful. Will certainly buy more traditional variants very soon.</p>
+                    <div class="review-attached-images" style="margin-top:0.5rem;"><img src="images/green%20suit.jpg" style="width:65px; height:85px; object-fit:cover; border-radius:4px; border:1px solid #ddd;"></div>
                 </div>
                 <div class="review-box">
-                    <div class="review-header"><span class="reviewer-name">नेहा कपूर</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                    <p class="review-comment">कपड़े की क्वालिटी वाक़ई प्रीमियम है, धोने के बाद भी कलर और चमक वैसी ही है। वर्थ बाइंग!</p>
-                </div>
-                <div class="review-box">
-                    <div class="review-header"><span class="reviewer-name">काजल अग्रवाल</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                    <p class="review-comment">लुक एकदम क्लासी और रॉयल आता है। पार्टी वियर के लिए बेस्ट ऑप्शन है रीजनेबल प्राइस में।</p>
-                </div>
-                <div class="review-box">
-                    <div class="review-header"><span class="reviewer-name">मीनाक्षी जोशी</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                    <p class="review-comment">दीपांशी फैशन वर्ल्ड के सूट कलेक्शन बहुत यूनिक होते हैं। स्टिचिंग फिनिशिंग बहुत लाजवाब है।</p>
-                </div>
-                <div class="review-box">
-                    <div class="review-header"><span class="reviewer-name">पूजा चौधरी</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                    <p class="review-comment">दुपट्टा बहुत ही खूबसूरत और पूरा लंबा है। ओवरऑल सूट पहनकर बहुत कम्फर्टेबल फील होता है।</p>
-                </div>
-                <div class="review-box">
-                    <div class="review-header"><span class="reviewer-name">स्वाति मिश्रा</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                    <p class="review-comment">मेरी मम्मी को यह सूट बहुत पसंद आया। फैब्रिक सचमुच बहुत सॉफ्ट और आरामदायक है।</p>
-                </div>
-                <div class="review-box">
-                    <div class="review-header"><span class="reviewer-name">किरण बेदी</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                    <p class="review-comment">प्राइस के हिसाब से क्वालिटी बहुत शानदार है। मॉल जैसी BRANDED फील आती है कम दामों में।</p>
-                </div>
-                <div class="review-box">
-                    <div class="review-header"><span class="reviewer-name">सपना गिल</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                    <p class="review-comment">थैंक यू सो मच! कुर्ती का घेरा और डिज़ाइन हुबहू मैच करता है। बेस्ट एक्सपीरियंस रहा मेरा। 😍</p>
+                    <div class="review-header"><span class="reviewer-name">Neha Kapoor</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">Premium thread work is top notch. The luster remains intact even after gentle handwash. Worth every single rupee!</p>
+                    <div class="review-attached-images" style="margin-top:0.5rem;"><img src="images/carrot%20suit.jpg" style="width:65px; height:85px; object-fit:cover; border-radius:4px; border:1px solid #ddd;"></div>
                 </div>
             </div>
 
@@ -225,33 +227,161 @@ function triggerProductDetailsRender() {
     `;
 }
 
+// डायरेक्ट व्हाट्सएप आर्डर
 function buyDirectOnWhatsApp(productId) {
     const product = getProductById(productId);
     if (!product) return;
-
-    const quantityInput = document.getElementById(`qty-${productId}`);
-    const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+    const quantity = parseInt(document.getElementById(`qty-${productId}`).value) || 1;
     
     const activeSizeBtn = document.querySelector('.size-btn.selected');
     const selectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'M';
-
-    let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
-    if (isNaN(purePrice)) purePrice = 1999;
     
+    let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
     const totalPrice = purePrice * quantity;
-    const MY_WHATSAPP_NUMBER = "919870708753";
+    const whatsappNum = "919870708753";
 
-    const message = `👋 *Hello Deepanshi Fashion World!*\n\n` +
-                    `मुझे यह प्रोडक्ट बहुत पसंद आया है और मैं इसे ऑर्डर करना चाहती हूँ:\n\n` +
-                    `👗 *Product Name:* ${product.name}\n` +
-                    `📐 *Size Selected:* ${selectedSize}\n` +
-                    `📦 *Quantity:* ${quantity}\n` +
-                    `💰 *Price:* ₹${purePrice.toLocaleString('en-IN')} each\n` +
-                    `💵 *Total Value:* ₹${totalPrice.toLocaleString('en-IN')}\n\n` +
-                    `कृपया मेरे इस ऑर्डर को कन्फर्म करने की प्रक्रिया आगे बढ़ाएं। धन्यवाद!`;
+    const msg = `👋 *Hello Deepanshi Fashion World!*\n\nI want to buy this item directly:\n\n👗 *Item Name:* ${product.name}\n📐 *Size:* ${selectedSize}\n📦 *Quantity:* ${quantity}\n💰 *Price:* ₹${purePrice.toLocaleString('en-IN')}\n💵 *Total:* ₹${totalPrice.toLocaleString('en-IN')}\n\nKindly process my dispatch order. Thank you!`;
+    window.open(`https://wa.me/${whatsappNum}?text=${encodeURIComponent(msg)}`, '_blank');
+}
 
-    const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
+/**
+ * ✅ फ़िक्स: कार्ट पेज डेटा रेंडरर सिंक (इमेज फ्रेम और टू-कॉलम फॉर्म लेआउट फिक्स)
+ */
+function displayCart() {
+    const cartItemsBox = document.getElementById('cart-items');
+    const emptyBox = document.getElementById('cart-empty');
+    const contentBox = document.getElementById('cart-content');
+    
+    if (!cartItemsBox) return;
+
+    if (cart.length === 0) {
+        emptyBox.style.display = 'block';
+        contentBox.style.display = 'none';
+        return;
+    }
+
+    emptyBox.style.display = 'none';
+    contentBox.style.display = 'grid';
+    cartItemsBox.innerHTML = '';
+
+    let totalBill = 0;
+    cart.forEach((item, index) => {
+        const cost = item.price * item.quantity;
+        totalBill += cost;
+        
+        let finalImageSrc = item.image;
+        if (!finalImageSrc.startsWith('images/') && !finalImageSrc.startsWith('http')) {
+            finalImageSrc = 'images/' + finalImageSrc;
+        }
+        
+        cartItemsBox.innerHTML += `
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 0.5rem 0;">
+                    <img src="${finalImageSrc}" style="width:50px; height:65px; object-fit:cover; border-radius:6px; border:1px solid #ddd;" onerror="this.src='images/Gemini.jpg';">
+                </td>
+                <td style="padding: 0.5rem; font-size:0.9rem;">
+                    <strong>${item.name}</strong><br>
+                    <small style="color:#e67e22; font-weight:500;">Size: ${item.size} x ${item.quantity}</small>
+                </td>
+                <td style="padding: 0.5rem; text-align:right; font-weight:bold;">₹${cost.toLocaleString('en-IN')}</td>
+                <td style="padding: 0.5rem; text-align:right;">
+                    <button style="background:none; border:none; color:#e74c3c; cursor:pointer; font-weight:bold; font-size:1.1rem;" onclick="removeCartItemIndex(${index})">❌</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    document.getElementById('subtotal').textContent = `₹${totalBill.toLocaleString('en-IN')}`;
+    document.getElementById('total').textContent = `₹${totalBill.toLocaleString('en-IN')}`;
+}
+
+function removeCartItemIndex(index) {
+    cart.splice(index, 1);
+    saveCartToStorage();
+    updateCartCount();
+    displayCart();
+}
+
+function togglePaymentGatewayNotice(mode) {
+    const notice = document.getElementById('online-payment-notice');
+    if (notice) notice.style.display = (mode === 'ONLINE') ? 'block' : 'none';
+}
+
+// मास्टर form सबमिशन हैंडलर
+let activePendingBillingData = null;
+function handleCheckoutFormSubmit(event) {
+    event.preventDefault();
+    
+    const mode = document.getElementById('payment').value;
+    activePendingBillingData = {
+        id: "DF" + Math.floor(100000 + Math.random() * 900000),
+        date: new Date().toLocaleDateString('en-IN'),
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        pincode: document.getElementById('pincode').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        method: mode === 'COD' ? 'Cash on Delivery (COD)' : 'Paid Online (UPI Verified)',
+        amount: cart.reduce((s, i) => s + (i.price * i.quantity), 0)
+    };
+
+    if (mode === 'ONLINE') {
+        document.getElementById('modal-total-amount').textContent = `₹${activePendingBillingData.amount.toLocaleString('en-IN')}`;
+        document.getElementById('payment-modal').style.display = 'flex';
+    } else {
+        verifyOnlinePaymentAndDispatch(); 
+    }
+}
+
+function closePaymentGatewayModal() {
+    document.getElementById('payment-modal').style.display = 'none';
+}
+
+function verifyOnlinePaymentAndDispatch() {
+    if (!activePendingBillingData) return;
+    closePaymentGatewayModal();
+
+    orderHistory.unshift(activePendingBillingData);
+    localStorage.setItem('orders', JSON.stringify(orderHistory));
+
+    document.getElementById('inv-id').textContent = activePendingBillingData.id;
+    document.getElementById('inv-date').textContent = activePendingBillingData.date;
+    document.getElementById('inv-method').textContent = activePendingBillingData.method;
+    document.getElementById('inv-name').textContent = activePendingBillingData.name;
+    document.getElementById('inv-phone').textContent = activePendingBillingData.phone;
+    document.getElementById('inv-address').textContent = `${activePendingBillingData.address}, ${activePendingBillingData.city} - ${activePendingBillingData.pincode}`;
+    
+    let itemsBillSummaryText = '';
+    let waItemsText = '';
+    cart.forEach(item => {
+        itemsBillSummaryText += `<div style="display:flex; justify-content:space-between; margin-bottom:0.2rem;"><span>• ${item.name} (${item.size}) x${item.quantity}</span><span>₹${(item.price * item.quantity).toLocaleString('en-IN')}</span></div>`;
+        waItemsText += `• *${item.name}* (Size: ${item.size}) x ${item.quantity}\n`;
+    });
+    document.getElementById('invoice-items-list').innerHTML = itemsBillSummaryText;
+    document.getElementById('inv-total').textContent = `₹${activePendingBillingData.amount.toLocaleString('en-IN')}`;
+
+    const whatsappNum = "919870708753";
+    const waMsg = `🛍️ *NEW ORDER DISPATCH RECEIPT* (#${activePendingBillingData.id})\n\n` +
+                  `👤 *Customer:* ${activePendingBillingData.name}\n` +
+                  `📞 *Phone:* ${activePendingBillingData.phone}\n` +
+                  `📍 *Address:* ${activePendingBillingData.address}, ${activePendingBillingData.city}\n` +
+                  `📮 *Pincode:* ${activePendingBillingData.pincode}\n` +
+                  `💳 *Payment:* ${activePendingBillingData.method}\n\n` +
+                  `📦 *Ordered Suits Layout:*\n${waItemsText}\n` +
+                  `💰 *Grand Total Amount:* ₹${activePendingBillingData.amount.toLocaleString('en-IN')}\n\n` +
+                  `Please secure package tracking number. Thank you!`;
+
+    document.getElementById('invoice-modal').style.display = 'flex';
+    window.open(`https://wa.me/${whatsappNum}?text=${encodeURIComponent(waMsg)}`, '_blank');
+
+    cart = [];
+    saveCartToStorage();
+    updateCartCount();
+}
+
+function closeInvoiceAndRedirectHome() {
+    document.getElementById('invoice-modal').style.display = 'none';
+    window.location.href = 'index.html';
 }
 
 function toggleReviewsSlider() {
@@ -280,10 +410,10 @@ function selectSize(element, size) {
     localStorage.setItem('last_selected_size', size);
 }
 
-// ✅ फ़िक्स: एड टू कार्ट करते ही तुरंत बिना किसी रुकावट के सीधे कार्ट वाले डिटेल्स फॉर्म (cart.html) पर ले जाने का स्पेशल फंक्शन
 function addToCart(productId) {
     let product = getProductById(productId);
     if (!product) return;
+    
     const quantityInput = document.getElementById(`qty-${productId}`);
     const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
     
@@ -306,6 +436,7 @@ function addToCart(productId) {
             quantity: quantity
         });
     }
+    
     saveCartToStorage();
     updateCartCount();
     
@@ -314,18 +445,8 @@ function addToCart(productId) {
         detailsCartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
     }
     
-    // फॉर्म को सीधे लाइव ट्रिगर करने के लिए डायरेक्ट रीडायरेक्शन रूल
     alert(`"${product.name}" (Size: ${currentSelectedSize}) added to cart! Redirecting to Checkout Form... 🛒`);
     window.location.href = 'cart.html';
-}
-
-function displayCart() {
-    const cartItemsBox = document.getElementById('cart-items');
-    if (!cartItemsBox) return;
-    cartItemsBox.innerHTML = '';
-    cart.forEach(item => {
-        cartItemsBox.innerHTML += `<tr><td>${item.name} (${item.size})</td><td>${item.quantity}</td><td>₹${(item.price * item.quantity).toLocaleString('en-IN')}</td></tr>`;
-    });
 }
 
 function updateCartCount() {
