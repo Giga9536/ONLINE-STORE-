@@ -1,11 +1,11 @@
 [
   {
     "id": 1,
-    "name": "ब्लू सूट कलेक्शन",
+    "name": "Elegant Blue Suit Collection",
     "price": 899,
     "image": "images/kurti1.jpg",
     "category": "Kurti",
-    "description": "दीपांशी फैशन वर्ल्ड का खूबसूरत् ब्लू सूट कलेक्शन, जो कैजुअल और डेली वियर के लिए एकदम परफेक्ट है।",
+    "description": "A beautiful classic blue suit collection from Deepanshi Fashion World, perfectly tailored and crafted for casual events and comfortable daily wear.",
     "media": [
       { "type": "image", "url": "images/kurti1.jpg" },
       { "type": "video", "url": "images/green%20video.mp4" },
@@ -15,11 +15,11 @@
   },
   {
     "id": 2,
-    "name": "प्रीमियम कलेक्शन सूट",
+    "name": "Premium Designer Ethnic Suit",
     "price": 1299,
     "image": "images/IMG_20260528_163105.jpg",
     "category": "Suit",
-    "description": "खूबसूरत कढ़ाई और premium fabric के साथ तैयार किया गया पार्टी वियर सूट।",
+    "description": "Exquisite party wear suit designed with intricate heavy embroidery work and premium luxury fabric, ensuring a royal silhouette for every occasion.",
     "media": [
       { "type": "image", "url": "images/IMG_20260528_163105.jpg" },
       { "type": "video", "url": "images/orange%20video.mp4" },
@@ -29,11 +29,11 @@
   },
   {
     "id": 3,
-    "name": "प्रीमियम ऑरेंज सूट",
+    "name": "Luxury Orange Malmal Cotton Suit",
     "price": 1399,
     "image": "images/IMG_20260528_163041.jpg",
     "category": "Suit",
-    "description": "दीपांशी फैशन वर्ल्ड का एलिगेंट ऑरेंज मलमल कॉटन सूट। खूबसूरत फूलों की कढ़ाई के साथ फेस्टिवल और कैजुअल वियर के लिए परफेक्ट ऑउटफिट जो आपको दे एकदम एलिगेंट लुक।",
+    "description": "An elegant orange pure malmal cotton suit from Deepanshi Fashion World. Features artistic floral thread embroidery, making it a perfect breathable outfit for festive vibes.",
     "media": [
       { "type": "image", "url": "images/IMG_20260528_163041.jpg" },
       { "type": "image", "url": "images/carrot%20suit.jpg" },
@@ -43,11 +43,11 @@
   },
   {
     "id": 4,
-    "name": "जॉर्जेट पार्टी वियर ग्रीन गाउन",
+    "name": "Georgette Party Wear Green Gown",
     "price": 1899,
     "image": "images/green%20suit.jpg",
     "category": "Gown",
-    "description": "शानदार ग्रीन जॉर्जेट पार्टी वियर गाउन, जो आपको किसी भी शादी या फंक्शन में देगा एक बेहतरीन और मॉडर्न लुक।",
+    "description": "Stunning emerald green georgette gown featuring fine ethnic textures, curated to give you a majestic and highly sophisticated look at any wedding ceremony.",
     "media": [
       { "type": "image", "url": "images/green%20suit.jpg" },
       { "type": "image", "url": "images/jamni%20suit.jpg" },
@@ -57,11 +57,11 @@
   },
   {
     "id": 5,
-    "name": "कैरट मलमल कॉटन सूट",
+    "name": "Carrot Pink Malmal Cotton Suit",
     "price": 1499,
     "image": "images/carrot%20suit.jpg",
     "category": "Suit",
-    "description": "प्रीमियम कैरट शेड में बेहद आरामदायक और सुंदर मलमल कॉटन सूट कलेक्शन।",
+    "description": "Ultra-soft premium malmal cotton suit in a refreshing carrot pink shade. Rich detailing with lightweight comfort, customized beautifully for your premium wardrobe.",
     "media": [
       { "type": "image", "url": "images/carrot%20suit.jpg" },
       { "type": "image", "url": "images/IMG_20260528_163041.jpg" },
@@ -71,11 +71,11 @@
   },
   {
     "id": 6,
-    "name": "क्लासिक ब्लैक डिजाइनर सूट",
+    "name": "Classic Black Designer Outfit",
     "price": 1799,
     "image": "images/black%20suit.jpg",
     "category": "Suit",
-    "description": "ऑफिस, फेस्टिवल्स और फॉर्मल इवेंट्स के लिए एलीगेंट ब्लैक फॉर्मल सूट।",
+    "description": "An elegant and formal jet black suit stitched symmetrically for formal office gatherings, casual celebrations, and high-end evening celebrations.",
     "media": [
       { "type": "image", "url": "images/black%20suit.jpg" },
       { "type": "image", "url": "images/IMG_20260528_163105.jpg" },
@@ -85,11 +85,11 @@
   },
   {
     "id": 7,
-    "name": "जेमिनी प्रीमियम ऑउटफिट",
+    "name": "Gemini Premium Exclusive Attire",
     "price": 1999,
     "image": "images/Gemini.jpg",
     "category": "Suit",
-    "description": "ट्रेंडिंग जेमिनी कलेक्शन का सबसे शानदार ऑउटफिट, जो पहनने में बेहद आरामदायक और दिखने में स्टाइलिश है।",
+    "description": "The masterpiece attire of our signature trending Gemini collection. Perfectly structured layout to provide unrivaled aesthetic style along with supreme all-day comfort.",
     "media": [
       { "type": "image", "url": "images/Gemini.jpg" },
       { "type": "image", "url": "images/kurti1.jpg" },
@@ -99,11 +99,11 @@
   },
   {
     "id": 8,
-    "name": "जामनी रॉयल एम्ब्रॉयडरी सूट",
+    "name": "Royal Purple Embroidered Suit",
     "price": 1599,
     "image": "images/jamni%20suit.jpg",
     "category": "Suit",
-    "description": "रॉयल जामुनी रंग में खूबसूरत कढ़ाई के साथ ट्रेडिशनल फेस्टिव वियर सूट।",
+    "description": "Magnificent royal purple shade traditional suit highlighted with gleaming multi-thread fine hand embroidery work, ideal for heavy wedding festivals.",
     "media": [
       { "type": "image", "url": "images/jamni%20suit.jpg" },
       { "type": "image", "url": "images/green%20suit.jpg" },
@@ -113,11 +113,11 @@
   },
   {
     "id": 9,
-    "name": "पिंक कढ़ाई फैंसी कुर्ती",
+    "name": "Pink Neck-Work Fancy Kurti",
     "price": 799,
     "image": "images/pink%20kadhai.jpg",
     "category": "Kurti",
-    "description": "आकर्षक गुलाबी रंग में हैवे नेक वर्क और शानदार फिनिशिंग के साथ फैंसी कुर्ती।",
+    "description": "Charming pastel pink fancy kurti designed with eye-catching heavy neckline embroidery patterns and clean finish alignments, great for casual outings.",
     "media": [
       { "type": "image", "url": "images/pink%20kadhai.jpg" },
       { "type": "image", "url": "images/kurti1.jpg" },
@@ -127,11 +127,11 @@
   },
   {
     "id": 10,
-    "name": "रेड स्टाइलिश कुर्ती कलेक्शन",
+    "name": "Ruby Red Trendy Kurti Collection",
     "price": 699,
     "image": "images/red%20kurti.jpg",
     "category": "Kurti",
-    "description": "डेली वियर और कॉलेज वियर के लिए PERFECT और ट्रेंडी रेड कुर्ती।",
+    "description": "A vibrant ruby red kurti that offers a perfectly modern and trendy aesthetic touch. Extremely lightweight and optimized for daily college or workplace fashion.",
     "media": [
       { "type": "image", "url": "images/red%20kurti.jpg" },
       { "type": "image", "url": "images/pink%20kadhai.jpg" },
