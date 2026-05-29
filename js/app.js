@@ -1,11 +1,11 @@
 /**
- * दीपांशी फैशन वर्ल्ड - मुख्य जावास्क्रिप्ट फ़ाइल (बग फिक्स्ड)
- * प्रोडक्ट लोडिंग, साइज चार्ट ट्रैकिंग और व्हाट्सएप इंटीग्रेशन के साथ
+ * दीपांशी फैशन वर्ल्ड - मुख्य जावास्क्रिप्ट फ़ाइल (थंबनेल स्लाइडर गैलरी अपग्रेडेड)
+ * प्रोडक्ट कार्ड लोडिंग, साइज चार्ट ट्रैकिंग और व्हाट्सएप इंटीग्रेशन के साथ
  */
 
 let cart = [];
 let orderHistory = [];
-window.allProductsList = []; // ग्लोबल लिस्ट को एरे सेट किया
+window.allProductsList = []; // ग्लोबल लिस्ट बैकअप
 
 // पेज लोड होते ही डेटा लोड करना और कार्ट काउंट अपडेट करना
 document.addEventListener('DOMContentLoaded', async () => {
@@ -22,14 +22,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         displayOrderHistory();
     }
 
-    // अगर हम डिटेल्स पेज पर हैं, तो डेटा आने के बाद डिटेल्स रेंडर करेंगे
+    // अगर हम डिटेल्स पेज पर हैं, तो डेटा आने के बाद डिटेल्स और थंबनेल स्लाइडर रेंडर करेंगे
     if (document.getElementById('product-detail-content')) {
         triggerProductDetailsRender();
     }
 });
 
 /**
- * 1. JSON फ़ाइल से डायनेमिक रूप से प्रोडक्ट्स लोड करना (होम पेज NaN फिक्स)
+ * 1. JSON फ़ाइल से डायनेमिक रूप से प्रोडक्ट्स लोड करना
  */
 async function loadProducts() {
     try {
@@ -40,7 +40,7 @@ async function loadProducts() {
         }
 
         const productsData = await response.json();
-        window.allProductsList = productsData; // वैश्विक उपयोग के लिए सेव किया
+        window.allProductsList = productsData; // वैश्विक उपयोग के लिए सुरक्षित
 
         const productContainer = document.getElementById('product-list');
         
@@ -48,21 +48,19 @@ async function loadProducts() {
             productContainer.innerHTML = ''; // पुराना कंटेंट साफ़ करना
 
             if (productsData.length === 0) {
-                productContainer.innerHTML = '<p class="no-products">फिलहाल कोई प्रोडक्ट उपलब्ध नहीं है।</p>';
+                productContainer.innerHTML = '<p class="no-products">फिलहाल कोई推销 उपलब्ध नहीं है।</p>';
                 return;
             }
 
             // हर एक प्रोडक्ट के लिए कार्ड तैयार करना (ग्रिड लेआउट में)
             productsData.forEach(product => {
-                // सुरक्षित प्राइस हैंडलिंग (NaN रोकने के लिए स्ट्रिंग या नंबर की जांच)
                 let purePrice = 0;
                 if (typeof product.price === 'string') {
                     purePrice = parseFloat(product.price.replace(/[^\d.]/g, ''));
                 } else {
                     purePrice = parseFloat(product.price);
                 }
-                
-                if (isNaN(purePrice)) purePrice = 1999; // सेफ फॉलबैक
+                if (isNaN(purePrice)) purePrice = 1999;
 
                 const productCard = `
                     <div class="product-card" data-category="${product.category || 'all'}">
@@ -83,7 +81,7 @@ async function loadProducts() {
                 `;
                 productContainer.innerHTML += productCard;
             });
-            console.log("सभी प्रोडक्ट्स होम पेज पर लोड हो गए हैं!");
+            console.log("सभी प्रोडक्ट्स 'View More' बटन के साथ लोड हो गए हैं!");
         }
     } catch (error) {
         console.error("प्रॉडक्ट लोड करने में समस्या आई:", error);
@@ -101,7 +99,7 @@ function getProductById(productId) {
 }
 
 /**
- * 3. प्रोडक्ट डिटेल्स पेज पर 'Loading...' हटाकर सही डेटा दिखाने का फिक्स
+ * 3. प्रोडक्ट डिटेल्स पेज पर थंबनेल स्लाइडर के साथ डेटा दिखाने का फंक्शन
  */
 function triggerProductDetailsRender() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -118,9 +116,30 @@ function triggerProductDetailsRender() {
         let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
         if (isNaN(purePrice)) purePrice = 1999;
 
-        const mediaHtml = product.image 
-            ? `<img src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';">`
-            : `<div style="font-size: 8rem; text-align: center; padding: 3rem;">👗</div>`;
+        // 🖼️ थंबनेल स्लाइडर (Media Array) रेंडरिंग लॉजिक
+        let mediaHtml = '';
+        
+        if (product.media && product.media.length > 0) {
+            let mainImageHtml = `<img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain;">`;
+            
+            let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; overflow-x: auto; padding-bottom: 5px; justify-content: center;">';
+            
+            product.media.forEach((med, idx) => {
+                thumbnailsHtml += `
+                    <img src="${med.url}" 
+                         alt="thumb-${idx}" 
+                         style="width: 60px; height: 75px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff;"
+                         onclick="document.getElementById('main-detail-img').src='${med.url}'; this.parentElement.querySelectorAll('img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
+                    >`;
+            });
+            thumbnailsHtml += '</div>';
+            
+            mediaHtml = mainImageHtml + thumbnailsHtml;
+        } else {
+            mediaHtml = product.image 
+                ? `<img src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain;">`
+                : `<div style="font-size: 8rem; text-align: center; padding: 3rem;">👗</div>`;
+        }
 
         detailContainer.innerHTML = `
             <div class="detail-image-box">
@@ -178,7 +197,27 @@ function changeQuantity(event, change) {
 }
 
 /**
- * 5. कार्ट में प्रोडक्ट जोड़ने का फंक्शन (साइज़ लॉक के साथ)
+ * 5. डिटेल्स पेज साइज़ सेलेक्टर
+ */
+function selectSize(element, size) {
+    document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
+    element.classList.add('selected');
+    localStorage.setItem('last_selected_size', size);
+}
+
+function addWithDetails(productId) {
+    addToCart(productId);
+}
+
+function buyNowWithDetails(productId) {
+    addToCart(productId);
+    setTimeout(() => {
+        window.location.href = "cart.html";
+    }, 500);
+}
+
+/**
+ * 6. कार्ट में प्रोडक्ट जोड़ने का मुख्य फंक्शन
  */
 function addToCart(productId) {
     let product = getProductById(productId);
@@ -190,6 +229,7 @@ function addToCart(productId) {
     
     const quantityInput = document.getElementById(`qty-${productId}`);
     const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+    
     const currentSelectedSize = localStorage.getItem('last_selected_size') || 'M';
     
     let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
@@ -218,7 +258,7 @@ function addToCart(productId) {
 }
 
 /**
- * 6. चेकआउट पेज (cart.html) पर लाइव आइटम दिखाना
+ * 7. चेकआउट पेज (cart.html) पर लाइव आइटम दिखाना
  */
 function displayCart() {
     const cartItemsContainer = document.getElementById('cart-items');
@@ -290,6 +330,9 @@ function updateCartCount() {
     }
 }
 
+/**
+ * 8. लोकल स्टोरेज मैनेजर्स
+ */
 function saveCartToStorage() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
@@ -353,10 +396,11 @@ function displayOrderHistory() {
 }
 
 /**
- * 7. व्हाट्सएप ऑर्डर हैंडलर
+ * 9. व्हाट्सएप पर ऑर्डर भेजने का मुख्य फ़ंक्शन
  */
 function placeOrder(event) {
     event.preventDefault();
+    
     try {
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
@@ -391,6 +435,7 @@ function placeOrder(event) {
         localStorage.setItem('orders', JSON.stringify(orderHistory));
         
         const MY_WHATSAPP_NUMBER = "919870708753"; 
+        
         const message = `🛍️ *NEW ORDER PLACED!* 🛍️\n\n` +
                         `👤 *Customer Name:* ${name}\n` +
                         `📞 *Customer Phone:* ${phone}\n` +
@@ -408,6 +453,7 @@ function placeOrder(event) {
         
         window.open(whatsappUrl, '_blank'); 
         window.location.href = "index.html";
+        
     } catch (error) {
         console.error("Error placing order:", error);
     }
