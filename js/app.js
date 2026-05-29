@@ -107,7 +107,6 @@ function triggerProductDetailsRender() {
 
     const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-    // 🔥 ऑटोमैटिक बेस्ट सेलर रेंडरर लॉजिक
     let bestsellerCardsHtml = '';
     const randomBestsellers = window.allProductsList.filter(p => p.id !== product.id).slice(0, 5);
     randomBestsellers.forEach(bp => {
@@ -151,8 +150,14 @@ function triggerProductDetailsRender() {
                 <input type="text" class="quantity-input" id="qty-${product.id}" value="1" readonly>
                 <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
             </div>
-            <div class="action-buttons">
-                <button class="btn btn-primary" onclick="addToCart(${product.id})">🛒 Add to Cart</button>
+            
+            <div class="action-buttons" style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.5rem;">
+                <button class="btn btn-primary" onclick="addToCart(${product.id})" style="padding: 0.75rem; font-size: 1rem;">
+                    🛒 Add to Cart
+                </button>
+                <button class="btn" onclick="buyDirectOnWhatsApp(${product.id})" style="background-color: #25D366; color: white; border: none; padding: 0.75rem; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    💬 Buy on WhatsApp
+                </button>
             </div>
         </div>
 
@@ -162,23 +167,102 @@ function triggerProductDetailsRender() {
         </div>
 
         <div class="reviews-section" style="grid-column: span 2;">
-            <h3 class="bestseller-title" style="border-left-color: #27ae60;">🌟 Customer Reviews</h3>
+            <h3 class="bestseller-title" style="border-left-color: #27ae60;">🌟 Customer Reviews (Feedback)</h3>
+            
             <div class="review-box">
-                <div class="review-header">
-                    <span class="reviewer-name">प्रिया शर्मा</span>
-                    <span class="review-stars">⭐⭐⭐⭐⭐</span>
-                </div>
+                <div class="review-header"><span class="reviewer-name">प्रिया शर्मा</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
                 <p class="review-comment">कपड़े का फैब्रिक और कढ़ाई बहुत ही सुंदर है। फिटिंग एकदम परफेक्ट आई, थैंक यू दीपांशी फैशन वर्ल्ड!</p>
             </div>
             <div class="review-box">
-                <div class="review-header">
-                    <span class="reviewer-name">अंजलि वर्मा</span>
-                    <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                <div class="review-header"><span class="reviewer-name">अंजलि वर्मा</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                <p class="review-comment">मैंने पहली बार वीडियो थंबनेल देखकर ऑर्डर किया था, जैसा वीडियो में सूट दिखा बिल्कुल वैसा ही मिला। बहुत बढ़िया सर्विस है।</p>
+            </div>
+
+            <div id="extended-reviews" class="extended-reviews-slide">
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">रितु सिंह</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">सूट का कलर और डिज़ाइन फोटो से भी ज्यादा प्यारा है। फेस्टिवल के लिए बहुत ही बेस्ट कलेक्शन है। 👍</p>
                 </div>
-                <p class="review-comment">मैंने पहली बार वीडियो थंबनेल देखकर ऑर्डर किया था, जैसा वीडियो में सूट दिखा बिल्कुल वैसा ही मिला।</p>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">संगीता यादव</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">डेलिवरी बहुत फ़ास्ट थी और कस्टमर सपोर्ट भी बहुत हेल्पफुल है। मैं और भी आर्डर करुँगी जल्द ही।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">नेहा कपूर</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">कपड़े की क्वालिटी वाक़ई प्रीमियम है, धोने के बाद भी कलर और चमक वैसी ही है। वर्थ बाइंग!</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">काजल अग्रवाल</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">लुक एकदम क्लासी और रॉयल आता है। पार्टी वियर के लिए बेस्ट ऑप्शन है रीजनेबल प्राइस में।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">मीनाक्षी जोशी</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">दीपांशी फैशन वर्ल्ड के सूट कलेक्शन बहुत यूनिक होते हैं। स्टिचिंग फिनिशिंग बहुत लाजवाब है।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">पूजा चौधरी</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">दुपट्टा बहुत ही खूबसूरत और पूरा लंबा है। ओवरऑल सूट पहनकर बहुत कम्फर्टेबल फील होता है।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">स्वाति मिश्रा</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">मेरी मम्मी को यह सूट बहुत पसंद आया। फैब्रिक सचमुच बहुत सॉफ्ट और आरामदायक है।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">किरण बेदी</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">प्राइस के हिसाब से क्वालिटी बहुत शानदार है। मॉल जैसी ब्रांडेड फील आती है कम दामों में।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">सपना गिल</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">थैंक यू सो मच! कुर्ती का घेरा और डिज़ाइन हुबहू मैच करता है। बेस्ट एक्सपीरियंस रहा मेरा। 😍</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button id="view-more-reviews-btn" class="view-more-btn" onclick="toggleReviewsSlider()">View More Reviews 🔽</button>
             </div>
         </div>
     `;
+}
+
+// डायरेक्ट व्हाट्सएप सिंगल आइटम ऑर्डर एपीआई गेटवे
+function buyDirectOnWhatsApp(productId) {
+    const product = getProductById(productId);
+    if (!product) return;
+
+    const quantityInput = document.getElementById(`qty-${productId}`);
+    const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+    const selectedSize = localStorage.getItem('last_selected_size') || 'M';
+
+    let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
+    if (isNaN(purePrice)) purePrice = 1999;
+    
+    const totalPrice = purePrice * quantity;
+    const MY_WHATSAPP_NUMBER = "919870708753";
+
+    const message = `👋 *Hello Deepanshi Fashion World!*\n\n` +
+                    `मुझे यह प्रोडक्ट बहुत पसंद आया है और मैं इसे ऑर्डर करना चाहती हूँ:\n\n` +
+                    `👗 *Product Name:* ${product.name}\n` +
+                    `📐 *Size Selected:* ${selectedSize}\n` +
+                    `📦 *Quantity:* ${quantity}\n` +
+                    `💰 *Price:* ₹${purePrice.toLocaleString('en-IN')} each\n` +
+                    `💵 *Total Value:* ₹${totalPrice.toLocaleString('en-IN')}\n\n` +
+                    `कृपया मेरे इस ऑर्डर को कन्फर्म करने की प्रक्रिया आगे बढ़ाएं। धन्यवाद!`;
+
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
+}
+
+// रिव्यू स्लाइडर ऑन-क्लिक टॉगल एनीमेशन रूल
+function toggleReviewsSlider() {
+    const extendedBox = document.getElementById('extended-reviews');
+    const btn = document.getElementById('view-more-reviews-btn');
+    if (extendedBox.classList.contains('open')) {
+        extendedBox.classList.remove('open');
+        btn.innerHTML = 'View More Reviews 🔽';
+    } else {
+        extendedBox.classList.add('open');
+        btn.innerHTML = 'Show Less Reviews 🔼';
+    }
 }
 
 function changeQuantity(event, change) {
