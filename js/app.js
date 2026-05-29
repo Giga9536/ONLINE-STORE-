@@ -42,6 +42,7 @@ async function loadProducts() {
         const productsData = await response.json();
         window.allProductsList = productsData;
 
+        // होमपेज प्रोडक्ट्स रेंडरर
         const productContainer = document.getElementById('product-list');
         if (productContainer) {
             productContainer.innerHTML = '';
@@ -227,7 +228,7 @@ function triggerProductDetailsRender() {
     `;
 }
 
-// डायरेक्ट व्हाट्सएप आर्डर
+// डायरेक्ट व्हाट्सएप आर्डर लॉजिक
 function buyDirectOnWhatsApp(productId) {
     const product = getProductById(productId);
     if (!product) return;
@@ -245,7 +246,7 @@ function buyDirectOnWhatsApp(productId) {
 }
 
 /**
- * ✅ फ़िक्स: कार्ट पेज डेटा रेंडरर सिंक (इमेज फ्रेम और टू-कॉलम फॉर्म लेआउट फिक्स)
+ * 🛍️ फ़िक्स: कार्ट पेज डेटा रेंडरर सिंक (खाली कार्ट स्थिति और भरे हुए कार्ट दोनों को सही से दिखाने का नियम)
  */
 function displayCart() {
     const cartItemsBox = document.getElementById('cart-items');
@@ -254,17 +255,20 @@ function displayCart() {
     
     if (!cartItemsBox) return;
 
+    // ✅ फ़िक्स: यदि कार्ट में कोई आइटम नहीं है, तो फ़ॉर्म छिपाएँ और खाली कार्ट संदेश दिखाएँ
     if (cart.length === 0) {
-        emptyBox.style.display = 'block';
-        contentBox.style.display = 'none';
+        if (emptyBox) emptyBox.style.display = 'block';
+        if (contentBox) contentBox.style.display = 'none';
         return;
     }
 
-    emptyBox.style.display = 'none';
-    contentBox.style.display = 'grid';
+    // ✅ फ़िक्स: यदि कार्ट में आइटम है, तो खाली संदेश छिपाएँ और पूरा फ़ॉर्म ग्रिड ऑन करें
+    if (emptyBox) emptyBox.style.display = 'none';
+    if (contentBox) contentBox.style.display = 'grid';
+    
     cartItemsBox.innerHTML = '';
-
     let totalBill = 0;
+
     cart.forEach((item, index) => {
         const cost = item.price * item.quantity;
         totalBill += cost;
@@ -291,8 +295,10 @@ function displayCart() {
         `;
     });
 
-    document.getElementById('subtotal').textContent = `₹${totalBill.toLocaleString('en-IN')}`;
-    document.getElementById('total').textContent = `₹${totalBill.toLocaleString('en-IN')}`;
+    const subtotalEl = document.getElementById('subtotal');
+    const totalEl = document.getElementById('total');
+    if (subtotalEl) subtotalEl.textContent = `₹${totalBill.toLocaleString('en-IN')}`;
+    if (totalEl) totalEl.textContent = `₹${totalBill.toLocaleString('en-IN')}`;
 }
 
 function removeCartItemIndex(index) {
@@ -326,15 +332,18 @@ function handleCheckoutFormSubmit(event) {
     };
 
     if (mode === 'ONLINE') {
-        document.getElementById('modal-total-amount').textContent = `₹${activePendingBillingData.amount.toLocaleString('en-IN')}`;
-        document.getElementById('payment-modal').style.display = 'flex';
+        const modalAmountEl = document.getElementById('modal-total-amount');
+        if (modalAmountEl) modalAmountEl.textContent = `₹${activePendingBillingData.amount.toLocaleString('en-IN')}`;
+        const payModal = document.getElementById('payment-modal');
+        if (payModal) payModal.style.display = 'flex';
     } else {
         verifyOnlinePaymentAndDispatch(); 
     }
 }
 
 function closePaymentGatewayModal() {
-    document.getElementById('payment-modal').style.display = 'none';
+    const payModal = document.getElementById('payment-modal');
+    if (payModal) payModal.style.display = 'none';
 }
 
 function verifyOnlinePaymentAndDispatch() {
@@ -344,12 +353,21 @@ function verifyOnlinePaymentAndDispatch() {
     orderHistory.unshift(activePendingBillingData);
     localStorage.setItem('orders', JSON.stringify(orderHistory));
 
-    document.getElementById('inv-id').textContent = activePendingBillingData.id;
-    document.getElementById('inv-date').textContent = activePendingBillingData.date;
-    document.getElementById('inv-method').textContent = activePendingBillingData.method;
-    document.getElementById('inv-name').textContent = activePendingBillingData.name;
-    document.getElementById('inv-phone').textContent = activePendingBillingData.phone;
-    document.getElementById('inv-address').textContent = `${activePendingBillingData.address}, ${activePendingBillingData.city} - ${activePendingBillingData.pincode}`;
+    const invId = document.getElementById('inv-id');
+    const invDate = document.getElementById('inv-date');
+    const invMethod = document.getElementById('inv-method');
+    const invName = document.getElementById('inv-name');
+    const invPhone = document.getElementById('inv-phone');
+    const invAddress = document.getElementById('inv-address');
+    const invItemsList = document.getElementById('invoice-items-list');
+    const invTotal = document.getElementById('inv-total');
+
+    if (invId) invId.textContent = activePendingBillingData.id;
+    if (invDate) invDate.textContent = activePendingBillingData.date;
+    if (invMethod) invMethod.textContent = activePendingBillingData.method;
+    if (invName) invName.textContent = activePendingBillingData.name;
+    if (invPhone) invPhone.textContent = activePendingBillingData.phone;
+    if (invAddress) invAddress.textContent = `${activePendingBillingData.address}, ${activePendingBillingData.city} - ${activePendingBillingData.pincode}`;
     
     let itemsBillSummaryText = '';
     let waItemsText = '';
@@ -357,8 +375,8 @@ function verifyOnlinePaymentAndDispatch() {
         itemsBillSummaryText += `<div style="display:flex; justify-content:space-between; margin-bottom:0.2rem;"><span>• ${item.name} (${item.size}) x${item.quantity}</span><span>₹${(item.price * item.quantity).toLocaleString('en-IN')}</span></div>`;
         waItemsText += `• *${item.name}* (Size: ${item.size}) x ${item.quantity}\n`;
     });
-    document.getElementById('invoice-items-list').innerHTML = itemsBillSummaryText;
-    document.getElementById('inv-total').textContent = `₹${activePendingBillingData.amount.toLocaleString('en-IN')}`;
+    if (invItemsList) invItemsList.innerHTML = itemsBillSummaryText;
+    if (invTotal) invTotal.textContent = `₹${activePendingBillingData.amount.toLocaleString('en-IN')}`;
 
     const whatsappNum = "919870708753";
     const waMsg = `🛍️ *NEW ORDER DISPATCH RECEIPT* (#${activePendingBillingData.id})\n\n` +
@@ -371,7 +389,8 @@ function verifyOnlinePaymentAndDispatch() {
                   `💰 *Grand Total Amount:* ₹${activePendingBillingData.amount.toLocaleString('en-IN')}\n\n` +
                   `Please secure package tracking number. Thank you!`;
 
-    document.getElementById('invoice-modal').style.display = 'flex';
+    const invModal = document.getElementById('invoice-modal');
+    if (invModal) invModal.style.display = 'flex';
     window.open(`https://wa.me/${whatsappNum}?text=${encodeURIComponent(waMsg)}`, '_blank');
 
     cart = [];
@@ -380,7 +399,8 @@ function verifyOnlinePaymentAndDispatch() {
 }
 
 function closeInvoiceAndRedirectHome() {
-    document.getElementById('invoice-modal').style.display = 'none';
+    const invModal = document.getElementById('invoice-modal');
+    if (invModal) invModal.style.display = 'none';
     window.location.href = 'index.html';
 }
 
