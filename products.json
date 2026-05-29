@@ -5,12 +5,12 @@
     "price": 899,
     "image": "images/kurti1.jpg",
     "category": "Kurti",
-    "description": "दीपांशी फैशन वर्ल्ड का खूबसूरत ब्लू सूट कलेक्शन, जो कैजुअल और डेली वियर के लिए एकदम परफेक्ट है।",
+    "description": "दीपांशी फैशन वर्ल्ड का खूबसूरत् ब्लू सूट कलेक्शन, जो कैजुअल और डेली वियर के लिए एकदम परफेक्ट है।",
     "media": [
       { "type": "image", "url": "images/kurti1.jpg" },
+      { "type": "video", "url": "images/green%20video.mp4" },
       { "type": "image", "url": "images/red%20kurti.jpg" },
-      { "type": "image", "url": "images/pink%20kadhai.jpg" },
-      { "type": "image", "url": "images/Gemini.jpg" }
+      { "type": "image", "url": "images/pink%20kadhai.jpg" }
     ]
   },
   {
@@ -22,9 +22,9 @@
     "description": "खूबसूरत कढ़ाई और premium fabric के साथ तैयार किया गया पार्टी वियर सूट।",
     "media": [
       { "type": "image", "url": "images/IMG_20260528_163105.jpg" },
+      { "type": "video", "url": "images/orange%20video.mp4" },
       { "type": "image", "url": "images/black%20suit.jpg" },
-      { "type": "image", "url": "images/jamni%20suit.jpg" },
-      { "type": "image", "url": "images/green%20suit.jpg" }
+      { "type": "image", "url": "images/jamni%20suit.jpg" }
     ]
   },
   {
@@ -131,7 +131,7 @@
     "price": 699,
     "image": "images/red%20kurti.jpg",
     "category": "Kurti",
-    "description": "डेली वियर और कॉलेज वियर के लिए परफेक्ट और ट्रेंडी रेड कुर्ती।",
+    "description": "डेली वियर और कॉलेज वियर के लिए PERFECT और ट्रेंडी रेड कुर्ती।",
     "media": [
       { "type": "image", "url": "images/red%20kurti.jpg" },
       { "type": "image", "url": "images/pink%20kadhai.jpg" },
