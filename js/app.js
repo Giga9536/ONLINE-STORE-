@@ -50,6 +50,22 @@ async function loadProducts() {
                 let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
                 if (isNaN(purePrice)) purePrice = 1999;
 
+                // ✅ नया लॉजिक: होमपेज ग्रिड पर पुराना प्राइस काटना और डिस्काउंट प्रतिशत दिखाना
+                let priceHtml = `<p class="product-price">₹${purePrice.toLocaleString('en-IN')}</p>`;
+                if (product.original_price) {
+                    let oldPrice = parseFloat(product.original_price);
+                    let discountPercent = Math.round(((oldPrice - purePrice) / oldPrice) * 100);
+                    if (discountPercent > 0) {
+                        priceHtml = `
+                            <p class="product-price" style="font-size: 0.95rem;">
+                                <span style="color: #7f8c8d; text-decoration: line-through; font-size: 0.85rem; font-weight: normal; margin-right: 4px;">₹${oldPrice.toLocaleString('en-IN')}</span>
+                                <span style="color: #e67e22; font-weight: bold;">₹${purePrice.toLocaleString('en-IN')}</span>
+                                <span style="color: #27ae60; font-size: 0.8rem; font-weight: bold; margin-left: 4px;">(${discountPercent}% Off)</span>
+                            </p>
+                        `;
+                    }
+                }
+
                 const productCard = `
                     <div class="product-card">
                         <div class="product-image-box">
@@ -59,7 +75,7 @@ async function loadProducts() {
                         </div>
                         <div class="product-info">
                             <h3 class="product-name">${product.name}</h3>
-                            <p class="product-price">₹${purePrice.toLocaleString('en-IN')}</p>
+                            ${priceHtml}
                             <a href="product-details.html?id=${product.id}" class="btn btn-primary" style="text-decoration: none; display: inline-block; text-align: center;">
                                 View More
                             </a>
@@ -123,6 +139,22 @@ function triggerProductDetailsRender() {
     let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
     if (isNaN(purePrice)) purePrice = 1999;
 
+    // ✅ नया लॉजिक: प्रोडक्ट डिस्क्रिप्शन पेज पर भी काटा हुआ पुराना दाम और डिस्काउंट कस्टमाइज़ करना
+    let detailPriceHtml = `<div class="detail-price">₹${purePrice.toLocaleString('en-IN')}</div>`;
+    if (product.original_price) {
+        let oldPrice = parseFloat(product.original_price);
+        let discountPercent = Math.round(((oldPrice - purePrice) / oldPrice) * 100);
+        if (discountPercent > 0) {
+            detailPriceHtml = `
+                <div class="detail-price" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem;">
+                    <span style="color: #7f8c8d; text-decoration: line-through; font-size: 1.1rem; font-weight: normal;">₹${oldPrice.toLocaleString('en-IN')}</span>
+                    <span style="color: #e67e22; font-weight: bold; font-size: 1.5rem;">₹${purePrice.toLocaleString('en-IN')}</span>
+                    <span style="color: #27ae60; font-size: 0.9rem; font-weight: bold; background: #e8f5e9; padding: 2px 8px; border-radius: 4px;">${discountPercent}% Off</span>
+                </div>
+            `;
+        }
+    }
+
     const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
     let bestsellerCardsHtml = '';
@@ -148,7 +180,7 @@ function triggerProductDetailsRender() {
         <div class="detail-image-box">${mediaHtml}</div>
         <div class="detail-info-box">
             <h1 class="detail-title">${product.name}</h1>
-            <div class="detail-price">₹${purePrice.toLocaleString('en-IN')}</div>
+            ${detailPriceHtml}
             <p class="detail-desc">${product.description || 'Premium quality outfit perfect for your wardrobe.'}</p>
             
             <div class="size-section">
@@ -244,9 +276,6 @@ function buyDirectOnWhatsApp(productId) {
     window.open(`https://wa.me/${whatsappNum}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
-/**
- * 🛍️ ✅ फ़िक्स: कार्ट पेज डेटा रेंडरर सिंक (इमेज पाथ को पूरी तरह फिक्स किया गया)
- */
 function displayCart() {
     const cartItemsBox = document.getElementById('cart-items');
     const emptyBox = document.getElementById('cart-empty');
@@ -269,7 +298,6 @@ function displayCart() {
         const cost = item.price * item.quantity;
         totalBill += cost;
         
-        // ✅ इमेज यूआरएल को साफ़ करके बिना किसी गड़बड़ के सही फ़ोल्डर पाथ असाइन किया गया
         let finalImageSrc = item.image;
         if (!finalImageSrc.startsWith('images/') && !finalImageSrc.startsWith('http')) {
             finalImageSrc = 'images/' + finalImageSrc;
@@ -308,7 +336,6 @@ function togglePaymentGatewayNotice(mode) {
     if (notice) notice.style.display = (mode === 'ONLINE') ? 'block' : 'none';
 }
 
-// मास्टर form सबमिशन हैंडलर
 let activePendingBillingData = null;
 function handleCheckoutFormSubmit(event) {
     event.preventDefault();
@@ -411,9 +438,6 @@ function selectSize(element, size) {
     localStorage.setItem('last_selected_size', size);
 }
 
-/**
- * ✅ फ़िक्स: 'Add to Cart' इंजन लॉजिक (क्लिक करते ही तुरंत डायरेक्ट डिटेल्स फॉर्म का पॉप-अप / कार्ट पेज ट्रिगर होगा)
- */
 function addToCart(productId) {
     let product = getProductById(productId);
     if (!product) return;
@@ -435,7 +459,7 @@ function addToCart(productId) {
             id: product.id,
             name: product.name,
             price: purePrice,
-            image: product.image, // शुद्ध इमेज ऑब्जेक्ट
+            image: product.image,
             size: currentSelectedSize,
             quantity: quantity
         });
@@ -449,7 +473,6 @@ function addToCart(productId) {
         detailsCartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
     }
     
-    // ✅ पॉइंट 1 फ़िक्स: अलर्ट संदेश के ठीक बाद कस्टमर को सीधे शिपिंग डिटेल्स फ़ॉर्म भरने के लिए कार्ट पेज पर भेज दिया जाएगा, जहाँ फ़ॉर्म पहले से ही लाइव ओपन रहेगा!
     alert(`"${product.name}" (Size: ${currentSelectedSize}) added to cart! Redirecting to Checkout Form... 🛒`);
     window.location.href = 'cart.html';
 }
