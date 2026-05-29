@@ -170,10 +170,10 @@ function triggerProductDetailsRender() {
             </div>
             
             <div class="action-buttons" style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.5rem;">
-                <button class="btn btn-primary" onclick="addToCart(${product.id})" style="padding: 0.75rem; font-size: 1rem;">
+                <button class="btn btn-primary" onclick="addToCart(${product.id})" style="padding: 0.75rem; font-size: 1rem; cursor: pointer;">
                     🛒 Add to Cart
                 </button>
-                <button class="btn" onclick="buyDirectOnWhatsApp(${product.id})" style="background-color: #25D366; color: white; border: none; padding: 0.75rem; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <button class="btn" onclick="buyDirectOnWhatsApp(${product.id})" style="background-color: #25D366; color: white; border: none; padding: 0.75rem; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
                     💬 Buy on WhatsApp
                 </button>
             </div>
@@ -232,7 +232,11 @@ function buyDirectOnWhatsApp(productId) {
     const product = getProductById(productId);
     if (!product) return;
     const quantity = parseInt(document.getElementById(`qty-${productId}`).value) || 1;
-    const selectedSize = localStorage.getItem('last_selected_size') || 'M';
+    
+    // वर्तमान एक्टिव साइज बटन से टेक्स्ट उठाएं
+    const activeSizeBtn = document.querySelector('.size-btn.selected');
+    const selectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'M';
+    
     let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
     const totalPrice = purePrice * quantity;
     const whatsappNum = "919870708753";
@@ -242,7 +246,7 @@ function buyDirectOnWhatsApp(productId) {
 }
 
 /**
- * 🛍️ नया कार्ट पेज अलाइनमेंट रेंडरर सिंक (प्रॉपर आइटम शो नियम)
+ * 🛍️ कार्ट पेज डेटा रेंडरर सिंक
  */
 function displayCart() {
     const cartItemsBox = document.getElementById('cart-items');
@@ -292,7 +296,7 @@ function togglePaymentGatewayNotice(mode) {
     if (notice) notice.style.display = (mode === 'ONLINE') ? 'block' : 'none';
 }
 
-// ✅ नया: मास्टर फॉर्म हैंडलर (COD वर्सेस ऑनलाइन पेमेंट मोड स्प्लिटर)
+// मास्टर फॉर्म हैंडलर (COD वर्सेस ऑनलाइन पेमेंट मोड स्प्लिटर)
 let activePendingBillingData = null;
 function handleCheckoutFormSubmit(event) {
     event.preventDefault();
@@ -314,7 +318,7 @@ function handleCheckoutFormSubmit(event) {
         document.getElementById('modal-total-amount').textContent = `₹${activePendingBillingData.amount.toLocaleString('en-IN')}`;
         document.getElementById('payment-modal').style.display = 'flex';
     } else {
-        verifyOnlinePaymentAndDispatch(); // COD डायरेक्ट आर्डर प्लेसमेंट
+        verifyOnlinePaymentAndDispatch(); 
     }
 }
 
@@ -322,16 +326,14 @@ function closePaymentGatewayModal() {
     document.getElementById('payment-modal').style.display = 'none';
 }
 
-// ✅ नया: मल्टी-आइटम व्हाट्सएप समरी इंजन + आटोमेटिक इनवॉइस जनरेटर फिक्स
+// मल्टी-आइटम व्हाट्सएप समरी इंजन + आटोमेटिक इनवॉइस जनरेटर फिक्स
 function verifyOnlinePaymentAndDispatch() {
     if (!activePendingBillingData) return;
     closePaymentGatewayModal();
 
-    // ऑर्डर हिस्ट्री में सेव करें
     orderHistory.unshift(activePendingBillingData);
     localStorage.setItem('orders', JSON.stringify(orderHistory));
 
-    // डिजिटल पक्का बिल (Invoice Modal) डेटा लोड
     document.getElementById('inv-id').textContent = activePendingBillingData.id;
     document.getElementById('inv-date').textContent = activePendingBillingData.date;
     document.getElementById('inv-method').textContent = activePendingBillingData.method;
@@ -348,7 +350,6 @@ function verifyOnlinePaymentAndDispatch() {
     document.getElementById('invoice-items-list').innerHTML = itemsBillSummaryText;
     document.getElementById('inv-total').textContent = `₹${activePendingBillingData.amount.toLocaleString('en-IN')}`;
 
-    // व्हाट्सएप मल्टी-आइटम मैसेज ट्रिगर
     const whatsappNum = "919870708753";
     const waMsg = `🛍️ *NEW ORDER DISPATCH RECEIPT* (#${activePendingBillingData.id})\n\n` +
                   `👤 *Customer:* ${activePendingBillingData.name}\n` +
@@ -360,13 +361,9 @@ function verifyOnlinePaymentAndDispatch() {
                   `💰 *Grand Total Amount:* ₹${activePendingBillingData.amount.toLocaleString('en-IN')}\n\n` +
                   `Please secure package tracking number. Thank you!`;
 
-    // इनवॉइस पॉप-अप शो करें
     document.getElementById('invoice-modal').style.display = 'flex';
-    
-    // व्हाट्सएप को बैकग्राउंड टैब में ओपन करें
     window.open(`https://wa.me/${whatsappNum}?text=${encodeURIComponent(waMsg)}`, '_blank');
 
-    // कार्ट साफ़ करें
     cart = [];
     saveCartToStorage();
     updateCartCount();
@@ -401,6 +398,47 @@ function selectSize(element, size) {
     document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
     element.classList.add('selected');
     localStorage.setItem('last_selected_size', size);
+}
+
+// ✅ फ़िक्स: बिल्कुल सटीक और फ़ास्ट 'Add to Cart' इंजन लॉजिक
+function addToCart(productId) {
+    let product = getProductById(productId);
+    if (!product) return;
+    
+    const quantityInput = document.getElementById(`qty-${productId}`);
+    const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+    
+    // ✅ सुरक्षित तरीका: अगर localStorage खाली है, तो स्क्रीन के एक्टिव क्लास बटन से डायरेक्ट साइज उठाएं
+    const activeSizeBtn = document.querySelector('.size-btn.selected');
+    const currentSelectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'M';
+    
+    let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
+    if (isNaN(purePrice)) purePrice = 1999;
+
+    const existingItem = cart.find(item => item.id === productId && item.size === currentSelectedSize);
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: purePrice,
+            image: product.image,
+            size: currentSelectedSize,
+            quantity: quantity
+        });
+    }
+    
+    saveCartToStorage();
+    updateCartCount();
+    
+    // ✅ फ़िक्स: क्लिक करते ही डिटेल्स पेज का फ्लोटिंग कार्ट काउंटर तुरंत रियल-टाइम में अपडेट होगा
+    const detailsCartCount = document.getElementById('details-cart-count');
+    if (detailsCartCount) {
+        detailsCartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
+    
+    alert(`"${product.name}" (Size: ${currentSelectedSize}) added to cart successfully! 🛒`);
 }
 
 function updateCartCount() {
