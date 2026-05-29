@@ -24,16 +24,16 @@
     "description": "दीपांशी फैशन वर्ल्ड का एलिगेंट ऑरेंज मलमल कॉटन सूट। खूबसूरत फूलों की कढ़ाई के साथ फेस्टिवल और कैजुअल वियर के लिए परफेक्ट ऑउटफिट जो आपको दे एकदम एलिगेंट लुक।",
     "media": [
       { "type": "image", "url": "images/IMG_20260528_163041.jpg" },
-      { "type": "image", "url": "images/carrot suit.jpg" },
-      { "type": "image", "url": "images/green suit.jpg" },
-      { "type": "image", "url": "images/jamni suit.jpg" }
+      { "type": "image", "url": "images/carrot%20suit.jpg" },
+      { "type": "image", "url": "images/green%20suit.jpg" },
+      { "type": "image", "url": "images/jamni%20suit.jpg" }
     ]
   },
   {
     "id": 4,
     "name": "जॉर्जेट पार्टी वियर ग्रीन गाउन",
     "price": 1899,
-    "image": "images/green suit.jpg",
+    "image": "images/green%20suit.jpg",
     "category": "Gown",
     "description": "शानदार ग्रीन जॉर्जेट पार्टी वियर गाउन, जो आपको किसी भी शादी या फंक्शन में देगा एक बेहतरीन और मॉडर्न लुक।"
   },
@@ -41,7 +41,7 @@
     "id": 5,
     "name": "कैरट मलमल कॉटन सूट",
     "price": 1499,
-    "image": "images/carrot suit.jpg",
+    "image": "images/carrot%20suit.jpg",
     "category": "Suit",
     "description": "प्रीमियम कैरट शेड में बेहद आरामदायक और सुंदर मलमल कॉटन सूट कलेक्शन।"
   },
@@ -49,7 +49,7 @@
     "id": 6,
     "name": "क्लासिक ब्लैक डिजाइनर सूट",
     "price": 1799,
-    "image": "images/black suit.jpg",
+    "image": "images/black%20suit.jpg",
     "category": "Suit",
     "description": "ऑफिस, फेस्टिवल्स और फॉर्मल इवेंट्स के लिए एलीगेंट ब्लैक फॉर्मल सूट।"
   },
@@ -65,7 +65,7 @@
     "id": 8,
     "name": "जामनी रॉयल एम्ब्रॉयडरी सूट",
     "price": 1599,
-    "image": "images/jamni suit.jpg",
+    "image": "images/jamni%20suit.jpg",
     "category": "Suit",
     "description": "रॉयल जामुनी रंग में खूबसूरत कढ़ाई के साथ ट्रेडिशनल फेस्टिव वियर सूट।"
   },
@@ -73,15 +73,15 @@
     "id": 9,
     "name": "पिंक कढ़ाई फैंसी कुर्ती",
     "price": 799,
-    "image": "images/pink kadhai.jpg",
+    "image": "images/pink%20kadhai.jpg",
     "category": "Kurti",
-    "description": "आकर्षक गुलाबी रंग में हैवी नेक वर्क और शानदार फिनिशिंग के साथ फैंसी कुर्ती।"
+    "description": "आकर्षक गुलाबी रंग में हैवे नेक वर्क और शानदार फिनिशिंग के साथ फैंसी कुर्ती।"
   },
   {
     "id": 10,
     "name": "रेड स्टाइलिश कुर्ती कलेक्शन",
     "price": 699,
-    "image": "images/red kurti.jpg",
+    "image": "images/red%20kurti.jpg",
     "category": "Kurti",
     "description": "डेली वियर और कॉलेज वियर के लिए परफेक्ट और ट्रेंडी रेड कुर्ती।"
   }
