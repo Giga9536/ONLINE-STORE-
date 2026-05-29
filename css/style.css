@@ -8,11 +8,9 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif; /* बदल कर मॉडर्न फॉन्ट किया गया */
+    font-family: 'Poppins', sans-serif;
     color: #333;
     line-height: 1.5;
-    
-    /* 🎨 लाइट ऑरेंज और पीले का खूबसूरत प्रोफेशनल मिश्रण (Gradient Background) */
     background: linear-gradient(135deg, #fff3e0 0%, #fffde7 50%, #ffe0b2 100%);
     background-attachment: fixed; 
 }
@@ -22,51 +20,56 @@ body {
    ========================================================================== */
 .navbar {
     background-color: #2c3e50;
-    padding: 0.6rem 0; /* लोगो के अनुसार पैडिंग थोड़ी कम की ताकि हेडर ज्यादा बड़ा न दिखे */
+    padding: 0.8rem 0;
     position: sticky;
     top: 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
     z-index: 1000;
 }
 
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
 }
 
-/* 🛍️ ब्रांड लोगो और टेक्स्ट का नया मॉडर्न कॉम्बिनेशन स्टाइल */
+/* लोगो रैपर में स्पेसिंग बढ़ाई गई */
 .logo-wrapper {
     display: flex;
     align-items: center;
-    gap: 10px; /* इमेज और टेक्स्ट के बीच की दूरी */
+    gap: 15px; /* लोगो इमेज और नाम के बीच प्रोफेशनल दूरी */
+    margin-right: 2rem; /* मेनू बटन से सुरक्षित दूरी */
 }
 
 .brand-logo {
-    width: 42px;         /* लोगो की चौड़ाई */
-    height: 42px;        /* लोगो की ऊंचाई */
+    width: 45px;
+    height: 45px;
     object-fit: cover;
-    border-radius: 50%;  /* लोगो को खूबसूरत गोल शेप देने के लिए (अगर चौकोर चाहिए तो इसे हटा दें) */
-    border: 2px solid #fff; /* वाइट बॉर्डर प्रीमियम लुक के लिए */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
+/* ✨ दीपांशी फैशन वर्ल्ड के लिए प्रीमियम कैलीग्राफी स्टाइल */
 .logo-text {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.35rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #fff; /* डार्क बैकग्राउंड पर साफ़ दिखने के लिए वाइट कलर */
+    font-family: 'Alex Brush', cursive; /* लग्जरी स्क्रिप्ट/कैलीग्राफी फ़ॉन्ट */
+    font-size: 2.1rem; /* कैलीग्राफी फ़ॉन्ट्स पतले होते हैं इसलिए साइज बड़ा किया */
+    font-weight: 500;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
+    white-space: nowrap;
 }
 
-/* हेडर मेनू लिंक्स स्टाइल */
+/* हेडर मेनू लिंक्स */
 .nav-menu {
     display: flex;
-    gap: 1.5rem;
+    gap: 2rem;
+    align-items: center;
 }
 
 .nav-link {
@@ -78,7 +81,7 @@ body {
 }
 
 .nav-link:hover, .nav-link.active {
-    color: #f39c12; /* गोल्ड/ऑरेंज होवर इफ़ेक्ट */
+    color: #f39c12;
 }
 
 .cart-link {
@@ -86,7 +89,7 @@ body {
     text-decoration: none;
     font-weight: bold;
     background-color: #e67e22;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.2rem;
     border-radius: 4px;
     transition: background 0.3s;
 }
@@ -142,7 +145,6 @@ body {
 }
 
 .header h1 {
-    font-family: 'Montserrat', sans-serif;
     font-size: 2.2rem;
     color: #2c3e50;
     margin-bottom: 0.5rem;
@@ -158,7 +160,6 @@ body {
 }
 
 .category-title {
-    font-family: 'Montserrat', sans-serif;
     font-size: 1.6rem;
     color: #2c3e50;
     margin-bottom: 1.5rem;
@@ -177,11 +178,11 @@ body {
     border-radius: 2px;
 }
 
-/* Products Grid Layout */
+/* 🛍️ कार्ड्स का साइज थोड़ा छोटा करने के लिए ग्रिड चौड़ाई 220px से घटाकर 190px की गई */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 1.2rem;
 }
 
 /* Product Card Style */
@@ -189,7 +190,7 @@ body {
     background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -197,12 +198,12 @@ body {
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
 }
 
 .product-image-box {
     width: 100%;
-    height: 280px; 
+    height: 240px; /* थोड़ा छोटे कार्ड्स के अनुपात में इमेज की ऊंचाई सेट की */
     background-color: #f9f9f9;
     overflow: hidden;
 }
@@ -215,11 +216,11 @@ body {
 }
 
 .product-card:hover .p-img {
-    transform: scale(1.05);
+    transform: scale(1.04);
 }
 
 .product-info {
-    padding: 1rem;
+    padding: 0.8rem;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -228,28 +229,29 @@ body {
 }
 
 .product-name {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     color: #2c3e50;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     font-weight: 600;
 }
 
 .product-price {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #e67e22;
     font-weight: bold;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
 }
 
 .btn {
     display: inline-block;
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1rem;
     border-radius: 4px;
     font-weight: 500;
     text-decoration: none;
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
+    transition: background 0.2s;
     width: 100%;
+    font-size: 0.9rem;
 }
 
 .btn-primary {
@@ -271,17 +273,6 @@ body {
     margin-top: 3rem;
 }
 
-.about-section h2 {
-    font-family: 'Montserrat', sans-serif;
-    color: #2c3e50;
-    margin-bottom: 1rem;
-}
-
-.about-section p {
-    color: #555;
-    margin-bottom: 1rem;
-}
-
 /* Footer Style */
 .footer {
     background-color: #2c3e50;
@@ -293,7 +284,7 @@ body {
 }
 
 /* ==========================================================================
-   4. Media Queries (Mobile & Tablet Optimization)
+   4. Media Queries (Mobile Optimization)
    ========================================================================== */
 @media (max-width: 768px) {
     .hamburger {
@@ -334,23 +325,15 @@ body {
     }
 
     .product-image-box {
-        height: 190px;
-    }
-    
-    .product-name {
-        font-size: 0.9rem;
-    }
-    
-    .product-price {
-        font-size: 1.05rem;
+        height: 180px;
     }
     
     .logo-text {
-        font-size: 1.1rem; /* मोबाइल पर नाम थोड़ा छोटा किया ताकि स्क्रीन से बाहर न जाए */
+        font-size: 1.6rem; /* मोबाइल स्क्रीन पर ओवरफ्लो से बचने के लिए */
     }
     
     .brand-logo {
-        width: 35px;
-        height: 35px;
+        width: 38px;
+        height: 38px;
     }
 }
