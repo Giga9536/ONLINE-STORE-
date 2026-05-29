@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart & Checkout - Deepanshi Fashion World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="css/style.css">
     <style>
         .checkout-container {
@@ -46,15 +50,36 @@
 
     <nav class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo" style="text-decoration: none;">🛍️ Deepanshi Fashion World</a>
-            <a href="index.html" class="nav-link">← Back to Shop</a>
+            <a href="index.html#home" class="logo-wrapper" style="text-decoration: none;">
+                <img src="images/logo.jpg" alt="Deepanshi Fashion World Logo" class="brand-logo" onerror="this.style.display='none';">
+                <div class="logo-text-block">
+                    <span class="logo-line-one">Deepanshi Fashion</span>
+                    <span class="logo-line-two">World</span>
+                </div>
+            </a>
+            
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
+            <div class="nav-right-section">
+                <div class="nav-menu">
+                    <a href="index.html#home" class="nav-link">Home</a>
+                    <a href="index.html#product-list" class="nav-link">Our Collection</a>
+                    <a href="cart.html" class="nav-link active">My Orders</a> 
+                    <a href="index.html#about" class="nav-link">About Us</a>
+                </div>
+            </div>
         </div>
     </nav>
 
     <div class="container">
         <div class="header">
-            <h1>Shopping Cart & Checkout</h1>
-            <p>Review your items and complete your order</p>
+            <h1 class="welcome-title">Shopping Cart & Checkout</h1>
+            <p class="welcome-subtitle">Review your items and complete your order</p>
         </div>
 
         <div id="cart-empty" class="empty-cart" style="display: none;">
@@ -125,7 +150,7 @@
     </div>
 
     <footer class="footer">
-        <p>&copy; 2026 Deepanshi Fashion World. All rights reserved.</p>
+        <p>&copy; 2026 Deepanshi Fashion World. All rights reserved. Built with HTML, CSS & JavaScript</p>
     </footer>
 
     <script src="js/app.js"></script>
