@@ -91,7 +91,7 @@
             
             <div class="billing-form">
                 <h2 style="margin-bottom: 1.5rem; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">🚚 Shipping Details</h2>
-                <form id="checkout-form" onsubmit="placeOrder(event)">
+                <form id="checkout-form" onsubmit="handleCheckoutFormSubmit(event)">
                     <div class="form-group">
                         <label for="name">Full Name</label>
                         <input type="text" id="name" required placeholder="Enter your full name">
@@ -99,6 +99,11 @@
                     <div class="form-group">
                         <label for="phone">Phone Number</label>
                         <input type="tel" id="phone" required placeholder="Enter 10-digit mobile number">
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" required maxlength="6" placeholder="Enter 6-digit area pincode" oninput="checkPincodeService(this.value)">
+                        <small id="pincode-status" style="display: block; margin-top: 0.3rem; font-weight: 600;"></small>
                     </div>
                     <div class="form-group">
                         <label for="address">Full Address</label>
@@ -110,10 +115,16 @@
                     </div>
                     <div class="form-group">
                         <label for="payment">Payment Mode</label>
-                        <select id="payment">
+                        <select id="payment" onchange="togglePaymentGatewayNotice(this.value)">
                             <option value="COD">Cash on Delivery (COD)</option>
+                            <option value="ONLINE">Pay Online (UPI / QR Scanner)</option>
                         </select>
                     </div>
+                    
+                    <div id="online-payment-notice" style="display: none; background: #e8f4fd; border-left: 4px solid #3498db; padding: 0.8rem; margin-bottom: 1rem; border-radius: 4px; font-size: 0.9rem; color: #2c3e50;">
+                        💡 <strong>Online Payment Selected:</strong> After clicking confirm, a secure UPI QR Scanner modal will appear to instantly transfer payment.
+                    </div>
+
                     <button type="submit" class="btn" style="background-color: #27ae60; color: white; font-size: 1.1rem; padding: 1rem; margin-top: 1rem;">Place Order (Confirm)</button>
                 </form>
             </div>
@@ -146,6 +157,61 @@
             <h2 style="margin-bottom: 1.5rem; color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 0.5rem;">📦 My Orders History</h2>
             <div id="orders-list">
                 </div>
+        </div>
+    </div>
+
+    <div id="payment-modal" class="custom-payment-modal">
+        <div class="modal-content">
+            <h3>🔒 Secure UPI Payment Gateway</h3>
+            <p>Scan the QR Code below using any UPI App (Google Pay, PhonePe, Paytm) to complete payment.</p>
+            
+            <div class="qr-placeholder">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=9870708753@okbizaxis%26pn=DeepanshiFashionWorld%26am=0%26cu=INR" alt="UPI QR Code">
+                <div style="font-weight: bold; margin-top: 0.5rem; color: #e67e22;">Deepanshi Fashion World</div>
+            </div>
+
+            <div class="amount-badge">Total Amount: <span id="modal-total-amount">₹0.00</span></div>
+            
+            <p style="font-size: 0.8rem; color: #7f8c8d; margin-top: 0.5rem;">⚠️ After successful payment, click the transaction verified button below to auto-send your full dispatch receipt to our WhatsApp.</p>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn confirm-btn" onclick="verifyOnlinePaymentAndDispatch()">I Have Paid Successfully ✅</button>
+                <button class="modal-btn cancel-btn" onclick="closePaymentGatewayModal()">Cancel Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="invoice-modal" class="custom-payment-modal">
+        <div class="invoice-box-content">
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <h2 style="font-family: 'Alex Brush', cursive; color: #2c3e50; font-size: 2.5rem;">Deepanshi Fashion World</h2>
+                <p style="font-size: 0.85rem; color: #7f8c8d;">Official Customer Digital Invoice Receipt</p>
+            </div>
+            <hr style="border: none; border-top: 1px dashed #ddd; margin: 1rem 0;">
+            
+            <div class="invoice-meta">
+                <p><strong>Order ID:</strong> <span id="inv-id"></span></p>
+                <p><strong>Date:</strong> <span id="inv-date"></span></p>
+                <p><strong>Payment Mode:</strong> <span id="inv-method"></span></p>
+            </div>
+            
+            <div class="invoice-meta" style="margin-top: 0.8rem;">
+                <p><strong>Customer Name:</strong> <span id="inv-name"></span></p>
+                <p><strong>Phone:</strong> <span id="inv-phone"></span></p>
+                <p><strong>Shipping Address:</strong> <span id="inv-address"></span></p>
+            </div>
+            
+            <h4 style="margin-top: 1.2rem; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 0.3rem;">Purchased Items</h4>
+            <div id="invoice-items-list" style="font-size: 0.9rem; margin-top: 0.5rem;"></div>
+            
+            <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; border-top: 2px solid #2c3e50; margin-top: 1.2rem; padding-top: 0.5rem;">
+                <span>Grand Total:</span>
+                <span id="inv-total"></span>
+            </div>
+            
+            <div style="text-align: center; margin-top: 1.5rem;" class="no-print">
+                <button class="modal-btn confirm-btn" style="width: auto; padding: 0.6rem 2rem;" onclick="closeInvoiceAndRedirectHome()">Take Screenshot & Continue</button>
+            </div>
         </div>
     </div>
 
