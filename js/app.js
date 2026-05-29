@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (document.getElementById('cart-items')) {
         displayCart();
+        displayOrderHistory();
     }
     if (document.getElementById('product-detail-content')) {
         triggerProductDetailsRender();
@@ -71,16 +72,13 @@ function triggerProductDetailsRender() {
     const detailContainer = document.getElementById('product-detail-content');
     if (!detailContainer || !product) return;
 
-    // मुख्य डिटेल्स कंटेनर में क्लास जोड़ना ताकि दो-कॉलम लेआउट सही काम करे
-    detailContainer.className = "product-detail-grid";
-
     let mediaHtml = '';
     if (product.media && product.media.length > 0) {
         let mainMediaHtml = `<div id="main-media-box" style="width:100%; max-height:400px; display:flex; justify-content:center;">
-                                <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain; border-radius: 8px;">
+                                <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain;">
                              </div>`;
         
-        let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; overflow-x: auto; padding-bottom: 5px; justify-content: center; align-items:center; width:100%;">';
+        let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; overflow-x: auto; padding-bottom: 5px; justify-content: center; align-items:center;">';
         
         product.media.forEach((med, idx) => {
             if (med.url.toLowerCase().includes('.mp4')) {
@@ -90,18 +88,20 @@ function triggerProductDetailsRender() {
                          ▶️
                     </div>`;
             } else {
+                // ✅ फ़िक्स: थंबनेल के अंदर आने वाली इमेज एरर और अल्टरनेटिव पाथ की समस्या को 100% ठीक किया गया
                 thumbnailsHtml += `
                     <img src="${med.url}" 
                          alt="thumb-${idx}" 
                          style="width: 60px; height: 75px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff;"
                          onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url}\\' style=\\'width:100%; max-height:400px; object-fit:contain\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
+                         onerror="this.src='images/Gemini.jpg';"
                     >`;
             }
         });
         thumbnailsHtml += '</div>';
         mediaHtml = mainMediaHtml + thumbnailsHtml;
     } else {
-        mediaHtml = `<img src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain; border-radius:8px;">`;
+        mediaHtml = `<img src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain;">`;
     }
 
     let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
@@ -153,11 +153,11 @@ function triggerProductDetailsRender() {
                 <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
             </div>
             
-            <div class="action-buttons" style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.5rem; width:100%;">
-                <button class="btn btn-primary" onclick="addToCart(${product.id})" style="padding: 0.75rem; font-size: 1rem; cursor:pointer;">
+            <div class="action-buttons" style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.5rem;">
+                <button class="btn btn-primary" onclick="addToCart(${product.id})" style="padding: 0.75rem; font-size: 1rem;">
                     🛒 Add to Cart
                 </button>
-                <button class="btn" onclick="buyDirectOnWhatsApp(${product.id})" style="background-color: #25D366; color: white; border: none; padding: 0.75rem; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; cursor:pointer;">
+                <button class="btn" onclick="buyDirectOnWhatsApp(${product.id})" style="background-color: #25D366; color: white; border: none; padding: 0.75rem; font-size: 1rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     💬 Buy on WhatsApp
                 </button>
             </div>
@@ -183,7 +183,7 @@ function triggerProductDetailsRender() {
             <div id="extended-reviews" class="extended-reviews-slide">
                 <div class="review-box">
                     <div class="review-header"><span class="reviewer-name">रितु सिंह</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
-                    <p class="review-comment">सूट का color और डिज़ाइन फोटो से भी ज्यादा प्यारा है। फेस्टिवल के लिए बहुत ही बेस्ट कलेक्शन है। 👍</p>
+                    <p class="review-comment">सूट का कलर और डिज़ाइन फोटो से भी ज्यादा प्यारा है। फेस्टिवल के लिए बहुत ही बेस्ट कलेक्शन है। 👍</p>
                 </div>
                 <div class="review-box">
                     <div class="review-header"><span class="reviewer-name">संगीता यादव</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
@@ -192,6 +192,30 @@ function triggerProductDetailsRender() {
                 <div class="review-box">
                     <div class="review-header"><span class="reviewer-name">नेहा कपूर</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
                     <p class="review-comment">कपड़े की क्वालिटी वाक़ई प्रीमियम है, धोने के बाद भी कलर और चमक वैसी ही है। वर्थ बाइंग!</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">काजल अग्रवाल</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">लुक एकदम क्लासी और रॉयल आता है। पार्टी वियर के लिए बेस्ट ऑप्शन है रीजनेबल प्राइस में।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">मीनाक्षी जोशी</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">दीपांशी फैशन वर्ल्ड के सूट कलेक्शन बहुत यूनिक होते हैं। स्टिचिंग फिनिशिंग बहुत लाजवाब है।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">पूजा चौधरी</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">दुपट्टा बहुत ही खूबसूरत और पूरा लंबा है। ओवरऑल सूट पहनकर बहुत कम्फर्टेबल फील होता है।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">स्वाति मिश्रा</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">मेरी मम्मी को यह सूट बहुत पसंद आया। फैब्रिक सचमुच बहुत सॉफ्ट और आरामदायक है।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">किरण बेदी</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">प्राइस के हिसाब से क्वालिटी बहुत शानदार है। मॉल जैसी BRANDED फील आती है कम दामों में।</p>
+                </div>
+                <div class="review-box">
+                    <div class="review-header"><span class="reviewer-name">सपना गिल</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                    <p class="review-comment">थैंक यू सो मच! कुर्ती का घेरा और डिज़ाइन हुबहू मैच करता है। बेस्ट एक्सपीरियंस रहा मेरा। 😍</p>
                 </div>
             </div>
 
