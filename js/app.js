@@ -2,13 +2,11 @@ let cart = [];
 let orderHistory = [];
 window.allProductsList = [];
 
-// DOM load hote hi functions trigger karna
 document.addEventListener('DOMContentLoaded', async () => {
     loadCartFromStorage();
     loadOrdersFromStorage();
     updateCartCount();
     
-    // JSON fetch hone ka wait karenge
     await loadProducts();
 
     if (document.getElementById('cart-items')) {
@@ -20,9 +18,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-/**
- * 1. JSON file se responsive grid cards ready karna
- */
 async function loadProducts() {
     try {
         const response = await fetch('products.json');
@@ -68,9 +63,6 @@ function getProductById(productId) {
     return null;
 }
 
-/**
- * 2. Multi-media and Video Gallery custom engine rule
- */
 function triggerProductDetailsRender() {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = parseInt(urlParams.get('id'));
@@ -100,7 +92,7 @@ function triggerProductDetailsRender() {
                     <img src="${med.url}" 
                          alt="thumb-${idx}" 
                          style="width: 60px; height: 75px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff;"
-                         onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url}\\' style=\\'width:100%; max-height:400px; object-fit:contain;\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
+                         onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url}\\' style=\\'width:100%; max-height:400px; object-fit:contain\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
                     >`;
             }
         });
@@ -113,12 +105,35 @@ function triggerProductDetailsRender() {
     let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
     if (isNaN(purePrice)) purePrice = 1999;
 
+    const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    // 🔥 ऑटोमैटिक बेस्ट सेलर रेंडरर लॉजिक
+    let bestsellerCardsHtml = '';
+    const randomBestsellers = window.allProductsList.filter(p => p.id !== product.id).slice(0, 5);
+    randomBestsellers.forEach(bp => {
+        let bpPrice = typeof bp.price === 'string' ? parseFloat(bp.price.replace(/[^\d.]/g, '')) : parseFloat(bp.price);
+        bestsellerCardsHtml += `
+            <a href="product-details.html?id=${bp.id}" class="bestseller-card">
+                <img src="${bp.image}" class="bestseller-img" onerror="this.src='images/Gemini.jpg';">
+                <div class="bestseller-name">${bp.name}</div>
+                <div class="bestseller-price">₹${bpPrice.toLocaleString('en-IN')}</div>
+            </a>
+        `;
+    });
+
     detailContainer.innerHTML = `
+        <div style="grid-column: span 2; text-align: right; margin-bottom: 1rem;">
+            <a href="cart.html" class="details-page-cart">
+                🛒 View Cart <span id="details-cart-count" class="cart-count">${totalCartItems}</span>
+            </a>
+        </div>
+        
         <div class="detail-image-box">${mediaHtml}</div>
         <div class="detail-info-box">
             <h1 class="detail-title">${product.name}</h1>
             <div class="detail-price">₹${purePrice.toLocaleString('en-IN')}</div>
             <p class="detail-desc">${product.description || 'Premium quality outfit perfect for your wardrobe.'}</p>
+            
             <div class="size-section">
                 <div class="size-title"><span>Select Size:</span></div>
                 <div class="size-grid">
@@ -130,7 +145,8 @@ function triggerProductDetailsRender() {
                     <button class="size-btn" onclick="selectSize(this, '3XL')">3XL</button>
                 </div>
             </div>
-            <div class="product-quantity" style="margin-top: 1rem; margin-bottom: 1.5rem;">
+            
+            <div class="product-quantity">
                 <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
                 <input type="text" class="quantity-input" id="qty-${product.id}" value="1" readonly>
                 <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
@@ -138,7 +154,31 @@ function triggerProductDetailsRender() {
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="addToCart(${product.id})">🛒 Add to Cart</button>
             </div>
-        </div>`;
+        </div>
+
+        <div class="bestseller-section" style="grid-column: span 2;">
+            <h3 class="bestseller-title">🔥 Our Best Sellers</h3>
+            <div class="bestseller-slider">${bestsellerCardsHtml}</div>
+        </div>
+
+        <div class="reviews-section" style="grid-column: span 2;">
+            <h3 class="bestseller-title" style="border-left-color: #27ae60;">🌟 Customer Reviews</h3>
+            <div class="review-box">
+                <div class="review-header">
+                    <span class="reviewer-name">प्रिया शर्मा</span>
+                    <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                </div>
+                <p class="review-comment">कपड़े का फैब्रिक और कढ़ाई बहुत ही सुंदर है। फिटिंग एकदम परफेक्ट आई, थैंक यू दीपांशी फैशन वर्ल्ड!</p>
+            </div>
+            <div class="review-box">
+                <div class="review-header">
+                    <span class="reviewer-name">अंजलि वर्मा</span>
+                    <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                </div>
+                <p class="review-comment">मैंने पहली बार वीडियो थंबनेल देखकर ऑर्डर किया था, जैसा वीडियो में सूट दिखा बिल्कुल वैसा ही मिला।</p>
+            </div>
+        </div>
+    `;
 }
 
 function changeQuantity(event, change) {
@@ -180,6 +220,11 @@ function addToCart(productId) {
     }
     saveCartToStorage();
     updateCartCount();
+    
+    const detailsCartCount = document.getElementById('details-cart-count');
+    if (detailsCartCount) {
+        detailsCartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
     alert(`Product added to cart successfully!`);
 }
 
