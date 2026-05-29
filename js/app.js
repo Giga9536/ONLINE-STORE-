@@ -1,27 +1,35 @@
 /**
- * दीपांशी फैशन वर्ल्ड - मुख्य जावास्क्रिप्ट फ़ाइल (अपडेटेड)
- * प्रोडक्ट कार्ड लोडिंग, साइज चार्ट ट्रैकिंग और व्हाट्सएप इंटीग्रेशन के साथ
+ * दीपांशी फैशन वर्ल्ड - मुख्य जावास्क्रिप्ट फ़ाइल (बग फिक्स्ड)
+ * प्रोडक्ट लोडिंग, साइज चार्ट ट्रैकिंग और व्हाट्सएप इंटीग्रेशन के साथ
  */
 
 let cart = [];
 let orderHistory = [];
+window.allProductsList = []; // ग्लोबल लिस्ट को एरे सेट किया
 
 // पेज लोड होते ही डेटा लोड करना और कार्ट काउंट अपडेट करना
-document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
+document.addEventListener('DOMContentLoaded', async () => {
     loadCartFromStorage();
     loadOrdersFromStorage();
     updateCartCount();
+
+    // सबसे पहले प्रोडक्ट्स को JSON से पूरी तरह सिंक होने का इंतजार (await) करेंगे
+    await loadProducts();
 
     // यदि हम चेकआउट (cart.html) पेज पर हैं, तो कार्ट और हिस्ट्री दिखाएं
     if (document.getElementById('cart-items')) {
         displayCart();
         displayOrderHistory();
     }
+
+    // अगर हम डिटेल्स पेज पर हैं, तो डेटा आने के बाद डिटेल्स रेंडर करेंगे
+    if (document.getElementById('product-detail-content')) {
+        triggerProductDetailsRender();
+    }
 });
 
 /**
- * 1. JSON फ़ाइल से डायनेमिक रूप से प्रोडक्ट्स लोड करना
+ * 1. JSON फ़ाइल से डायनेमिक रूप से प्रोडक्ट्स लोड करना (होम पेज NaN फिक्स)
  */
 async function loadProducts() {
     try {
@@ -32,8 +40,7 @@ async function loadProducts() {
         }
 
         const productsData = await response.json();
-        // वैश्विक उपयोग के लिए विंडो ऑब्जेक्ट में प्रोडक्ट्स को सुरक्षित करना
-        window.allProductsList = productsData; 
+        window.allProductsList = productsData; // वैश्विक उपयोग के लिए सेव किया
 
         const productContainer = document.getElementById('product-list');
         
@@ -47,6 +54,16 @@ async function loadProducts() {
 
             // हर एक प्रोडक्ट के लिए कार्ड तैयार करना (ग्रिड लेआउट में)
             productsData.forEach(product => {
+                // सुरक्षित प्राइस हैंडलिंग (NaN रोकने के लिए स्ट्रिंग या नंबर की जांच)
+                let purePrice = 0;
+                if (typeof product.price === 'string') {
+                    purePrice = parseFloat(product.price.replace(/[^\d.]/g, ''));
+                } else {
+                    purePrice = parseFloat(product.price);
+                }
+                
+                if (isNaN(purePrice)) purePrice = 1999; // सेफ फॉलबैक
+
                 const productCard = `
                     <div class="product-card" data-category="${product.category || 'all'}">
                         <div class="product-image-box">
@@ -56,7 +73,7 @@ async function loadProducts() {
                         </div>
                         <div class="product-info">
                             <h3 class="product-name">${product.name}</h3>
-                            <p class="product-price">₹${parseFloat(product.price).toLocaleString('en-IN')}</p>
+                            <p class="product-price">₹${purePrice.toLocaleString('en-IN')}</p>
                             
                             <a href="product-details.html?id=${product.id}" class="btn btn-primary" style="text-decoration: none; display: inline-block; text-align: center;">
                                 View More
@@ -66,7 +83,7 @@ async function loadProducts() {
                 `;
                 productContainer.innerHTML += productCard;
             });
-            console.log("सभी प्रोडक्ट्स 'View More' बटन के साथ लोड हो गए हैं!");
+            console.log("सभी प्रोडक्ट्स होम पेज पर लोड हो गए हैं!");
         }
     } catch (error) {
         console.error("प्रॉडक्ट लोड करने में समस्या आई:", error);
@@ -77,14 +94,78 @@ async function loadProducts() {
  * 2. आईडी (ID) के आधार पर प्रोडक्ट ढूंढने का ग्लोबल हेल्पर फंक्शन
  */
 function getProductById(productId) {
-    if (window.allProductsList) {
+    if (window.allProductsList && window.allProductsList.length > 0) {
         return window.allProductsList.find(p => p.id === productId) || null;
     }
     return null;
 }
 
 /**
- * 3. क्वांटिटी (+ / - बटन) को बदलने का फंक्शन
+ * 3. प्रोडक्ट डिटेल्स पेज पर 'Loading...' हटाकर सही डेटा दिखाने का फिक्स
+ */
+function triggerProductDetailsRender() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = parseInt(urlParams.get('id'));
+    
+    if (!productId) return;
+    
+    const product = getProductById(productId);
+    const detailContainer = document.getElementById('product-detail-content');
+    
+    if (!detailContainer) return;
+    
+    if (product) {
+        let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
+        if (isNaN(purePrice)) purePrice = 1999;
+
+        const mediaHtml = product.image 
+            ? `<img src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';">`
+            : `<div style="font-size: 8rem; text-align: center; padding: 3rem;">👗</div>`;
+
+        detailContainer.innerHTML = `
+            <div class="detail-image-box">
+                ${mediaHtml}
+            </div>
+            <div class="detail-info-box">
+                <h1 class="detail-title">${product.name}</h1>
+                <div class="detail-price">₹${purePrice.toLocaleString('en-IN')}</div>
+                <p class="detail-desc">${product.description || 'Premium quality outfit perfect for your beautiful wardrobe.'}</p>
+                
+                <div class="size-section">
+                    <div class="size-title">
+                        <span>Select Size:</span>
+                        <span style="color: #3498db; font-size: 0.9rem; cursor: pointer; text-decoration: underline;">Size Chart</span>
+                    </div>
+                    <div class="size-grid">
+                        <button class="size-btn" onclick="selectSize(this, 'S')">S</button>
+                        <button class="size-btn selected" onclick="selectSize(this, 'M')">M</button>
+                        <button class="size-btn" onclick="selectSize(this, 'L')">L</button>
+                        <button class="size-btn" onclick="selectSize(this, 'XL')">XL</button>
+                        <button class="size-btn" onclick="selectSize(this, 'XXL')">XXL</button>
+                        <button class="size-btn" onclick="selectSize(this, '3XL')">3XL</button>
+                    </div>
+                </div>
+
+                <div class="product-quantity" style="margin-bottom: 1.5rem;">
+                    <span style="font-weight: bold; color: #2c3e50; display: block; margin-bottom: 0.5rem;">Quantity:</span>
+                    <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                    <input type="text" class="quantity-input" id="qty-${product.id}" value="1" readonly>
+                    <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="addWithDetails(${product.id})">🛒 Add to Cart</button>
+                    <button class="btn btn-buy-now" onclick="buyNowWithDetails(${product.id})">⚡ Buy Now</button>
+                </div>
+            </div>
+        `;
+    } else {
+        detailContainer.innerHTML = '<p class="no-products">क्षमा करें, इस प्रोडक्ट की डिटेल्स नहीं मिल सकीं।</p>';
+    }
+}
+
+/**
+ * 4. क्वांटिटी (+ / - बटन) को बदलने का फंक्शन
  */
 function changeQuantity(event, change) {
     const input = event.target.parentElement.querySelector('.quantity-input');
@@ -97,10 +178,9 @@ function changeQuantity(event, change) {
 }
 
 /**
- * 4. कार्ट में प्रोडक्ट जोड़ने का मुख्य फंक्शन (साइज़ और क्वांटिटी बैकअप के साथ)
+ * 5. कार्ट में प्रोडक्ट जोड़ने का फंक्शन (साइज़ लॉक के साथ)
  */
 function addToCart(productId) {
-    // अगर विंडो लिस्ट में नहीं है, तो लोकल स्टोरेज से अस्थाई रूप से डेटा निकालने का प्रयास करें
     let product = getProductById(productId);
     
     if (!product) {
@@ -110,11 +190,11 @@ function addToCart(productId) {
     
     const quantityInput = document.getElementById(`qty-${productId}`);
     const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
-    
-    // डिटेल्स पेज से चुना गया साइज़ निकालें (डिफ़ॉल्ट 'M')
     const currentSelectedSize = localStorage.getItem('last_selected_size') || 'M';
     
-    // कार्ट में चेक करें कि क्या समान आईडी और साइज़ का आइटम पहले से मौजूद है
+    let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
+    if (isNaN(purePrice)) purePrice = 1999;
+
     const existingItem = cart.find(item => item.id === productId && item.size === currentSelectedSize);
     
     if (existingItem) {
@@ -123,9 +203,9 @@ function addToCart(productId) {
         cart.push({
             id: product.id,
             name: product.name,
-            price: parseFloat(product.price),
+            price: purePrice,
             image: product.image,
-            size: currentSelectedSize, // साइज़ यहाँ स्टोर हो रहा है
+            size: currentSelectedSize,
             quantity: quantity
         });
     }
@@ -138,7 +218,7 @@ function addToCart(productId) {
 }
 
 /**
- * 5. चेकआउट पेज (cart.html) पर लाइव आइटम दिखाना
+ * 6. चेकआउट पेज (cart.html) पर लाइव आइटम दिखाना
  */
 function displayCart() {
     const cartItemsContainer = document.getElementById('cart-items');
@@ -210,9 +290,6 @@ function updateCartCount() {
     }
 }
 
-/**
- * 6. लोकल स्टोरेज मैनेजर्स
- */
 function saveCartToStorage() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
@@ -231,9 +308,6 @@ function loadOrdersFromStorage() {
     }
 }
 
-/**
- * 7. पुराना ऑर्डर इतिहास (My Orders History) दिखाना
- */
 function displayOrderHistory() {
     const section = document.getElementById('orders-history-section');
     const listContainer = document.getElementById('orders-list');
@@ -279,11 +353,10 @@ function displayOrderHistory() {
 }
 
 /**
- * 8. व्हाट्सएप पर ऑर्डर भेजने का मुख्य फ़ंक्शन (Size Blocks के साथ इंटीग्रेटेड)
+ * 7. व्हाट्सएप ऑर्डर हैंडलर
  */
 function placeOrder(event) {
     event.preventDefault();
-    
     try {
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
@@ -298,7 +371,6 @@ function placeOrder(event) {
         let totalAmount = 0;
         let itemsText = ''; 
         
-        // कार्ट में मौजूद हर एक आइटम का नाम और उसका चुना हुआ साइज़ टेक्स्ट में जोड़ना
         cart.forEach((item, index) => {
             totalAmount += item.price * item.quantity;
             itemsText += `${index + 1}. 🛍️ ${item.name} \n   [Size: *${item.size}*] [Qty: ${item.quantity}] - ₹${item.price * item.quantity}\n\n`;
@@ -318,10 +390,7 @@ function placeOrder(event) {
         orderHistory.push(newOrder);
         localStorage.setItem('orders', JSON.stringify(orderHistory));
         
-        // 📲 आपका व्हाट्सएप नंबर (सुरक्षित रूप से कॉन्फ़िगर किया गया)
         const MY_WHATSAPP_NUMBER = "919870708753"; 
-        
-        // सुंदर व्हाट्सएप बोल्ड फॉर्मेटिंग संदेश
         const message = `🛍️ *NEW ORDER PLACED!* 🛍️\n\n` +
                         `👤 *Customer Name:* ${name}\n` +
                         `📞 *Customer Phone:* ${phone}\n` +
@@ -337,10 +406,8 @@ function placeOrder(event) {
         cart = [];
         saveCartToStorage();
         
-        // व्हाट्सएप खोलना
         window.open(whatsappUrl, '_blank'); 
         window.location.href = "index.html";
-        
     } catch (error) {
         console.error("Error placing order:", error);
     }
