@@ -2,42 +2,41 @@
   {
     "id": 1,
     "name": "ब्लू सूट कलेक्शन",
-    "price": "₹899",
+    "price": 899,
     "image": "images/kurti1.jpg",
-    "category": "Kurti"
+    "category": "Kurti",
+    "description": "Premium Blue Suit collection for casual and festive occasions."
   },
   {
     "id": 2,
     "name": "प्रीमियम कलेक्शन सूट",
-    "price": "₹1,299",
+    "price": 1299,
     "image": "images/IMG_20260528_163105.jpg",
-    "category": "Suit"
+    "category": "Suit",
+    "description": "Elegant premium formal and festive suit design with heavy work."
   },
   {
     "id": 3,
     "name": "प्रीमियम ऑरेंज सूट",
-    "price": "₹1,399",
+    "price": 1399,
     "image": "images/IMG_20260528_163041.jpg",
     "category": "Suit",
-    "description": "दीपांशी फैशन वर्ल्ड का एलिगेंट ऑरेंज मलमल कॉटन सूट। खूबसूरत फूलों की कढ़ाई के साथ फेस्टिवल और कैजुअल वियर के लिए परफेक्ट ऑउटफिट जो आपको दे एकदम एलिगेंट लुक।",
-    "media": [
-      { "type": "image", "url": "images/IMG_20260528_163041.jpg" },
-      { "type": "image", "url": "images/IMG_20260528_163105.jpg" },
-      { "type": "image", "url": "images/Gemini.jpg" }
-    ]
+    "description": "दीपांशी फैशन वर्ल्ड का एलिगेंट ऑरेंज मलमल कॉटन सूट। खूबसूरत फूलों की कढ़ाई के साथ फेस्टिवल और कैजुअल वियर के लिए परफेक्ट ऑउटफिट जो आपको दे एकदम एलिगेंट लुक।"
   },
   {
     "id": 4,
     "name": "जॉर्जेट पार्टी वियर गाउन",
-    "price": "₹1,899",
+    "price": 1899,
     "image": "images/gown1.jpg",
-    "category": "Gown"
+    "category": "Gown",
+    "description": "Stunning Georgette Party Wear Gown with fine fabric and modern styling."
   },
   {
     "id": 5,
     "name": "जेमिनी प्रीमियम ऑउटफिट",
-    "price": "₹1,999",
+    "price": 1999,
     "image": "images/Gemini.jpg",
-    "category": "Suit"
+    "category": "Suit",
+    "description": "Trending Gemini collection trendy outfit for women, comfortable and stylish."
   }
 ]
