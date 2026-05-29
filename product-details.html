@@ -3,276 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details & Secure Checkout - Deepanshi Fashion World</title>
+    <title>Product Details - Deepanshi Fashion World</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* 📦 मुख्य प्रोडक्ट डिटेल्स बॉक्स */
         .product-detail-container {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 2.5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
             margin-top: 2rem;
             background: white;
             padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        
-        /* 📸 🎥 राईट-साइड वर्टिकल थंबनेल गैलरी लेआउट */
-        .gallery-wrapper {
-            display: flex;
-            flex-direction: row-reverse; /* 👈 थंबनेल को मुख्य इमेज के दाईं तरफ रखने के लिए */
-            gap: 15px;
+        .detail-image-box {
             width: 100%;
-        }
-
-        /* दाईं तरफ का थंबनेल कॉलम */
-        .thumbnail-column {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 80px;
-            width: 100%;
-        }
-
-        .thumb-box {
-            width: 100%;
-            height: 90px;
-            border: 2px solid #eee;
-            border-radius: 6px;
-            overflow: hidden;
-            cursor: pointer;
-            position: relative;
-            background: #f8f9fa;
-            transition: all 0.2s ease;
-        }
-
-        .thumb-box:hover, .thumb-box.active {
-            border-color: #e67e22; /* एक्टिव थंबनेल पर सुंदर ऑरेंज बॉर्डर */
-        }
-
-        .thumb-box img, .thumb-box video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* वीडियो थंबनेल के ऊपर प्ले का आइकॉन */
-        .video-badge {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.5rem;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-        }
-
-        /* बीच का मुख्य डिस्प्ले बॉक्स */
-        .main-display-box {
-            flex-grow: 1;
             border-radius: 8px;
             overflow: hidden;
             background-color: #f8f9fa;
-            border: 1px solid #f0f0f0;
-            height: 500px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-
-        .main-display-box img, .main-display-box video {
+        .detail-image-box img {
             width: 100%;
-            height: 100%;
+            height: auto;
+            display: block;
             object-fit: contain;
+            max-height: 500px;
         }
-
-        /* 📝 इनफार्मेशन बॉक्स */
         .detail-info-box {
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
         }
         .detail-title {
             font-size: 2rem;
             color: #2c3e50;
             margin-bottom: 0.5rem;
-            font-weight: 600;
         }
         .detail-price {
             font-size: 1.8rem;
             color: #e74c3c;
             font-weight: bold;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
         .detail-desc {
-            color: #555;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        /* 📋 बिलिंग फॉर्म स्टाइल */
-        .billing-form {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-top: 2.5rem;
-            display: none; /* डिफ़ॉल्ट रूप से छुपा रहेगा, कार्ट बटन दबाने पर दिखेगा */
-        }
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #2c3e50;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #bdc3c7;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        /* 🔘 बटन्स स्टाइल्स */
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
             font-size: 1.1rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
         }
-        .btn-primary { background-color: #3498db; color: white; }
-        .btn-whatsapp { background-color: #25D366; color: white; text-decoration: none; }
-        .btn-submit { background-color: #27ae60; color: white; margin-top: 1rem; }
-
-        /* 💳 पेमेंट ओवरले स्क्रीन पॉप-अप */
-        .payment-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            color: white;
+        
+        /* 📏 Size Chart Styling */
+        .size-section {
+            margin-bottom: 1.5rem;
+        }
+        .size-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .size-grid {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .size-btn {
+            border: 1px solid #bdc3c7;
+            background: white;
+            padding: 0.6rem 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            min-width: 50px;
             text-align: center;
         }
-        .payment-box {
-            background: #2c3e50;
-            padding: 2.5rem;
-            border-radius: 12px;
-            max-width: 450px;
-            width: 90%;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+        .size-btn:hover {
+            border-color: #2c3e50;
+            background-color: #f8f9fa;
         }
-        .payment-box h2 { color: #2ecc71; margin-bottom: 1rem; }
-        .payment-box p { font-size: 1.1rem; margin-bottom: 1.5rem; line-height: 1.5; }
-        .overlay-btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 5px;
+        .size-btn.selected {
+            background-color: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
         }
-        .btn-success { background-color: #2ecc71; color: white; }
-        .btn-retry { background-color: #e67e22; color: white; }
 
-        /* 📱 मोबाइल रिस्पॉन्सिव व्यू */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .btn-buy-now {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        /* ⭐️ Customer Review Styling */
+        .reviews-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 3rem;
+        }
+        .reviews-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .review-card {
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #fcfcfc;
+        }
+        .review-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 0.8rem;
+        }
+        .review-stars {
+            color: #f1c40f;
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
+        }
+        .review-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+        .review-text {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 0.3rem;
+        }
+        .view-more-container {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .view-more-btn {
+            background: none;
+            border: 2px solid #3498db;
+            color: #3498db;
+            padding: 0.6rem 2rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .view-more-btn:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
         @media (max-width: 768px) {
             .product-detail-container {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
                 padding: 1rem;
             }
-            .gallery-wrapper {
-                flex-direction: column-reverse; /* मोबाइल पर थंबनेल्स मुख्य इमेज के नीचे आ जाएंगे */
-            }
-            .thumbnail-column {
-                flex-direction: row;
-                max-width: 100%;
-                overflow-x: auto;
-                padding-bottom: 5px;
-            }
-            .thumb-box {
-                width: 70px;
-                height: 70px;
-                flex-shrink: 0;
-            }
-            .main-display-box {
-                height: 350px;
-            }
+            .detail-title { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
+
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">🛍️ Deepanshi Fashion World</a>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="cart.html" class="nav-link">My Orders</a>
-            </div>
+            <a href="index.html" class="nav-link">← Back to Shop</a>
         </div>
     </nav>
 
     <div class="container">
-        <div id="product-detail-display"></div>
-
-        <div id="checkout-section" class="billing-form">
-            <h2 style="margin-bottom: 1.5rem; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">📝 डिलीवरी की जानकारी (Delivery Address)</h2>
-            <form id="order-form" onsubmit="handleCheckout(event)">
-                <div class="form-group">
-                    <label>आपका नाम (Full Name) *</label>
-                    <input type="text" id="cust-name" required placeholder="अपना पूरा नाम लिखें">
-                </div>
-                <div class="form-group">
-                    <label>मोबाइल नंबर (Mobile Number) *</label>
-                    <input type="tel" id="cust-phone" required placeholder="10 अंकों का मोबाइल नंबर">
-                </div>
-                <div class="form-group">
-                    <label>पूरा पता (Full Address - House No, Street, Area) *</label>
-                    <input type="text" id="cust-address" required placeholder="मकान नंबर, गली, इलाका">
-                </div>
-                <div class="form-group">
-                    <label>पिन कोड (Pincode) *</label>
-                    <input type="number" id="cust-pincode" required placeholder="6 अंकों का पिनकोड">
-                </div>
-                <div class="form-group">
-                    <label>पेमेंट का तरीका (Payment Method) *</label>
-                    <select id="payment-method" required onchange="togglePaymentHint()">
-                        <option value="Online Payment">Online UPI Payment (PhonePe, Google Pay, Paytm)</option>
-                        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-submit">🚀 ऑर्डर प्लेस करें (Confirm Order)</button>
-            </form>
+        <div id="product-detail-content" class="product-detail-container">
+            <p style="text-align: center; grid-column: span 2;">Loading product details...</p>
         </div>
-    </div>
 
-    <div id="payment-overlay" class="payment-overlay">
-        <div class="payment-box">
-            <h2>🔒 Secure UPI Payment</h2>
-            <p>हम आपके फोन का पेमेंट ऐप खोलने की कोशिश कर रहे हैं...<br>यदि पेमेंट ऐप ऑटोमैटिक नहीं खुलता है, तो नीचे दिए गए <b>"Pay Now"</b> बटन पर क्लिक करें।</p>
-            <p id="payment-amount-status" style="font-weight: bold; font-size: 1.2rem; color: #f1c40f;"></p>
-            <button id="retry-pay-btn" class="overlay-btn btn-retry">🔄 Pay Now (Open App Again)</button>
-            <button id="complete-order-btn" class="overlay-btn btn-success">✅ पेमेंट कर दिया है (Confirm Order)</button>
+        <div class="reviews-section">
+            <h2 class="reviews-title">Customers Love Us (Feedback)</h2>
+            <div class="reviews-grid" id="reviews-container">
+                <div class="review-card">
+                    <img src="images/Gemini.jpg" class="review-img" alt="Customer Review">
+                    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="review-name">Neha S. <span style="font-weight: normal; font-size: 0.8rem; color:#95a5a6;">• 31/01/2026</span></div>
+                    <p class="review-text">Absolutely stunning! The quality of the fabric is soft and comfortable. Perfect fitting and exactly like the picture.</p>
+                </div>
+                <div class="review-card">
+                    <img src="images/black-suit.jpg" class="review-img" alt="Customer Review">
+                    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="review-name">Priya S. <span style="font-weight: normal; font-size: 0.8rem; color:#95a5a6;">• 19/01/2026</span></div>
+                    <p class="review-text">The fabric is super soft, lightweight and breathable. Loved the embroidery and fast delivery too!</p>
+                </div>
+            </div>
+
+            <div class="view-more-container">
+                <button class="view-more-btn" id="view-more-reviews-btn" onclick="toggleMoreReviews()">View More Reviews</button>
+            </div>
         </div>
     </div>
 
@@ -280,159 +217,108 @@
         <p>&copy; 2026 Deepanshi Fashion World. All rights reserved.</p>
     </footer>
 
+    <script src="js/app.js"></script>
     <script>
-        let activeProduct = null;
+        let selectedSize = "M"; // डिफ़ॉल्ट साइज़ सेट है
 
-        // 📸 🎥 थंबनेल पर क्लिक करने पर मुख्य फोटो या वीडियो बदलने का फंक्शन
-        function changeMainMedia(element, type, url) {
-            document.querySelectorAll('.thumb-box').forEach(box => box.classList.remove('active'));
-            element.classList.add('active');
-
-            const displayBox = document.getElementById('main-media-display');
-            if (type === 'video') {
-                displayBox.innerHTML = `<video src="${url}" controls autoplay loop muted></video>`;
-            } else {
-                displayBox.innerHTML = `<img src="${url}" alt="Product Image">`;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
+        window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = parseInt(urlParams.get('id'));
-            if (!productId) return;
+            
+            if (productId) {
+                const product = getProductById(productId);
+                
+                if (product) {
+                    const detailContainer = document.getElementById('product-detail-content');
+                    const mediaHtml = product.image 
+                        ? `<img src="${product.image}" alt="${product.name}">`
+                        : `<div style="font-size: 8rem; text-align: center; padding: 3rem;">👗</div>`;
 
-            try {
-                const response = await fetch('products.json');
-                const products = await response.json();
-                activeProduct = products.find(p => p.id === productId);
-
-                if (activeProduct) {
-                    const displayContainer = document.getElementById('product-detail-display');
-                    
-                    // मीडिया एरे चेक करना (यदि products.json में 'media' नहीं है, तो सिंगल इमेज का उपयोग करेगा)
-                    let mediaList = activeProduct.media || [{ type: 'image', url: activeProduct.image }];
-                    
-                    // थंबनेल्स का HTML बनाना
-                    let thumbHTML = '';
-                    mediaList.forEach((item, index) => {
-                        const activeClass = index === 0 ? 'active' : '';
-                        if (item.type === 'video') {
-                            thumbHTML += `
-                                <div class="thumb-box ${activeClass}" onclick="changeMainMedia(this, 'video', '${item.url}')">
-                                    <video src="${item.url}" muted></video>
-                                    <div class="video-badge">▶</div>
-                                </div>`;
-                        } else {
-                            thumbHTML += `
-                                <div class="thumb-box ${activeClass}" onclick="changeMainMedia(this, 'image', '${item.url}')">
-                                    <img src="${item.url}" onerror="this.src='images/Gemini.jpg';">
-                                </div>`;
-                        }
-                    });
-
-                    // पहला मुख्य मीडिया आइटम लोड करना
-                    let mainMediaHTML = '';
-                    if (mediaList[0].type === 'video') {
-                        mainMediaHTML = `<video src="${mediaList[0].url}" controls autoplay loop muted></video>`;
-                    } else {
-                        mainMediaHTML = `<img src="${mediaList[0].url}" onerror="this.src='images/Gemini.jpg';">`;
-                    }
-
-                    // पूरा स्ट्रक्चर स्क्रीन पर लोड करना
-                    displayContainer.innerHTML = `
-                        <div class="product-detail-container">
-                            <div class="gallery-wrapper">
-                                <div class="thumbnail-column">
-                                    ${thumbHTML}
+                    detailContainer.innerHTML = `
+                        <div class="detail-image-box">
+                            ${mediaHtml}
+                        </div>
+                        <div class="detail-info-box">
+                            <h1 class="detail-title">${product.name}</h1>
+                            <div class="detail-price">₹${product.price}</div>
+                            <p class="detail-desc">${product.description || 'Premium quality outfit perfect for your beautiful wardrobe.'}</p>
+                            
+                            <div class="size-section">
+                                <div class="size-title">
+                                    <span>Select Size:</span>
+                                    <span style="color: #3498db; font-size: 0.9rem; cursor: pointer; text-decoration: underline;">Size Chart</span>
                                 </div>
-                                <div class="main-display-box" id="main-media-display">
-                                    ${mainMediaHTML}
+                                <div class="size-grid">
+                                    <button class="size-btn" onclick="selectSize(this, 'S')">S</button>
+                                    <button class="size-btn selected" onclick="selectSize(this, 'M')">M</button>
+                                    <button class="size-btn" onclick="selectSize(this, 'L')">L</button>
+                                    <button class="size-btn" onclick="selectSize(this, 'XL')">XL</button>
+                                    <button class="size-btn" onclick="selectSize(this, 'XXL')">XXL</button>
+                                    <button class="size-btn" onclick="selectSize(this, '3XL')">3XL</button>
                                 </div>
                             </div>
 
-                            <div class="detail-info-box">
-                                <h1 class="detail-title">${activeProduct.name}</h1>
-                                <div class="detail-price">${activeProduct.price}</div>
-                                <p class="detail-desc">${activeProduct.description || 'दीपांशी फैशन वर्ल्ड का प्रीमियम और खूबसूरत कलेक्शन जो आपको दे एक बेहतरीन और एलिगेंट लुक।'}</p>
-                                
-                                <div class="action-buttons">
-                                    <button class="btn btn-primary" onclick="showCheckoutSection()">
-                                        🛒 Add to Cart & Buy Now
-                                    </button>
-                                    <a href="#" class="btn btn-whatsapp" onclick="directWhatsApp('${activeProduct.name}', '${activeProduct.price}')">
-                                        💬 Buy directly via WhatsApp
-                                    </a>
-                                </div>
+                            <div class="product-quantity" style="margin-bottom: 1.5rem;">
+                                <span style="font-weight: bold; color: #2c3e50; display: block; margin-bottom: 0.5rem;">Quantity:</span>
+                                <button class="quantity-btn" onclick="changeQuantity(event, -1)">-</button>
+                                <input type="text" class="quantity-input" id="qty-${product.id}" value="1" readonly>
+                                <button class="quantity-btn" onclick="changeQuantity(event, 1)">+</button>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" onclick="addWithDetails(${product.id})">🛒 Add to Cart</button>
+                                <button class="btn btn-buy-now" onclick="buyNowWithDetails(${product.id})">⚡ Buy Now</button>
                             </div>
                         </div>
                     `;
                 }
-            } catch (error) {
-                console.error("विवरण लोड करने में समस्या आई:", error);
             }
         });
 
-        function showCheckoutSection() {
-            const formSection = document.getElementById('checkout-section');
-            formSection.style.display = 'block';
-            formSection.scrollIntoView({ behavior: 'smooth' });
+        // साइज़ बटन सिलेक्ट करने का फंक्शन
+        function selectSize(element, size) {
+            document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedSize = size;
         }
 
-        function togglePaymentHint() {
-            // ज़रूरत पड़ने पर कोई हिंट मैसेज जोड़ने के लिए खाली रखा गया है
+        // कार्ट में साइज़ की जानकारी के साथ भेजने के लिए हेल्पर
+        function addWithDetails(productId) {
+            addToCart(productId);
+            // सिलेक्ट किया हुआ साइज़ ब्राउज़र मेमोरी में स्टोर हो जाएगा ताकि व्हाट्सएप मैसेज में जा सके
+            localStorage.setItem('last_selected_size', selectedSize);
         }
 
-        // व्हाट्सएप पर फाइनल मैसेज भेजने का फंक्शन
-        window.sendWhatsAppNotification = function(paymentStatus) {
-            const whatsappNumber = "919870708753"; 
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
-            const address = document.getElementById('cust-address').value;
-            const pincode = document.getElementById('cust-pincode').value;
-            const method = document.getElementById('payment-method').value;
+        function buyNowWithDetails(productId) {
+            addWithDetails(productId);
+            setTimeout(() => {
+                window.location.href = "cart.html";
+            }, 500);
+        }
 
-            const message = `🛍️ *नया ऑर्डर प्राप्त हुआ - दीपांशी फैशन वर्ल्ड* \n------------------------------------------\n\n📦 *प्रोडक्ट:* ${activeProduct.name}\n💰 *कीमत:* ${activeProduct.price}\n\n👤 *ग्राहक विवरण:* \n📝 *नाम:* ${name}\n📞 *मोबाइल:* ${phone}\n🏠 *पता:* ${address}\n📍 *पिन कोड:* ${pincode}\n💳 *पेमेंट का तरीका:* ${method}\n⚡ *पेमेंट स्टेटस:* ${paymentStatus}\n------------------------------------------`;
+        // View More Reviews पर क्लिक करने पर दिखने वाले अतिरिक्त रिव्यूज
+        function toggleMoreReviews() {
+            const container = document.getElementById('reviews-container');
+            const btn = document.getElementById('view-more-reviews-btn');
             
-            window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`, '_blank');
-        }
-
-        // ऑर्डर सबमिट होने पर ऑनलाइन पेमेंट या COD का लॉजिक हैंडल करना
-        function handleCheckout(event) {
-            event.preventDefault();
-            const method = document.getElementById('payment-method').value;
-
-            if (method === "Cash on Delivery") {
-                alert("आपका कैश ऑन डिलीवरी ऑर्डर तैयार है! व्हाट्सएप पर कन्फर्मेशन भेजें।");
-                window.sendWhatsAppNotification("सफल (Cash on Delivery)");
-            } else {
-                // ऑनलाइन यूपीआई पेमेंट गेटवे शुरू करना
-                const myUPIID = "9870708753@ptaxis"; 
-                const cleanPrice = activeProduct.price.replace(/[^0-9]/g, ''); 
-
-                document.getElementById('payment-amount-status').innerText = `कुल राशि: ₹${cleanPrice}`;
-                const overlay = document.getElementById('payment-overlay');
-                overlay.style.display = 'flex';
-
-                // यूनिवर्सल यूपीआई डीप लिंक
-                const upiURL = `upi://pay?pa=${myUPIID}&pn=Deepanshi%20Fashion%20World&am=${cleanPrice}&cu=INR&tn=Order%20for%20${encodeURIComponent(activeProduct.name)}`;
-                
-                window.location.href = upiURL;
-
-                document.getElementById('retry-pay-btn').onclick = function() {
-                    window.location.href = upiURL;
-                };
-
-                document.getElementById('complete-order-btn').onclick = function() {
-                    overlay.style.display = 'none';
-                    window.sendWhatsAppNotification("सफल (ऑनलाइन पेमेंट प्राप्त)");
-                };
-            }
-        }
-
-        function directWhatsApp(productName, productPrice) {
-            const whatsappNumber = "919870708753"; 
-            const message = `नमस्ते *दीपांशी फैशन वर्ल्ड*,\\n\\nमुझे यह पसंद आया है:\\n📌 *नाम:* ${productName}\\n💰 *कीमत:* ${productPrice}`;
-            window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`, '_blank');
+            // डमी एक्स्ट्रा रिव्यूज़ लिस्ट (इमेज के साथ)
+            const extraReviewsHtml = `
+                <div class="review-card extra-review">
+                    <img src="images/black-suit.jpg" class="review-img" alt="Customer Review">
+                    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="review-name">Manasi <span style="font-weight: normal; font-size: 0.8rem; color:#95a5a6;">• 30/11/2025</span></div>
+                    <p class="review-text">Color and fabric are great—Soft, Comfy, And Easy To Wear. The stylish Dupatta makes it look super elegant.</p>
+                </div>
+                <div class="review-card extra-review">
+                    <img src="images/Gemini.jpg" class="review-img" alt="Customer Review">
+                    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="review-name">Indra <span style="font-weight: normal; font-size: 0.8rem; color:#95a5a6;">• 18/11/2025</span></div>
+                    <p class="review-text">The fit is perfect and feels super comfortable to wear. The design and print look very premium and high quality.</p>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', extraReviewsHtml);
+            btn.style.display = 'none'; // अतिरिक्त रिव्यू खुलने के बाद बटन छिप जाएगा
         }
     </script>
 </body>
