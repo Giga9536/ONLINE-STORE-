@@ -20,7 +20,7 @@ body {
    ========================================================================== */
 .navbar {
     background-color: #2c3e50;
-    padding: 0.6rem 0;
+    padding: 0.8rem 0;
     position: sticky;
     top: 0;
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
@@ -36,14 +36,13 @@ body {
     align-items: center;
 }
 
-/* ब्रांड लोगो और स्पेसिंग */
 .logo-wrapper {
     display: flex;
     align-items: center;
     gap: 15px;
+    text-decoration: none !important;
 }
 
-/* 🔄 लोगो का साइज बढ़ाकर 55px किया गया */
 .brand-logo {
     width: 55px;
     height: 55px;
@@ -53,25 +52,22 @@ body {
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
-/* प्रीमियम कैलीग्राफी स्टाइल */
-.logo-text {
+/* ✅ फ़िक्स: दीपांशी फैशन वर्ल्ड का साइज बड़ा किया और नीले रंग को हमेशा के लिए सफ़ेद किया */
+.logo-text, .logo-wrapper .logo-text, a.logo-wrapper:visited .logo-text {
     font-family: 'Alex Brush', cursive;
-    font-size: 2.2rem;
+    font-size: 2.6rem; 
     font-weight: 500;
-    color: #ffffff;
+    color: #ffffff !important; /* हमेशा चमकीला सफेद रहेगा, नीला नहीं होगा */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     letter-spacing: 0.5px;
     white-space: nowrap;
 }
 
-/* राइट साइड कंटेनर जो मेनू और कार्ट को जोड़ता है */
 .nav-right-section {
     display: flex;
     align-items: center;
-    gap: 2rem;
 }
 
-/* हेडर मेनू लिंक्स */
 .nav-menu {
     display: flex;
     gap: 1.5rem;
@@ -90,29 +86,86 @@ body {
     color: #f39c12;
 }
 
-/* कार्ट बटन स्टाइल */
-.cart-link {
-    color: #fff;
+/* डिस्क्रिप्शन पेज के लिए टॉप फ्लोटिंग कार्ट बटन */
+.details-page-cart {
+    background-color: #e67e22;
+    color: #fff !important;
     text-decoration: none;
     font-weight: bold;
-    background-color: #e67e22;
-    padding: 0.5rem 1.2rem;
-    border-radius: 4px;
-    transition: background 0.3s;
-    white-space: nowrap;
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
 }
 
-.cart-link:hover {
+.details-page-cart:hover {
     background-color: #d35400;
+    transform: translateY(-2px);
 }
 
 .cart-count {
     background-color: #fff;
     color: #e67e22;
-    padding: 0.1rem 0.4rem;
+    padding: 0.1rem 0.5rem;
     border-radius: 50%;
-    font-size: 0.8rem;
-    margin-left: 0.2rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   ⚙️ फ़िक्स: क्वांटिटी बटन का लेआउट और यूनिफॉर्म साइज (40px)
+   ========================================================================== */
+.product-quantity {
+    display: flex;
+    align-items: center;
+    gap: 0; /* बटनों को आपस में जोड़ने के लिए */
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* प्लस और माइनस बटन का परफेक्ट आकार */
+.quantity-btn {
+    width: 40px;
+    height: 40px;
+    background-color: #2c3e50;
+    color: #ffffff;
+    border: 1px solid #2c3e50;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.quantity-btn:hover {
+    background-color: #34495e;
+}
+
+/* बीच का नंबर इनपुट बॉक्स */
+.quantity-input {
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+    outline: none;
+}
+
+/* कोनों को सुंदर गोलाई देना */
+.product-quantity .quantity-btn:first-child {
+    border-radius: 4px 0 0 4px;
+}
+.product-quantity .quantity-btn:last-child {
+    border-radius: 0 4px 4px 0;
 }
 
 /* मोबाइल हैमबर्गर */
@@ -125,9 +178,9 @@ body {
 }
 
 .hamburger span {
-    width: 25px;
-    height: 3px;
     background-color: #fff;
+    height: 3px;
+    width: 25px;
     border-radius: 2px;
     transition: all 0.3s ease;
 }
@@ -145,19 +198,16 @@ body {
     padding: 0 1rem;
 }
 
-/* वेलकम बैनर मुख्य बॉक्स */
 .header {
     text-align: center;
     margin-bottom: 2.5rem;
     background: rgba(255, 255, 255, 0.85);
-    padding: 1.8rem 1rem; /* पैडिंग थोड़ी कम की */
+    padding: 1.8rem 1rem;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-/* 🔄 वेलकम टेक्स्ट को छोटा (1.6rem) और मॉडर्न किया गया */
 .welcome-title {
-    font-family: 'Poppins', sans-serif;
     font-size: 1.6rem;
     color: #2c3e50;
     font-weight: 600;
@@ -192,14 +242,12 @@ body {
     border-radius: 2px;
 }
 
-/* प्रोडक्ट्स ग्रिड लेआउट */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     gap: 1.2rem;
 }
 
-/* Product Card Style */
 .product-card {
     background-color: #fff;
     border-radius: 8px;
@@ -218,7 +266,6 @@ body {
 .product-image-box {
     width: 100%;
     height: 240px; 
-    background-color: #f9f9f9;
     overflow: hidden;
 }
 
@@ -226,11 +273,6 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.product-card:hover .p-img {
-    transform: scale(1.04);
 }
 
 .product-info {
@@ -262,8 +304,6 @@ body {
     border-radius: 4px;
     font-weight: 500;
     text-decoration: none;
-    cursor: pointer;
-    transition: background 0.2s;
     width: 100%;
     font-size: 0.9rem;
 }
@@ -278,7 +318,6 @@ body {
     background-color: #34495e;
 }
 
-/* About Section */
 .about-section {
     background: rgba(255, 255, 255, 0.85);
     padding: 2rem;
@@ -287,7 +326,6 @@ body {
     margin-top: 3rem;
 }
 
-/* Footer Style */
 .footer {
     background-color: #2c3e50;
     color: #bdc3c7;
@@ -305,10 +343,6 @@ body {
         display: flex;
     }
 
-    .nav-right-section {
-        gap: 0.8rem;
-    }
-
     .nav-menu {
         display: none;
         flex-direction: column;
@@ -322,7 +356,6 @@ body {
         gap: 1rem;
     }
 
-    /* मोबाइल पर चेक होने पर मेनू खोलें */
     .menu-toggle:checked ~ .nav-right-section .nav-menu {
         display: flex;
     }
@@ -337,7 +370,6 @@ body {
         transform: translateY(-8px) rotate(-45deg);
     }
 
-    /* Mobile Double Grid Layout */
     .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         gap: 0.8rem;
@@ -348,12 +380,12 @@ body {
     }
     
     .logo-text {
-        font-size: 1.5rem; /* मोबाइल स्क्रीन पर टेक्स्ट एडजस्टमेंट */
+        font-size: 1.8rem; 
     }
     
     .brand-logo {
-        width: 44px;
-        height: 44px;
+        width: 46px;
+        height: 46px;
     }
 
     .welcome-title {
