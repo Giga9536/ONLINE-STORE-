@@ -5,7 +5,13 @@
     "price": 899,
     "image": "images/kurti1.jpg",
     "category": "Kurti",
-    "description": "दीपांशी फैशन वर्ल्ड का खूबसूरत ब्लू सूट कलेक्शन, जो कैजुअल और डेली वियर के लिए एकदम परफेक्ट है।"
+    "description": "दीपांशी फैशन वर्ल्ड का खूबसूरत ब्लू सूट कलेक्शन, जो कैजुअल और डेली वियर के लिए एकदम परफेक्ट है।",
+    "media": [
+      { "type": "image", "url": "images/kurti1.jpg" },
+      { "type": "image", "url": "images/red%20kurti.jpg" },
+      { "type": "image", "url": "images/pink%20kadhai.jpg" },
+      { "type": "image", "url": "images/Gemini.jpg" }
+    ]
   },
   {
     "id": 2,
@@ -13,7 +19,13 @@
     "price": 1299,
     "image": "images/IMG_20260528_163105.jpg",
     "category": "Suit",
-    "description": "खूबसूरत कढ़ाई और प्रीमियम फैब्रिक के साथ तैयार किया गया पार्टी वियर सूट।"
+    "description": "खूबसूरत कढ़ाई और प्रीमियम फैब्रिक के साथ तैयार किया गया पार्टी वियर सूट।",
+    "media": [
+      { "type": "image", "url": "images/IMG_20260528_163105.jpg" },
+      { "type": "image", "url": "images/black%20suit.jpg" },
+      { "type": "image", "url": "images/jamni%20suit.jpg" },
+      { "type": "image", "url": "images/green%20suit.jpg" }
+    ]
   },
   {
     "id": 3,
@@ -35,7 +47,13 @@
     "price": 1899,
     "image": "images/green%20suit.jpg",
     "category": "Gown",
-    "description": "शानदार ग्रीन जॉर्जेट पार्टी वियर गाउन, जो आपको किसी भी शादी या फंक्शन में देगा एक बेहतरीन और मॉडर्न लुक।"
+    "description": "शानदार ग्रीन जॉर्जेट पार्टी वियर गाउन, जो आपको किसी भी शादी या फंक्शन में देगा एक बेहतरीन और मॉडर्न लुक।",
+    "media": [
+      { "type": "image", "url": "images/green%20suit.jpg" },
+      { "type": "image", "url": "images/jamni%20suit.jpg" },
+      { "type": "image", "url": "images/black%20suit.jpg" },
+      { "type": "image", "url": "images/IMG_20260528_163105.jpg" }
+    ]
   },
   {
     "id": 5,
@@ -43,7 +61,13 @@
     "price": 1499,
     "image": "images/carrot%20suit.jpg",
     "category": "Suit",
-    "description": "प्रीमियम कैरट शेड में बेहद आरामदायक और सुंदर मलमल कॉटन सूट कलेक्शन।"
+    "description": "प्रीमियम कैरट शेड में बेहद आरामदायक और सुंदर मलमल कॉटन सूट कलेक्शन।",
+    "media": [
+      { "type": "image", "url": "images/carrot%20suit.jpg" },
+      { "type": "image", "url": "images/IMG_20260528_163041.jpg" },
+      { "type": "image", "url": "images/red%20kurti.jpg" },
+      { "type": "image", "url": "images/Gemini.jpg" }
+    ]
   },
   {
     "id": 6,
@@ -51,7 +75,13 @@
     "price": 1799,
     "image": "images/black%20suit.jpg",
     "category": "Suit",
-    "description": "ऑफिस, फेस्टिवल्स और फॉर्मल इवेंट्स के लिए एलीगेंट ब्लैक फॉर्मल सूट।"
+    "description": "ऑफिस, फेस्टिवल्स और फॉर्मल इवेंट्स के लिए एलीगेंट ब्लैक फॉर्मल सूट।",
+    "media": [
+      { "type": "image", "url": "images/black%20suit.jpg" },
+      { "type": "image", "url": "images/IMG_20260528_163105.jpg" },
+      { "type": "image", "url": "images/jamni%20suit.jpg" },
+      { "type": "image", "url": "images/green%20suit.jpg" }
+    ]
   },
   {
     "id": 7,
@@ -59,7 +89,13 @@
     "price": 1999,
     "image": "images/Gemini.jpg",
     "category": "Suit",
-    "description": "ट्रेंडिंग जेमिनी कलेक्शन का सबसे शानदार ऑउटफिट, जो पहनने में बेहद आरामदायक और दिखने में स्टाइलिश है।"
+    "description": "ट्रेंडिंग जेमिनी कलेक्शन का सबसे शानदार ऑउटफिट, जो पहनने में बेहद आरामदायक और दिखने में स्टाइलिश है।",
+    "media": [
+      { "type": "image", "url": "images/Gemini.jpg" },
+      { "type": "image", "url": "images/kurti1.jpg" },
+      { "type": "image", "url": "images/pink%20kadhai.jpg" },
+      { "type": "image", "url": "images/red%20kurti.jpg" }
+    ]
   },
   {
     "id": 8,
@@ -67,7 +103,13 @@
     "price": 1599,
     "image": "images/jamni%20suit.jpg",
     "category": "Suit",
-    "description": "रॉयल जामुनी रंग में खूबसूरत कढ़ाई के साथ ट्रेडिशनल फेस्टिव वियर सूट।"
+    "description": "रॉयल जामुनी रंग में खूबसूरत कढ़ाई के साथ ट्रेडिशनल फेस्टिव वियर सूट।",
+    "media": [
+      { "type": "image", "url": "images/jamni%20suit.jpg" },
+      { "type": "image", "url": "images/green%20suit.jpg" },
+      { "type": "image", "url": "images/black%20suit.jpg" },
+      { "type": "image", "url": "images/IMG_20260528_163105.jpg" }
+    ]
   },
   {
     "id": 9,
@@ -75,7 +117,13 @@
     "price": 799,
     "image": "images/pink%20kadhai.jpg",
     "category": "Kurti",
-    "description": "आकर्षक गुलाबी रंग में हैवे नेक वर्क और शानदार फिनिशिंग के साथ फैंसी कुर्ती।"
+    "description": "आकर्षक गुलाबी रंग में हैवे नेक वर्क और शानदार फिनिशिंग के साथ फैंसी कुर्ती।",
+    "media": [
+      { "type": "image", "url": "images/pink%20kadhai.jpg" },
+      { "type": "image", "url": "images/kurti1.jpg" },
+      { "type": "image", "url": "images/red%20kurti.jpg" },
+      { "type": "image", "url": "images/Gemini.jpg" }
+    ]
   },
   {
     "id": 10,
@@ -83,6 +131,12 @@
     "price": 699,
     "image": "images/red%20kurti.jpg",
     "category": "Kurti",
-    "description": "डेली वियर और कॉलेज वियर के लिए परफेक्ट और ट्रेंडी रेड कुर्ती।"
+    "description": "डेली वियर और कॉलेज वियर के लिए परफेक्ट और ट्रेंडी रेड कुर्ती।",
+    "media": [
+      { "type": "image", "url": "images/red%20kurti.jpg" },
+      { "type": "image", "url": "images/pink%20kadhai.jpg" },
+      { "type": "image", "url": "images/kurti1.jpg" },
+      { "type": "image", "url": "images/carrot%20suit.jpg" }
+    ]
   }
 ]
