@@ -80,7 +80,6 @@ body {
 }
 .nav-link:hover, .nav-link.active { color: #ffb74d; }
 
-/* डिस्क्रिप्शन पेज टॉप कार्ट बटन */
 .details-page-cart {
     background-color: #e67e22;
     color: #fff !important;
@@ -105,7 +104,7 @@ body {
 }
 
 /* ==========================================================================
-   ⚙️ फ़िक्स: क्वांटिटी बटन स्टाइल (40px परफेक्ट अलाइन)
+   ⚙️ क्वांटिटी बटन स्टाइल (40px परफेक्ट अलाइनमेंट फिक्स)
    ========================================================================== */
 .product-quantity {
     display: flex;
@@ -137,130 +136,116 @@ body {
     font-weight: 600;
     border: 1px solid #ccc;
     background-color: #fff;
+    color: #333;
+    outline: none;
 }
 
 .product-quantity .quantity-btn:first-child { border-radius: 4px 0 0 4px; }
 .product-quantity .quantity-btn:last-child { border-radius: 0 4px 4px 0; }
 
-/* ==========================================================================
-   🎨 फ़िक्स: साइज बटन को बड़ा (42px) और साफ़-साफ़ दिखाना
-   ========================================================================== */
-.size-section {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.size-title {
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 0.6rem;
-    font-size: 1rem;
-}
-
-.size-grid {
-    display: flex;
-    gap: 0.8rem; /* बटनों के बीच बेहतरीन दूरी */
-    flex-wrap: wrap;
-}
-
+/* साइज बटन फिक्स */
+.size-section { margin-top: 1.5rem; margin-bottom: 1.5rem; }
+.size-title { font-weight: 600; color: #2c3e50; margin-bottom: 0.6rem; font-size: 1rem; }
+.size-grid { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 .size-btn {
-    width: 44px;  /* परफेक्ट बड़ा साइज */
-    height: 44px; /* परफेक्ट बड़ा साइज */
-    background-color: #ffffff;
-    color: #2c3e50;
-    border: 2px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 44px; height: 44px;
+    background-color: #ffffff; color: #2c3e50;
+    border: 2px solid #ccc; border-radius: 6px;
+    font-size: 1rem; font-weight: bold; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
     transition: all 0.2s ease;
 }
-
-.size-btn:hover {
-    border-color: #2c3e50;
-    background-color: #f8f9fa;
-}
-
-.size-btn.selected {
-    background-color: #2c3e50;
-    color: #ffffff;
-    border-color: #2c3e50;
-    box-shadow: 0 3px 8px rgba(44, 62, 80, 0.3);
-}
+.size-btn:hover { border-color: #2c3e50; background-color: #f8f9fa; }
+.size-btn.selected { background-color: #2c3e50; color: #ffffff; border-color: #2c3e50; box-shadow: 0 3px 8px rgba(44, 62, 80, 0.3); }
 
 /* ==========================================================================
-   🔥 न्यू: बेस्ट सेलर हॉरिजॉन्टल स्लाइडर स्टाइल 
+   🛍️ फिक्स: प्रोडक्ट कार्ड्स का प्रीमियम और यूनिफॉर्म ग्रिड लुक
    ========================================================================== */
-.bestseller-section {
-    margin-top: 3rem;
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 1.2rem;
 }
 
-.bestseller-title {
-    font-size: 1.4rem;
-    color: #2c3e50;
-    margin-bottom: 1rem;
-    border-left: 4px solid #e67e22;
-    padding-left: 10px;
-}
-
-.bestseller-slider {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    scroll-behavior: smooth;
-}
-
-.bestseller-slider::-webkit-scrollbar {
-    height: 6px;
-}
-.bestseller-slider::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 10px;
-}
-
-.bestseller-card {
-    flex: 0 0 160px; /* फिक्स्ड साइज लाइट रिस्पॉन्सिव */
-    background: #fdfdfd;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 0.5rem;
-    text-align: center;
-    text-decoration: none;
-    color: #333;
-}
-
-.bestseller-img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: 6px;
-}
-
-.bestseller-name {
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-top: 0.4rem;
-    white-space: nowrap;
+.product-card {
+    background-color: #fff;
+    border-radius: 12px; /* अधिक स्मूथ कोने */
     overflow: hidden;
-    text-overflow: ellipsis;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06); /* क्लीनर सॉफ्ट शैडो */
+    border: 1px solid rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
 }
 
-.bestseller-price {
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+}
+
+.product-image-box {
+    width: 100%;
+    height: 240px; 
+    overflow: hidden;
+    background-color: #fbfbfb;
+}
+
+.p-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+.product-card:hover .p-img { transform: scale(1.04); }
+
+.product-info {
+    padding: 1rem 0.8rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.product-name {
+    font-size: 0.95rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.product-price {
+    font-size: 1.15rem;
     color: #e67e22;
     font-weight: bold;
-    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
 }
 
+.btn {
+    display: inline-block;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    width: 100%;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+}
+
+.btn-primary { background-color: #2c3e50; color: #fff; border: none; }
+.btn-primary:hover { background-color: #34495e; }
+
+/* Best Sellers */
+.bestseller-section { margin-top: 3rem; background: #fff; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.bestseller-title { font-size: 1.4rem; color: #2c3e50; margin-bottom: 1rem; border-left: 4px solid #e67e22; padding-left: 10px; }
+.bestseller-slider { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 10px; scroll-behavior: smooth; }
+.bestseller-card { flex: 0 0 160px; background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 0.5rem; text-align: center; text-decoration: none; color: #333; }
+.bestseller-img { width: 100%; height: 160px; object-fit: cover; border-radius: 6px; }
+.bestseller-name { font-size: 0.85rem; font-weight: 600; margin-top: 0.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bestseller-price { color: #e67e22; font-weight: bold; font-size: 0.95rem; }
+
 /* ==========================================================================
-   🌟 न्यू: कस्टमर रिव्यू स्टाइलिंग
+   🔄 न्यू: व्यू मोर रिव्यूज स्लाइड स्मूथ एनीमेशन रूल्स
    ========================================================================== */
 .reviews-section {
     margin-top: 2rem;
@@ -270,41 +255,52 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-.review-box {
-    border-bottom: 1px dashed #eee;
-    padding: 1rem 0;
-}
+.review-box { border-bottom: 1px dashed #eee; padding: 1rem 0; }
 .review-box:last-child { border-bottom: none; }
 .review-header { display: flex; justify-content: space-between; margin-bottom: 0.3rem; }
 .reviewer-name { font-weight: bold; color: #2c3e50; font-size: 0.95rem; }
 .review-stars { color: #f1c40f; font-size: 0.9rem; }
-.review-comment { color: #555; font-size: 0.9rem; }
+.review-comment { color: #555; font-size: 0.9rem; line-height: 1.4; }
 
-/* ==========================================================================
-   3. Base Layout Layouts
-   ========================================================================== */
+/* हाइड/शो के लिए स्लाइडर इफेक्ट कंटेनर */
+.extended-reviews-slide {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0, 1, 0, 1); /* स्मूथ ओपनिंग */
+}
+
+/* जावास्क्रिप्ट जब इस क्लास को जोड़ेगा तब स्लाइडर खुलेगा */
+.extended-reviews-slide.open {
+    max-height: 2000px; /* पर्याप्त लिमिट ताकि सारे रिव्यूज दिखें */
+    transition: max-height 0.5s cubic-bezier(1, 0, 1, 0);
+}
+
+.view-more-btn {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.view-more-btn:hover {
+    background-color: #2c3e50;
+    color: white;
+    border-color: #2c3e50;
+}
+
+/* Base structural styles */
 .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
 .header { text-align: center; margin-bottom: 2.5rem; background: rgba(255, 255, 255, 0.85); padding: 1.8rem 1rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .welcome-title { font-size: 1.6rem; color: #2c3e50; font-weight: 600; margin-bottom: 0.3rem; }
 .welcome-subtitle { font-size: 0.95rem; color: #7f8c8d; }
-.category-section { margin-bottom: 3rem; }
-.category-title { font-size: 1.5rem; color: #2c3e50; margin-bottom: 1.5rem; position: relative; padding-bottom: 0.5rem; }
-.category-title::after { content: ''; position: absolute; left: 0; bottom: 0; width: 60px; height: 3px; background-color: #e67e22; border-radius: 2px; }
-
-.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1.2rem; }
-.product-card { background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.06); display: flex; flex-direction: column; }
-.product-image-box { width: 100%; height: 240px; overflow: hidden; }
-.p-img { width: 100%; height: 100%; object-fit: cover; }
-.product-info { padding: 0.8rem; text-align: center; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-.product-name { font-size: 0.95rem; color: #2c3e50; font-weight: 600; }
-.product-price { font-size: 1.1rem; color: #e67e22; font-weight: bold; }
-.btn { display: inline-block; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 500; text-decoration: none; width: 100%; font-size: 0.9rem; }
-.btn-primary { background-color: #2c3e50; color: #fff; border: none; }
-.btn-primary:hover { background-color: #34495e; }
 .about-section { background: rgba(255, 255, 255, 0.85); padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .footer { background-color: #2c3e50; color: #bdc3c7; text-align: center; padding: 1.5rem 1rem; margin-top: 4rem; font-size: 0.9rem; }
 
-/* Mobile Hamburger Menu Control */
+/* मोबाइल नियंत्रण */
 .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 1001; }
 .hamburger span { background-color: #fff; height: 3px; width: 25px; border-radius: 2px; }
 .menu-toggle { display: none; }
