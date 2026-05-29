@@ -5,7 +5,7 @@
     "price": 899,
     "image": "images/kurti1.jpg",
     "category": "Kurti",
-    "description": "Premium Blue Suit collection for casual and festive occasions."
+    "description": "दीपांशी फैशन वर्ल्ड का खूबसूरत ब्लू सूट कलेक्शन, जो कैजुअल और डेली वियर के लिए एकदम परफेक्ट है।"
   },
   {
     "id": 2,
@@ -13,7 +13,7 @@
     "price": 1299,
     "image": "images/IMG_20260528_163105.jpg",
     "category": "Suit",
-    "description": "Elegant premium formal and festive suit design with heavy work."
+    "description": "खूबसूरत कढ़ाई और प्रीमियम फैब्रिक के साथ तैयार किया गया पार्टी वियर सूट।"
   },
   {
     "id": 3,
@@ -21,22 +21,44 @@
     "price": 1399,
     "image": "images/IMG_20260528_163041.jpg",
     "category": "Suit",
-    "description": "दीपांशी फैशन वर्ल्ड का एलिगेंट ऑरेंज मलमल कॉटन सूट। खूबसूरत फूलों की कढ़ाई के साथ फेस्टिवल और कैजुअल वियर के लिए परफेक्ट ऑउटफिट जो आपको दे एकदम एलिगेंट लुक।"
+    "description": "दीपांशी फैशन वर्ल्ड का एलिगेंट ऑरेंज मलमल कॉटन सूट। खूबसूरत फूलों की कढ़ाई के साथ फेस्टिवल और कैजुअल वियर के लिए परफेक्ट ऑउटफिट जो आपको दे एकदम एलिगेंट लुक।",
+    "media": [
+      { "type": "image", "url": "images/IMG_20260528_163041.jpg" },
+      { "type": "image", "url": "images/1000097772.jpg" },
+      { "type": "image", "url": "images/1000097773.jpg" },
+      { "type": "image", "url": "images/black-suit.jpg" }
+    ]
   },
   {
     "id": 4,
-    "name": "जॉर्जेट पार्टी वियर गाउन",
+    "name": "जॉर्जेट पार्टी वियर गाउन (ग्रीन)",
     "price": 1899,
-    "image": "images/gown1.jpg",
+    "image": "images/1000097772.jpg",
     "category": "Gown",
-    "description": "Stunning Georgette Party Wear Gown with fine fabric and modern styling."
+    "description": "शानदार ग्रीन जॉर्जेट पार्टी वियर गाउन, जो आपको किसी भी शादी या फंक्शन में देगा एक बेहतरीन और मॉडर्न लुक।"
   },
   {
     "id": 5,
     "name": "जेमिनी प्रीमियम ऑउटफिट",
     "price": 1999,
+    "image": "images/1000097773.jpg",
+    "category": "Suit",
+    "description": "ट्रेंडिंग जेमिनी कलेक्शन का सबसे शानदार ऑउटफिट, जो पहनने में बेहद आरामदायक और दिखने में स्टाइलिश है।"
+  },
+  {
+    "id": 6,
+    "name": "क्लासिक ब्लैक सूट",
+    "price": 4999,
+    "image": "images/black-suit.jpg",
+    "category": "Suit",
+    "description": "ऑफिस और फॉर्मल इवेंट्स के लिए एलीगेंट ब्लैक फॉर्मल सूट।"
+  },
+  {
+    "id": 7,
+    "name": "जमीनी फैशन वर्ल्ड स्पेशल",
+    "price": 1999,
     "image": "images/Gemini.jpg",
     "category": "Suit",
-    "description": "Trending Gemini collection trendy outfit for women, comfortable and stylish."
+    "description": "दीपांशी फैशन वर्ल्ड का स्पेशल जमीनी कलेक्शन ऑउटफिट।"
   }
 ]
