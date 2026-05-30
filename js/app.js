@@ -79,13 +79,20 @@ async function loadProducts() {
             const product = {};
             
             headers.forEach((header, index) => {
-                product[header] = rowData[index] || '';
+                // हेडर्स और कीज़ से अतिरिक्त स्पेस को साफ़ करना
+                let cleanKey = header.trim();
+                product[cleanKey] = rowData[index] ? rowData[index].trim() : '';
             });
             
-            if (product.id && product.name && product.name.trim() !== '') {
-                product.id = parseInt(product.id);
+            // ऑब्जेक्ट कीज़ का सुरक्षित मिलान
+            let pId = product.id || product.ID || '';
+            let pName = product.name || product.Name || '';
+
+            if (pId && pName) {
+                product.id = parseInt(pId);
+                product.name = pName;
                 
-                // मजबूत मीडिया गैलरी एरे सिंकर
+                // मीडिया एरे सिंकिंग
                 product.media = [];
                 if (product.image) product.media.push({ "type": "image", "url": product.image });
                 if (product.image2) product.media.push({ "type": "image", "url": product.image2 });
@@ -95,9 +102,9 @@ async function loadProducts() {
                 
                 if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
                 
-                // वीडियो डेटा को साफ़ करके स्पेशल 'video' टैग असाइन करना
-                if (product.video && product.video.trim() !== '') {
-                    product.media.push({ "type": "video", "url": product.video.trim() });
+                // वीडियो कॉलम को हमेशा क्लीन करके स्पेशल 'video' टैग असाइन करना
+                if (product.video && product.video !== '') {
+                    product.media.push({ "type": "video", "url": product.video });
                 }
                 
                 productsData.push(product);
@@ -179,10 +186,10 @@ function triggerProductDetailsRender() {
         
         product.media.forEach((med, idx) => {
             let pathStr = String(med.url).toLowerCase();
-            // ✅ फिक्स: वीडियो टाइप फ़ाइल मिलते ही थंबनेल ग्रिड के अंदर "▶️ वीडियो बटन" रेंडर करने का फुल-प्रूफ नियम
+            // ✅ फिक्स: वीडियो फ़ाइल मिलते ही थंबनेल एरे में सीधा प्ले बटन (▶️) रेंडर करने का फुल-प्रूफ़ लूप रूल
             if (med.type === 'video' || pathStr.includes('.mp4') || pathStr.includes('video')) {
                 thumbnailsHtml += `
-                    <div class="thumb-video-btn" style="width: 60px; height: 75px; min-width: 60px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
+                    <div class="thumb-video-box" style="width: 60px; height: 75px; min-width: 60px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
                          onclick="document.getElementById('main-media-box').innerHTML='<video src=\\'${med.url}\\' controls autoplay style=\\'width:100%; max-height:400px; object-fit:contain; border-radius:8px;\\'></video>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';">
                          ▶️
                     </div>`;
@@ -285,7 +292,7 @@ function triggerProductDetailsRender() {
             <h3 class="bestseller-title" style="border-left-color: #27ae60;">🌟 Customer Reviews (Feedback)</h3>
             
             <div class="review-box">
-                <div class="review-header"><span class="reviewer-name">Priya Sharma</span><span class="review-stars">⭐⭐⭐⭐微</span></div>
+                <div class="review-header"><span class="reviewer-name">Priya Sharma</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
                 <p class="review-comment">The fabric and embroidery are exceptionally beautiful. Fitting turned out to be perfect. Thank you Deepanshi Fashion World!</p>
                 <div class="review-attached-images" style="margin-top:0.5rem;">
                     <img src="images/kurti1.jpg" style="width:65px; height:85px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
@@ -502,3 +509,7 @@ function selectSize(element, size) {
     element.classList.add('selected');
     localStorage.setItem('last_selected_size', size);
 }
+
+function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
+function loadCartFromStorage() { const savedCart = localStorage.getItem('cart'); if (savedCart) cart = JSON.parse(savedCart); }
+function loadOrdersFromStorage() { const savedOrders = localStorage.getItem('orders'); if (savedOrders) orderHistory = JSON.parse(savedOrders); }
