@@ -79,12 +79,10 @@ async function loadProducts() {
             const product = {};
             
             headers.forEach((header, index) => {
-                // हेडर्स की चाबियों से छिपे हुए स्पेस को पूरी तरह साफ करना
                 let cleanKey = header.trim();
                 product[cleanKey] = rowData[index] ? rowData[index].trim() : '';
             });
             
-            // आईडी और नाम को सुरक्षित रूप से कैच करने का नियम ताकि स्टोर गायब न हो
             let pId = product.id || product.ID || '';
             let pName = product.name || product.Name || '';
 
@@ -92,7 +90,7 @@ async function loadProducts() {
                 product.id = parseInt(pId);
                 product.name = pName;
                 
-                // मीडिया गैलरी एरे सिंकिंग (3 से 4 इमेजेस लोड करना)
+                // मीडिया एरे सिंकिंग
                 product.media = [];
                 if (product.image) product.media.push({ "type": "image", "url": product.image });
                 if (product.image2) product.media.push({ "type": "image", "url": product.image2 });
@@ -102,7 +100,6 @@ async function loadProducts() {
                 
                 if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
                 
-                // गूगल शीट से वीडियो पाथ को सही फॉर्मेट में रीड करके पुश करना
                 if (product.video && product.video.trim() !== '') {
                     product.media.push({ "type": "video", "url": product.video.trim() });
                 }
@@ -182,14 +179,14 @@ function triggerProductDetailsRender() {
                                 <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain; border-radius:8px;">
                              </div>`;
         
-        let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; overflow-x: auto; padding-bottom: 5px; justify-content: center; align-items:center;">';
+        // ✅ 5वें स्लाइड को स्क्रीन से बाहर छिपने से रोकने के लिए ऑटो-स्क्रॉल स्लाइडर लेआउट इंजेक्ट रूल
+        let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 8px; margin-top: 1rem; overflow-x: auto; white-space: nowrap; padding: 5px; justify-content: center; align-items: center; max-width: 100%; width: 100%; -webkit-overflow-scrolling: touch;">';
         
         product.media.forEach((med, idx) => {
             let pathStr = String(med.url).toLowerCase();
-            // ✅ फिक्स: थंबनेल स्लाइडर के अंदर वीडियो आते ही "▶️ प्ले आइकॉन बॉक्स" बनाने का नियम
             if (med.type === 'video' || pathStr.includes('.mp4') || pathStr.includes('video')) {
                 thumbnailsHtml += `
-                    <div style="width: 60px; height: 75px; min-width: 60px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
+                    <div style="width: 60px; height: 75px; min-width: 60px; max-width: 60px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white; flex-shrink: 0;"
                          onclick="document.getElementById('main-media-box').innerHTML='<video src=\\'${med.url}\\' controls autoplay style=\\'width:100%; max-height:400px; object-fit:contain; border-radius:8px;\\'></video>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';">
                          ▶️
                     </div>`;
@@ -197,7 +194,7 @@ function triggerProductDetailsRender() {
                 thumbnailsHtml += `
                     <img src="${med.url}" 
                          alt="thumb-${idx}" 
-                         style="width: 60px; height: 75px; min-width: 60px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff;"
+                         style="width: 60px; height: 75px; min-width: 60px; max-width: 60px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff; flex-shrink: 0;"
                          onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url}\\' style=\\'width:100%; max-height:400px; object-fit:contain; border-radius:8px;\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
                          onerror="this.src='images/Gemini.jpg';"
                     >`;
@@ -508,50 +505,6 @@ function selectSize(element, size) {
     document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
     element.classList.add('selected');
     localStorage.setItem('last_selected_size', size);
-}
-
-function addToCart(productId) {
-    let product = getProductById(productId);
-    if (!product) return;
-    
-    const quantityInput = document.getElementById(`qty-${productId}`);
-    const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
-    
-    const activeSizeBtn = document.querySelector('.size-btn.selected');
-    const currentSelectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'M';
-    
-    let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
-    if (isNaN(purePrice)) purePrice = 1999;
-
-    const existingItem = cart.find(item => item.id === productId && item.size === currentSelectedSize);
-    if (existingItem) {
-        existingItem.quantity += quantity;
-    } else {
-        cart.push({
-            id: product.id,
-            name: product.name,
-            price: purePrice,
-            image: product.image,
-            size: currentSelectedSize,
-            quantity: quantity
-        });
-    }
-    
-    saveCartToStorage();
-    updateCartCount();
-    
-    const detailsCartCount = document.getElementById('details-cart-count');
-    if (detailsCartCount) {
-        detailsCartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-    }
-    
-    alert(`"${product.name}" (Size: ${currentSelectedSize}) added to cart! Redirecting to Checkout Form... 🛒`);
-    window.location.href = 'cart.html';
-}
-
-function updateCartCount() {
-    const cartCount = document.getElementById('cart-count');
-    if (cartCount) cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
 }
 
 function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
