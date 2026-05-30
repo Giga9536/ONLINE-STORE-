@@ -79,20 +79,20 @@ async function loadProducts() {
             const product = {};
             
             headers.forEach((header, index) => {
-                // हेडर्स और कीज़ से अतिरिक्त स्पेस को साफ़ करना
+                // हेडर्स की चाबियों से छिपे हुए स्पेस को पूरी तरह साफ करना
                 let cleanKey = header.trim();
                 product[cleanKey] = rowData[index] ? rowData[index].trim() : '';
             });
             
-            // ऑब्जेक्ट कीज़ का सुरक्षित मिलान
+            // आईडी और नाम को सुरक्षित रूप से कैच करने का नियम ताकि स्टोर गायब न हो
             let pId = product.id || product.ID || '';
             let pName = product.name || product.Name || '';
 
-            if (pId && pName) {
+            if (pId && pName && pName.trim() !== '') {
                 product.id = parseInt(pId);
                 product.name = pName;
                 
-                // मीडिया एरे सिंकिंग
+                // मीडिया गैलरी एरे सिंकिंग (3 से 4 इमेजेस लोड करना)
                 product.media = [];
                 if (product.image) product.media.push({ "type": "image", "url": product.image });
                 if (product.image2) product.media.push({ "type": "image", "url": product.image2 });
@@ -102,9 +102,9 @@ async function loadProducts() {
                 
                 if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
                 
-                // वीडियो कॉलम को हमेशा क्लीन करके स्पेशल 'video' टैग असाइन करना
-                if (product.video && product.video !== '') {
-                    product.media.push({ "type": "video", "url": product.video });
+                // गूगल शीट से वीडियो पाथ को सही फॉर्मेट में रीड करके पुश करना
+                if (product.video && product.video.trim() !== '') {
+                    product.media.push({ "type": "video", "url": product.video.trim() });
                 }
                 
                 productsData.push(product);
@@ -186,10 +186,10 @@ function triggerProductDetailsRender() {
         
         product.media.forEach((med, idx) => {
             let pathStr = String(med.url).toLowerCase();
-            // ✅ फिक्स: वीडियो फ़ाइल मिलते ही थंबनेल एरे में सीधा प्ले बटन (▶️) रेंडर करने का फुल-प्रूफ़ लूप रूल
+            // ✅ फिक्स: थंबनेल स्लाइडर के अंदर वीडियो आते ही "▶️ प्ले आइकॉन बॉक्स" बनाने का नियम
             if (med.type === 'video' || pathStr.includes('.mp4') || pathStr.includes('video')) {
                 thumbnailsHtml += `
-                    <div class="thumb-video-box" style="width: 60px; height: 75px; min-width: 60px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
+                    <div style="width: 60px; height: 75px; min-width: 60px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
                          onclick="document.getElementById('main-media-box').innerHTML='<video src=\\'${med.url}\\' controls autoplay style=\\'width:100%; max-height:400px; object-fit:contain; border-radius:8px;\\'></video>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';">
                          ▶️
                     </div>`;
@@ -508,6 +508,50 @@ function selectSize(element, size) {
     document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
     element.classList.add('selected');
     localStorage.setItem('last_selected_size', size);
+}
+
+function addToCart(productId) {
+    let product = getProductById(productId);
+    if (!product) return;
+    
+    const quantityInput = document.getElementById(`qty-${productId}`);
+    const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+    
+    const activeSizeBtn = document.querySelector('.size-btn.selected');
+    const currentSelectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'M';
+    
+    let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
+    if (isNaN(purePrice)) purePrice = 1999;
+
+    const existingItem = cart.find(item => item.id === productId && item.size === currentSelectedSize);
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: purePrice,
+            image: product.image,
+            size: currentSelectedSize,
+            quantity: quantity
+        });
+    }
+    
+    saveCartToStorage();
+    updateCartCount();
+    
+    const detailsCartCount = document.getElementById('details-cart-count');
+    if (detailsCartCount) {
+        detailsCartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
+    
+    alert(`"${product.name}" (Size: ${currentSelectedSize}) added to cart! Redirecting to Checkout Form... 🛒`);
+    window.location.href = 'cart.html';
+}
+
+function updateCartCount() {
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
 }
 
 function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
