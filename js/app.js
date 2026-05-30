@@ -58,7 +58,7 @@ function parseCSVLine(line) {
 
 async function loadProducts() {
     try {
-        const sheetId = '1dAUsZm2emo96kRbFH6exyMHyK5HPVy9mHaqhY49cnM';
+        const sheetId = '1dAUsZm2emo96kRbFH6exyMHyK5HPVy9mHaqhY49c0nM';
         const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
 
         const response = await fetch(sheetUrl);
@@ -95,7 +95,7 @@ async function loadProducts() {
                 
                 if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
                 
-                // वीडियो डेटा को साफ़ करके ऑब्जेक्ट में पुश करना
+                // वीडियो डेटा को साफ़ करके स्पेशल 'video' टैग असाइन करना
                 if (product.video) {
                     product.media.push({ "type": "video", "url": product.video.trim() });
                 }
@@ -106,7 +106,7 @@ async function loadProducts() {
 
         window.allProductsList = productsData;
 
-        // होमपेज प्रोडक्ट्स ग्रिड रेंडरर
+        // होमपेज ग्रिड रेंडरर
         const productContainer = document.getElementById('product-list');
         if (productContainer) {
             productContainer.innerHTML = '';
@@ -179,7 +179,7 @@ function triggerProductDetailsRender() {
         
         product.media.forEach((med, idx) => {
             let pathStr = String(med.url).toLowerCase();
-            // ✅ एडवांस डीप-मैचिंग रूल: ताकि वीडियो का थंबनेल हर हाल में अलग से पहचाना जा सके
+            // ✅ एडवांस डीप-मैचिंग रूल: टाइप या स्ट्रिंग के आधार पर वीडियो थंबनेल को 100% सटीक रेंडर करना
             if (med.type === 'video' || pathStr.includes('.mp4') || pathStr.includes('video')) {
                 thumbnailsHtml += `
                     <div style="width: 60px; height: 75px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
