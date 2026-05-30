@@ -82,7 +82,7 @@ async function loadProducts() {
                 product[header] = rowData[index] || '';
             });
             
-            if (product.id) {
+            if (product.id && product.name && product.name.trim() !== '') {
                 product.id = parseInt(product.id);
                 
                 // मजबूत मीडिया गैलरी एरे सिंकर
@@ -96,7 +96,7 @@ async function loadProducts() {
                 if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
                 
                 // वीडियो डेटा को साफ़ करके स्पेशल 'video' टैग असाइन करना
-                if (product.video) {
+                if (product.video && product.video.trim() !== '') {
                     product.media.push({ "type": "video", "url": product.video.trim() });
                 }
                 
@@ -106,7 +106,7 @@ async function loadProducts() {
 
         window.allProductsList = productsData;
 
-        // होमपेज ग्रिड रेंडरर
+        // होमपेज प्रोडक्ट्स ग्रिड रेंडरर
         const productContainer = document.getElementById('product-list');
         if (productContainer) {
             productContainer.innerHTML = '';
@@ -170,28 +170,28 @@ function triggerProductDetailsRender() {
     if (!detailContainer || !product) return;
 
     let mediaHtml = '';
-    if (product.media && product.media.length > 1) {
+    if (product.media && product.media.length > 0) {
         let mainMediaHtml = `<div id="main-media-box" style="width:100%; max-height:400px; display:flex; justify-content:center;">
-                                <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain;">
+                                <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain; border-radius:8px;">
                              </div>`;
         
         let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; overflow-x: auto; padding-bottom: 5px; justify-content: center; align-items:center;">';
         
         product.media.forEach((med, idx) => {
             let pathStr = String(med.url).toLowerCase();
-            // ✅ एडवांस डीप-मैचिंग रूल: टाइप या स्ट्रिंग के आधार पर वीडियो थंबनेल को 100% सटीक रेंडर करना
+            // ✅ फिक्स: वीडियो टाइप फ़ाइल मिलते ही थंबनेल ग्रिड के अंदर "▶️ वीडियो बटन" रेंडर करने का फुल-प्रूफ नियम
             if (med.type === 'video' || pathStr.includes('.mp4') || pathStr.includes('video')) {
                 thumbnailsHtml += `
-                    <div style="width: 60px; height: 75px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
-                         onclick="document.getElementById('main-media-box').innerHTML='<video src=\\'${med.url}\\' controls autoplay style=\\'width:100%; max-height:400px; object-fit:contain;\\'></video>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';">
+                    <div class="thumb-video-btn" style="width: 60px; height: 75px; min-width: 60px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
+                         onclick="document.getElementById('main-media-box').innerHTML='<video src=\\'${med.url}\\' controls autoplay style=\\'width:100%; max-height:400px; object-fit:contain; border-radius:8px;\\'></video>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';">
                          ▶️
                     </div>`;
             } else {
                 thumbnailsHtml += `
                     <img src="${med.url}" 
                          alt="thumb-${idx}" 
-                         style="width: 60px; height: 75px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff;"
-                         onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url}\\' style=\\'width:100%; max-height:400px; object-fit:contain\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
+                         style="width: 60px; height: 75px; min-width: 60px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff;"
+                         onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url}\\' style=\\'width:100%; max-height:400px; object-fit:contain; border-radius:8px;\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
                          onerror="this.src='images/Gemini.jpg';"
                     >`;
             }
@@ -285,7 +285,7 @@ function triggerProductDetailsRender() {
             <h3 class="bestseller-title" style="border-left-color: #27ae60;">🌟 Customer Reviews (Feedback)</h3>
             
             <div class="review-box">
-                <div class="review-header"><span class="reviewer-name">Priya Sharma</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                <div class="review-header"><span class="reviewer-name">Priya Sharma</span><span class="review-stars">⭐⭐⭐⭐微</span></div>
                 <p class="review-comment">The fabric and embroidery are exceptionally beautiful. Fitting turned out to be perfect. Thank you Deepanshi Fashion World!</p>
                 <div class="review-attached-images" style="margin-top:0.5rem;">
                     <img src="images/kurti1.jpg" style="width:65px; height:85px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
@@ -502,51 +502,3 @@ function selectSize(element, size) {
     element.classList.add('selected');
     localStorage.setItem('last_selected_size', size);
 }
-
-function addToCart(productId) {
-    let product = getProductById(productId);
-    if (!product) return;
-    
-    const quantityInput = document.getElementById(`qty-${productId}`);
-    const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
-    
-    const activeSizeBtn = document.querySelector('.size-btn.selected');
-    const currentSelectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'M';
-    
-    let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
-    if (isNaN(purePrice)) purePrice = 1999;
-
-    const existingItem = cart.find(item => item.id === productId && item.size === currentSelectedSize);
-    if (existingItem) {
-        existingItem.quantity += quantity;
-    } else {
-        cart.push({
-            id: product.id,
-            name: product.name,
-            price: purePrice,
-            image: product.image,
-            size: currentSelectedSize,
-            quantity: quantity
-        });
-    }
-    
-    saveCartToStorage();
-    updateCartCount();
-    
-    const detailsCartCount = document.getElementById('details-cart-count');
-    if (detailsCartCount) {
-        detailsCartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-    }
-    
-    alert(`"${product.name}" (Size: ${currentSelectedSize}) added to cart! Redirecting to Checkout Form... 🛒`);
-    window.location.href = 'cart.html';
-}
-
-function updateCartCount() {
-    const cartCount = document.getElementById('cart-count');
-    if (cartCount) cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-}
-
-function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
-function loadCartFromStorage() { const savedCart = localStorage.getItem('cart'); if (savedCart) cart = JSON.parse(savedCart); }
-function loadOrdersFromStorage() { const savedOrders = localStorage.getItem('orders'); if (savedOrders) orderHistory = JSON.parse(savedOrders); }
