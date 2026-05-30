@@ -58,6 +58,7 @@ function parseCSVLine(line) {
 
 async function loadProducts() {
     try {
+        // ✅ आपकी नई गूगल शीट आईडी यहाँ सफलतापूर्वक अपडेट कर दी गई है
         const sheetId = '1dAUsZm2emo96kRbFH6exyMHyK5HPVy9mHaqhY49c0nM';
         const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
 
@@ -100,7 +101,7 @@ async function loadProducts() {
                 
                 if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
                 
-                // वीडियो डेटा को क्लीन करके पुश करना
+                // वीडियो पाथ को मीडिया गैलरी में पुश करना
                 if (product.video && product.video !== '') {
                     product.media.push({ "type": "video", "url": product.video });
                 }
@@ -111,7 +112,7 @@ async function loadProducts() {
 
         window.allProductsList = productsData;
 
-        // ✅ फिक्स: दोनों प्रकार के होमपेज आईडी लेआउट (product-list और product-container) का डबल सपोर्ट बैकअप
+        // होमपेज का डबल आईडी बैकअप रेंडरर (product-list या product-container दोनों के लिए)
         const productContainer = document.getElementById('product-list') || document.getElementById('product-container');
         if (productContainer) {
             productContainer.innerHTML = '';
@@ -153,7 +154,7 @@ async function loadProducts() {
                 productContainer.innerHTML += productCard;
             });
             
-            // अगर लोडिंग टेक्स्ट मौजूद है तो उसे हटाना
+            // लोडिंग इंडिकेटर टेक्स्ट को स्क्रीन से हटाना
             const loadingTextEl = document.querySelector('.container p');
             if (loadingTextEl && loadingTextEl.textContent.includes('Loading')) {
                 loadingTextEl.style.display = 'none';
@@ -186,7 +187,7 @@ function triggerProductDetailsRender() {
                                 <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain; border-radius:8px;">
                              </div>`;
         
-        // ✅ फिक्स: 5वीं वीडियो स्लाइड को स्क्रीन पर पिचकने या कटने से रोकने के लिए 100% रिस्पॉन्सिव फ्लेक्स स्लाइडर रूल
+        // ✅ फ़िक्स: 5वीं वीडियो स्लाइड को मोबाइल स्क्रीन पर कटने से रोकने के लिए ऑटो-स्क्रॉलिंग कंटेनर सेटअप
         let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 8px; margin-top: 1rem; overflow-x: auto; white-space: nowrap; padding: 5px; justify-content: flex-start; align-items: center; max-width: 100%; width: 100%; -webkit-overflow-scrolling: touch;">';
         
         product.media.forEach((med, idx) => {
@@ -512,6 +513,50 @@ function selectSize(element, size) {
     document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
     element.classList.add('selected');
     localStorage.setItem('last_selected_size', size);
+}
+
+function addToCart(productId) {
+    let product = getProductById(productId);
+    if (!product) return;
+    
+    const quantityInput = document.getElementById(`qty-${productId}`);
+    const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+    
+    const activeSizeBtn = document.querySelector('.size-btn.selected');
+    const currentSelectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'M';
+    
+    let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
+    if (isNaN(purePrice)) purePrice = 1999;
+
+    const existingItem = cart.find(item => item.id === productId && item.size === currentSelectedSize);
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: purePrice,
+            image: product.image,
+            size: currentSelectedSize,
+            quantity: quantity
+        });
+    }
+    
+    saveCartToStorage();
+    updateCartCount();
+    
+    const detailsCartCount = document.getElementById('details-cart-count');
+    if (detailsCartCount) {
+        detailsCartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
+    
+    alert(`"${product.name}" (Size: ${currentSelectedSize}) added to cart! Redirecting to Checkout Form... 🛒`);
+    window.location.href = 'cart.html';
+}
+
+function updateCartCount() {
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
 }
 
 function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
