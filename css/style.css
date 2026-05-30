@@ -58,7 +58,7 @@ function parseCSVLine(line) {
 
 async function loadProducts() {
     try {
-        // ✅ आपकी बिल्कुल सही नई गूगल शीट आईडी (c0 के साथ) यहाँ फिक्स कर दी गई है
+        // आपकी लाइव गूगल शीट आईडी बिल्कुल सही अक्षरों में यहाँ फिक्स है
         const sheetId = '1dAUsZm2emo96kRbFH6exyMHyK5HPVy9mHaqhY49c0nM';
         const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
 
@@ -91,17 +91,20 @@ async function loadProducts() {
                 product.id = parseInt(pId);
                 product.name = pName;
                 
-                // मजबूत मीडिया गैलरी एरे सिंकर
+                // मीडिया गैलरी एरे सिंकर - सभी स्पेलिंग्स पूरी तरह शुद्ध हैं
                 product.media = [];
-                if (product.image) product.media.push({ "type": "image", "url": product.image });
-                if (product.image2) product.media.push({ "type": "image", "url": product.image2 });
-                
-                let img3Val = product.image3 || product.mage3 || '';
-                if (img3Val) product.media.push({ "type": "image", "url": img3Val });
-                
-                if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
-                
-                // वीडियो पाथ को मीडिया गैलरी में सिंक करना
+                if (product.image) {
+                    product.media.push({ "type": "image", "url": product.image });
+                }
+                if (product.image2) {
+                    product.media.push({ "type": "image", "url": product.image2 });
+                }
+                if (product.image3) {
+                    product.media.push({ "type": "image", "url": product.image3 });
+                }
+                if (product.image4) {
+                    product.media.push({ "type": "image", "url": product.image4 });
+                }
                 if (product.video && product.video !== '') {
                     product.media.push({ "type": "video", "url": product.video });
                 }
@@ -112,7 +115,7 @@ async function loadProducts() {
 
         window.allProductsList = productsData;
 
-        // होमपेज का डबल आईडी सपोर्ट बैकअप (product-list और product-container दोनों के लिए)
+        // होमपेज का डबल आईडी सपोर्ट रेंडरर
         const productContainer = document.getElementById('product-list') || document.getElementById('product-container');
         if (productContainer) {
             productContainer.innerHTML = '';
@@ -154,7 +157,6 @@ async function loadProducts() {
                 productContainer.innerHTML += productCard;
             });
             
-            // "Loading premium store items..." टेक्स्ट को स्क्रीन से हटाना
             const loadingTextEl = document.querySelector('.container p') || document.querySelector('#product-container p');
             if (loadingTextEl && (loadingTextEl.textContent.includes('Loading') || loadingTextEl.textContent.includes('loading'))) {
                 loadingTextEl.style.display = 'none';
@@ -187,7 +189,7 @@ function triggerProductDetailsRender() {
                                 <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain; border-radius:8px;">
                              </div>`;
         
-        // ✅ मोबाइल ऑटो-स्क्रॉलिंग थंबनेल स्लाइडर कंटेनर (ताकि 5वीं स्लाइड कभी न कटे और स्वाइप हो सके)
+        // स्वाइपेबल मोबाइल थंबनेल स्लाइडर कंटेनर (5वीं स्लाइड को सुरक्षित रखने के लिए)
         let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 8px; margin-top: 1rem; overflow-x: auto; white-space: nowrap; padding: 5px; justify-content: flex-start; align-items: center; max-width: 100%; width: 100%; -webkit-overflow-scrolling: touch;">';
         
         product.media.forEach((med, idx) => {
