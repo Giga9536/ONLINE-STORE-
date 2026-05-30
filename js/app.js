@@ -35,7 +35,7 @@ function checkPincodeService(pin) {
     }
 }
 
-// सुरक्षित तरीके से CSV की एक लाइन को एरे में बदलने का यूनिवर्सल फंक्शन (स्पेशल सिंबल्स और स्पेस फिक्स)
+// सुरक्षित तरीके से CSV की एक लाइन को एरे में बदलने का यूनिवर्सल फंक्शन
 function parseCSVLine(line) {
     const result = [];
     let current = '';
@@ -58,7 +58,6 @@ function parseCSVLine(line) {
 
 async function loadProducts() {
     try {
-        // आपकी असली Google Sheet ID सुरक्षित रूप से लिंक कर दी गई है
         const sheetId = '1dAUsZm2emo96kRbFH6exyMHyK5HPVy9mHaqhY49c0nM';
         const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
 
@@ -69,7 +68,6 @@ async function loadProducts() {
         const lines = csvText.split(/\r?\n/);
         if (lines.length === 0) return;
 
-        // हेडर्स को साफ़ सुथरा रीड करना
         const headers = parseCSVLine(lines[0]);
         const productsData = [];
 
@@ -87,7 +85,7 @@ async function loadProducts() {
             if (product.id) {
                 product.id = parseInt(product.id);
                 
-                // ✅ मजबूत मीडिया गैलरी एरे बिल्डर (3 से 4 इमेजेस और वीडियो को बिना रुकावट रीड करने का फिक्स)
+                // मजबूत मीडिया गैलरी एरे सिंकर
                 product.media = [];
                 if (product.image) product.media.push({ "type": "image", "url": product.image });
                 if (product.image2) product.media.push({ "type": "image", "url": product.image2 });
@@ -96,6 +94,8 @@ async function loadProducts() {
                 if (img3Val) product.media.push({ "type": "image", "url": img3Val });
                 
                 if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
+                
+                // ✅ वीडियो कॉलम को हमेशा स्पेशल 'video' टाइप टैग असाइन करने का नियम
                 if (product.video) product.media.push({ "type": "video", "url": product.video });
                 
                 productsData.push(product);
@@ -176,6 +176,7 @@ function triggerProductDetailsRender() {
         let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; overflow-x: auto; padding-bottom: 5px; justify-content: center; align-items:center;">';
         
         product.media.forEach((med, idx) => {
+            // ✅ फ़िक्स: वीडियो को हर हाल में पहचानने के लिए डबल-लेयर वेरिफिकेशन चेक रूल
             if (med.type === 'video' || med.url.toLowerCase().includes('.mp4')) {
                 thumbnailsHtml += `
                     <div style="width: 60px; height: 75px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
@@ -281,7 +282,7 @@ function triggerProductDetailsRender() {
             <h3 class="bestseller-title" style="border-left-color: #27ae60;">🌟 Customer Reviews (Feedback)</h3>
             
             <div class="review-box">
-                <div class="review-header"><span class="reviewer-name">Priya Sharma</span><span class="review-stars">⭐⭐⭐⭐微</span></div>
+                <div class="review-header"><span class="reviewer-name">Priya Sharma</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
                 <p class="review-comment">The fabric and embroidery are exceptionally beautiful. Fitting turned out to be perfect. Thank you Deepanshi Fashion World!</p>
                 <div class="review-attached-images" style="margin-top:0.5rem;">
                     <img src="images/kurti1.jpg" style="width:65px; height:85px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
@@ -493,6 +494,7 @@ function changeQuantity(event, change) {
     }
 }
 
+// सुरक्षित आकार सेटिंग फिक्स
 function selectSize(element, size) {
     document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
     element.classList.add('selected');
