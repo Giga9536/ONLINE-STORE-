@@ -58,7 +58,7 @@ function parseCSVLine(line) {
 
 async function loadProducts() {
     try {
-        // ✅ आपकी नई गूगल शीट आईडी यहाँ सफलतापूर्वक अपडेट कर दी गई है
+        // ✅ आपकी बिल्कुल सही नई गूगल शीट आईडी (c0 के साथ) यहाँ फिक्स कर दी गई है
         const sheetId = '1dAUsZm2emo96kRbFH6exyMHyK5HPVy9mHaqhY49c0nM';
         const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
 
@@ -101,7 +101,7 @@ async function loadProducts() {
                 
                 if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
                 
-                // वीडियो पाथ को मीडिया गैलरी में पुश करना
+                // वीडियो पाथ को मीडिया गैलरी में सिंक करना
                 if (product.video && product.video !== '') {
                     product.media.push({ "type": "video", "url": product.video });
                 }
@@ -112,7 +112,7 @@ async function loadProducts() {
 
         window.allProductsList = productsData;
 
-        // होमपेज का डबल आईडी बैकअप रेंडरर (product-list या product-container दोनों के लिए)
+        // होमपेज का डबल आईडी सपोर्ट बैकअप (product-list और product-container दोनों के लिए)
         const productContainer = document.getElementById('product-list') || document.getElementById('product-container');
         if (productContainer) {
             productContainer.innerHTML = '';
@@ -154,9 +154,9 @@ async function loadProducts() {
                 productContainer.innerHTML += productCard;
             });
             
-            // लोडिंग इंडिकेटर टेक्स्ट को स्क्रीन से हटाना
-            const loadingTextEl = document.querySelector('.container p');
-            if (loadingTextEl && loadingTextEl.textContent.includes('Loading')) {
+            // "Loading premium store items..." टेक्स्ट को स्क्रीन से हटाना
+            const loadingTextEl = document.querySelector('.container p') || document.querySelector('#product-container p');
+            if (loadingTextEl && (loadingTextEl.textContent.includes('Loading') || loadingTextEl.textContent.includes('loading'))) {
                 loadingTextEl.style.display = 'none';
             }
         }
@@ -187,7 +187,7 @@ function triggerProductDetailsRender() {
                                 <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain; border-radius:8px;">
                              </div>`;
         
-        // ✅ फ़िक्स: 5वीं वीडियो स्लाइड को मोबाइल स्क्रीन पर कटने से रोकने के लिए ऑटो-स्क्रॉलिंग कंटेनर सेटअप
+        // ✅ मोबाइल ऑटो-स्क्रॉलिंग थंबनेल स्लाइडर कंटेनर (ताकि 5वीं स्लाइड कभी न कटे और स्वाइप हो सके)
         let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 8px; margin-top: 1rem; overflow-x: auto; white-space: nowrap; padding: 5px; justify-content: flex-start; align-items: center; max-width: 100%; width: 100%; -webkit-overflow-scrolling: touch;">';
         
         product.media.forEach((med, idx) => {
@@ -461,7 +461,7 @@ function verifyOnlinePaymentAndDispatch() {
         waItemsText += `• *${item.name}* (Size: ${item.size}) x ${item.quantity}\n`;
     });
     if (invItemsList) invItemsList.innerHTML = itemsBillSummaryText;
-    if (invTotal) invTotal.textContent = `₹${activePendingBillingData.amount.toLocaleString('en-IN')}`;
+    if (invTotal) invTotal.textContent = `Grand Total Amount: ₹${activePendingBillingData.amount.toLocaleString('en-IN')}`;
 
     const whatsappNum = "919870708753";
     const waMsg = `🛍️ *NEW ORDER DISPATCH RECEIPT* (#${activePendingBillingData.id})\n\n` +
