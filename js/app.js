@@ -58,7 +58,7 @@ function parseCSVLine(line) {
 
 async function loadProducts() {
     try {
-        const sheetId = '1dAUsZm2emo96kRbFH6exyMHyK5HPVy9mHaqhY49c0nM';
+        const sheetId = '1dAUsZm2emo96kRbFH6exyMHyK5HPVy9mHaqhY49cnM';
         const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
 
         const response = await fetch(sheetUrl);
@@ -95,8 +95,10 @@ async function loadProducts() {
                 
                 if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
                 
-                // ✅ वीडियो कॉलम को हमेशा स्पेशल 'video' टाइप टैग असाइन करने का नियम
-                if (product.video) product.media.push({ "type": "video", "url": product.video });
+                // वीडियो डेटा को साफ़ करके ऑब्जेक्ट में पुश करना
+                if (product.video) {
+                    product.media.push({ "type": "video", "url": product.video.trim() });
+                }
                 
                 productsData.push(product);
             }
@@ -176,8 +178,9 @@ function triggerProductDetailsRender() {
         let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; overflow-x: auto; padding-bottom: 5px; justify-content: center; align-items:center;">';
         
         product.media.forEach((med, idx) => {
-            // ✅ फ़िक्स: वीडियो को हर हाल में पहचानने के लिए डबल-लेयर वेरिफिकेशन चेक रूल
-            if (med.type === 'video' || med.url.toLowerCase().includes('.mp4')) {
+            let pathStr = String(med.url).toLowerCase();
+            // ✅ एडवांस डीप-मैचिंग रूल: ताकि वीडियो का थंबनेल हर हाल में अलग से पहचाना जा सके
+            if (med.type === 'video' || pathStr.includes('.mp4') || pathStr.includes('video')) {
                 thumbnailsHtml += `
                     <div style="width: 60px; height: 75px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
                          onclick="document.getElementById('main-media-box').innerHTML='<video src=\\'${med.url}\\' controls autoplay style=\\'width:100%; max-height:400px; object-fit:contain;\\'></video>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';">
@@ -494,7 +497,6 @@ function changeQuantity(event, change) {
     }
 }
 
-// सुरक्षित आकार सेटिंग फिक्स
 function selectSize(element, size) {
     document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
     element.classList.add('selected');
