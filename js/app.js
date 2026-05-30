@@ -35,9 +35,30 @@ function checkPincodeService(pin) {
     }
 }
 
+// सुरक्षित तरीके से CSV की एक लाइन को एरे में बदलने का यूनिवर्सल फंक्शन (स्पेशल सिंबल्स और स्पेस फिक्स)
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    result.push(current.trim());
+    return result.map(v => v.replace(/^"|"$/g, '').trim());
+}
+
 async function loadProducts() {
     try {
-        // ✅ आपकी असली Google Sheet ID यहाँ सुरक्षित रूप से लिंक कर दी गई है
+        // आपकी असली Google Sheet ID सुरक्षित रूप से लिंक कर दी गई है
         const sheetId = '1dAUsZm2emo96kRbFH6exyMHyK5HPVy9mHaqhY49c0nM';
         const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
 
@@ -45,43 +66,45 @@ async function loadProducts() {
         if (!response.ok) throw new Error(`Google Sheet Fetch Error! status: ${response.status}`);
         const csvText = await response.text();
         
-        // सुरक्षित CSV पार्सर जो एक्स्ट्रा कोट्स और लेआउट की गड़बड़ी को साफ करता है
         const lines = csvText.split(/\r?\n/);
         if (lines.length === 0) return;
 
-        // हेडर्स से फालतू के कोट्स हटाना
-        const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
+        // हेडर्स को साफ़ सुथरा रीड करना
+        const headers = parseCSVLine(lines[0]);
         const productsData = [];
 
         for (let i = 1; i < lines.length; i++) {
             const currentLine = lines[i].trim();
             if (!currentLine) continue;
             
-            // कोट्स और कॉमा को सही से संभालने वाला रेगुलेटर
-            const matches = currentLine.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || currentLine.split(',');
-            const rowData = matches.map(v => v.replace(/^"|"$/g, '').trim());
-            
+            const rowData = parseCSVLine(currentLine);
             const product = {};
+            
             headers.forEach((header, index) => {
-                let value = rowData[index] || '';
-                // वैल्यू के अंदर छिपे हुए अतिरिक्त कोट्स को पूरी तरह साफ करना
-                product[header] = value.replace(/^"|"$/g, '').trim();
+                product[header] = rowData[index] || '';
             });
             
             if (product.id) {
                 product.id = parseInt(product.id);
-                // थंबनेल गैलरी का ऑटोमैटिक पाथ सिंक ताकि लेआउट न टूटे
-                product.media = [
-                    { "type": "image", "url": product.image },
-                    { "type": "image", "url": "images/Gemini.jpg" }
-                ];
+                
+                // ✅ मजबूत मीडिया गैलरी एरे बिल्डर (3 से 4 इमेजेस और वीडियो को बिना रुकावट रीड करने का फिक्स)
+                product.media = [];
+                if (product.image) product.media.push({ "type": "image", "url": product.image });
+                if (product.image2) product.media.push({ "type": "image", "url": product.image2 });
+                
+                let img3Val = product.image3 || product.mage3 || '';
+                if (img3Val) product.media.push({ "type": "image", "url": img3Val });
+                
+                if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
+                if (product.video) product.media.push({ "type": "video", "url": product.video });
+                
                 productsData.push(product);
             }
         }
 
         window.allProductsList = productsData;
 
-        // होमपेज收藏 ग्रिड रेंडरर
+        // होमपेज प्रोडक्ट्स ग्रिड रेंडरर
         const productContainer = document.getElementById('product-list');
         if (productContainer) {
             productContainer.innerHTML = '';
@@ -145,7 +168,7 @@ function triggerProductDetailsRender() {
     if (!detailContainer || !product) return;
 
     let mediaHtml = '';
-    if (product.media && product.media.length > 0) {
+    if (product.media && product.media.length > 1) {
         let mainMediaHtml = `<div id="main-media-box" style="width:100%; max-height:400px; display:flex; justify-content:center;">
                                 <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain;">
                              </div>`;
@@ -153,7 +176,7 @@ function triggerProductDetailsRender() {
         let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; overflow-x: auto; padding-bottom: 5px; justify-content: center; align-items:center;">';
         
         product.media.forEach((med, idx) => {
-            if (med.url && med.url.toLowerCase().includes('.mp4')) {
+            if (med.type === 'video' || med.url.toLowerCase().includes('.mp4')) {
                 thumbnailsHtml += `
                     <div style="width: 60px; height: 75px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
                          onclick="document.getElementById('main-media-box').innerHTML='<video src=\\'${med.url}\\' controls autoplay style=\\'width:100%; max-height:400px; object-fit:contain;\\'></video>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';">
@@ -161,10 +184,10 @@ function triggerProductDetailsRender() {
                     </div>`;
             } else {
                 thumbnailsHtml += `
-                    <img src="${med.url || product.image}" 
+                    <img src="${med.url}" 
                          alt="thumb-${idx}" 
                          style="width: 60px; height: 75px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff;"
-                         onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url || product.image}\\' style=\\'width:100%; max-height:400px; object-fit:contain\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
+                         onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url}\\' style=\\'width:100%; max-height:400px; object-fit:contain\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
                          onerror="this.src='images/Gemini.jpg';"
                     >`;
             }
@@ -172,7 +195,7 @@ function triggerProductDetailsRender() {
         thumbnailsHtml += '</div>';
         mediaHtml = mainMediaHtml + thumbnailsHtml;
     } else {
-        mediaHtml = `<img src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain;">`;
+        mediaHtml = `<img src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain; border-radius: 8px;">`;
     }
 
     let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
@@ -258,7 +281,7 @@ function triggerProductDetailsRender() {
             <h3 class="bestseller-title" style="border-left-color: #27ae60;">🌟 Customer Reviews (Feedback)</h3>
             
             <div class="review-box">
-                <div class="review-header"><span class="reviewer-name">Priya Sharma</span><span class="review-stars">⭐⭐⭐⭐⭐</span></div>
+                <div class="review-header"><span class="reviewer-name">Priya Sharma</span><span class="review-stars">⭐⭐⭐⭐微</span></div>
                 <p class="review-comment">The fabric and embroidery are exceptionally beautiful. Fitting turned out to be perfect. Thank you Deepanshi Fashion World!</p>
                 <div class="review-attached-images" style="margin-top:0.5rem;">
                     <img src="images/kurti1.jpg" style="width:65px; height:85px; object-fit:cover; border-radius:4px; border:1px solid #ddd;">
@@ -385,23 +408,6 @@ function handleCheckoutFormSubmit(event) {
     } else {
         verifyOnlinePaymentAndDispatch(); 
     }
-}
-
-// डायरेक्ट व्हाट्सएप आर्डर लॉजिक
-function buyDirectOnWhatsApp(productId) {
-    const product = getProductById(productId);
-    if (!product) return;
-    const quantity = parseInt(document.getElementById(`qty-${productId}`).value) || 1;
-    
-    const activeSizeBtn = document.querySelector('.size-btn.selected');
-    const selectedSize = activeSizeBtn ? activeSizeBtn.textContent.trim() : 'M';
-    
-    let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
-    const totalPrice = purePrice * quantity;
-    const whatsappNum = "919870708753";
-
-    const msg = `👋 *Hello Deepanshi Fashion World!*\n\nI want to buy this item directly:\n\n👗 *Item Name:* ${product.name}\n📐 *Size:* ${selectedSize}\n📦 *Quantity:* ${quantity}\n💰 *Price:* ₹${purePrice.toLocaleString('en-IN')}\n💵 *Total:* ₹${totalPrice.toLocaleString('en-IN')}\n\nKindly process my dispatch order. Thank you!`;
-    window.open(`https://wa.me/${whatsappNum}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 function closePaymentGatewayModal() {
