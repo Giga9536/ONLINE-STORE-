@@ -436,3 +436,101 @@ body {
     .bestseller-card { min-width: 120px; }
     .bestseller-img { height: 130px; }
 }
+
+/* ==========================================================================
+   Gallery Dot Slider Styles
+   ========================================================================== */
+.gallery-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    user-select: none;
+}
+
+.gallery-slide {
+    width: 100%;
+    animation: fadeSlide 0.35s ease;
+}
+
+@keyframes fadeSlide {
+    from { opacity: 0.4; transform: scale(0.98); }
+    to   { opacity: 1;   transform: scale(1); }
+}
+
+/* Dot indicators */
+.gallery-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0 6px;
+    background: transparent;
+}
+
+.gallery-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #c0c0c0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0;         /* video icon छुपाओ normally */
+    border: none;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.gallery-dot.active {
+    background: #2c3e50;
+    width: 22px;
+    border-radius: 5px;   /* active dot थोड़ा लम्बा */
+}
+
+/* Video dot पर ▶ icon दिखाओ */
+.gallery-dot:not(:empty) {
+    font-size: 7px;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+}
+
+.gallery-dot:not(:empty).active {
+    color: #fff;
+    background: #e67e22;
+    width: 26px;
+}
+
+/* Arrow buttons */
+.gallery-arrow {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.2s;
+    line-height: 1;
+    padding: 0;
+}
+
+.gallery-arrow:hover { background: rgba(0,0,0,0.6); }
+.left-arrow  { left: 8px; }
+.right-arrow { right: 8px; }
+
+@media (max-width: 480px) {
+    .gallery-arrow { width: 30px; height: 30px; font-size: 1.2rem; }
+}
