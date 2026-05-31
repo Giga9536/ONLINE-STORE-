@@ -505,32 +505,53 @@ body {
     width: 26px;
 }
 
-/* Arrow buttons */
-.gallery-arrow {
-    position: absolute;
-    top: 45%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.35);
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    font-size: 1.5rem;
-    cursor: pointer;
+/* Touch swipe enabled - no arrow buttons */
+
+/* ==========================================================================
+   Sticky Bottom Add to Cart Bar (Product Detail Page)
+   ========================================================================== */
+.sticky-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    transition: background 0.2s;
-    line-height: 1;
-    padding: 0;
+    gap: 0;
+    z-index: 999;
+    box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.15);
 }
 
-.gallery-arrow:hover { background: rgba(0,0,0,0.6); }
-.left-arrow  { left: 8px; }
-.right-arrow { right: 8px; }
+.sticky-add-btn {
+    flex: 1;
+    background: #2c3e50;
+    color: #fff;
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.2s;
+}
 
-@media (max-width: 480px) {
-    .gallery-arrow { width: 30px; height: 30px; font-size: 1.2rem; }
+.sticky-add-btn:hover { background: #34495e; }
+
+.sticky-whatsapp-btn {
+    flex: 1;
+    background: #25D366;
+    color: #fff;
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.2s;
+}
+
+.sticky-whatsapp-btn:hover { background: #1ebe5d; }
+
+/* Sticky bar की जगह छोड़ने के लिए page का bottom padding */
+body:has(.sticky-bottom-bar) .container {
+    padding-bottom: 80px;
 }
