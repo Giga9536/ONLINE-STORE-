@@ -157,10 +157,9 @@ body {
    4. Product Detail Page Layout
    ========================================================================== */
 .product-detail-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .detail-image-box {
@@ -168,8 +167,7 @@ body {
     border-radius: 12px;
     padding: 1rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    position: sticky;
-    top: 80px;
+    width: 100%;
 }
 
 .detail-info-box {
@@ -429,10 +427,7 @@ body {
     .welcome-title { font-size: 1.4rem; }
     #product-list, .products-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
 
-    /* Product Detail */
-    .product-detail-layout {
-        grid-template-columns: 1fr;
-    }
+    /* Product Detail - already single column */
     .detail-image-box { position: static; }
     .detail-title { font-size: 1.2rem; }
     .detail-price { font-size: 1.3rem; }
