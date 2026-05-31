@@ -81,11 +81,10 @@ body {
 .nav-link:hover, .nav-link.active { color: #ffb74d; }
 
 /* ==========================================================================
-   ⚙️ Products Grid & Layout (फिक्स्ड)
+   ⚙️ Products Grid & Layout
    ========================================================================== */
 .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
 
-/* JavaScript में 'product-list' आईडी का उपयोग हो रहा है, इसलिए इसे यहाँ जोड़ना ज़रूरी है */
 #product-list, #product-container { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
