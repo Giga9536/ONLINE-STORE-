@@ -37,6 +37,7 @@ function checkPincodeService(pin) {
 
 // सुरक्षित तरीके से CSV की एक लाइन को एरे में बदलने का यूनिवर्सल फंक्शन
 function parseCSVLine(line) {
+    // ✅ Improved: handles "" escaped quotes inside quoted fields
     const result = [];
     let current = '';
     let inQuotes = false;
@@ -44,16 +45,50 @@ function parseCSVLine(line) {
     for (let i = 0; i < line.length; i++) {
         const char = line[i];
         if (char === '"') {
-            inQuotes = !inQuotes;
+            if (inQuotes && line[i + 1] === '"') {
+                // "" inside quotes = escaped double-quote character
+                current += '"';
+                i++;
+            } else {
+                inQuotes = !inQuotes;
+            }
         } else if (char === ',' && !inQuotes) {
-            result.push(current.trim());
+            result.push(current);
             current = '';
         } else {
             current += char;
         }
     }
-    result.push(current.trim());
-    return result.map(v => v.replace(/^"|"$/g, '').trim());
+    result.push(current);
+    return result.map(v => v.trim());
+}
+
+function parseFullCSV(csvText) {
+    // ✅ Multi-line cell support: Google Sheets wraps cells with 
+ inside in quotes
+    const rows = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < csvText.length; i++) {
+        const char = csvText[i];
+        if (char === '"') {
+            if (inQuotes && csvText[i + 1] === '"') {
+                current += '"';
+                i++;
+            } else {
+                inQuotes = !inQuotes;
+            }
+        } else if ((char === '\n' || (char === '\r' && csvText[i+1] === '\n')) && !inQuotes) {
+            if (char === '\r') i++; // skip \n after \r
+            rows.push(parseCSVLine(current));
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    if (current.trim()) rows.push(parseCSVLine(current));
+    return rows;
 }
 
 async function loadProducts() {
@@ -65,24 +100,24 @@ async function loadProducts() {
         if (!response.ok) throw new Error(`Google Sheet Fetch Error! status: ${response.status}`);
         const csvText = await response.text();
         
-        const lines = csvText.split(/\r?\n/);
-        if (lines.length === 0) return;
+        // ✅ parseFullCSV: multi-line description cells को सही parse करेगा
+        const allRows = parseFullCSV(csvText);
+        if (allRows.length === 0) return;
 
-        const headers = parseCSVLine(lines[0]);
+        const headers = allRows[0];
         const productsData = [];
 
-        for (let i = 1; i < lines.length; i++) {
-            const currentLine = lines[i].trim();
-            if (!currentLine) continue;
-            
-            const rowData = parseCSVLine(currentLine);
+        for (let i = 1; i < allRows.length; i++) {
+            const rowData = allRows[i];
+            if (!rowData || rowData.every(cell => cell.trim() === '')) continue;
             const product = {};
             
             headers.forEach((header, index) => {
                 product[header] = rowData[index] || '';
             });
             
-            if (product.id) {
+            // ✅ सिर्फ वो products लो जिनका name और image दोनों हों
+            if (product.id && product.name && product.name.trim() !== '' && product.image && product.image.trim() !== '') {
                 product.id = parseInt(product.id);
                 
                 // मजबूत मीडिया गैलरी एरे सिंकर
