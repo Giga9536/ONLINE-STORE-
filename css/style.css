@@ -80,36 +80,17 @@ body {
 }
 .nav-link:hover, .nav-link.active { color: #ffb74d; }
 
-.details-page-cart {
-    background-color: #e67e22;
-    color: #fff !important;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 0.6rem 1.4rem;
-    border-radius: 30px;
-    box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.95rem;
-}
-
-.cart-count {
-    background-color: #fff;
-    color: #e67e22;
-    padding: 0.1rem 0.5rem;
-    border-radius: 50%;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
-
 /* ==========================================================================
-   ⚙️ UI Elements & Layout
+   ⚙️ Products Grid & Layout (फिक्स्ड)
    ========================================================================== */
 .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-.header { text-align: center; margin-bottom: 2.5rem; background: rgba(255, 255, 255, 0.85); padding: 1.8rem 1rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-.welcome-title { font-size: 1.6rem; color: #2c3e50; font-weight: 600; margin-bottom: 0.3rem; }
-.welcome-subtitle { font-size: 0.95rem; color: #7f8c8d; }
+
+/* JavaScript में 'product-list' आईडी का उपयोग हो रहा है, इसलिए इसे यहाँ जोड़ना ज़रूरी है */
+#product-list, #product-container { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 20px; 
+}
 
 .product-card { background-color: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); transition: transform 0.3s ease; }
 .product-card:hover { transform: translateY(-6px); }
@@ -132,4 +113,5 @@ body {
     .hamburger { display: flex; }
     .nav-menu { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background-color: #2c3e50; padding: 1rem; gap: 1rem; }
     .menu-toggle:checked ~ .nav-right-section .nav-menu { display: flex; }
+    #product-list { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
 }
