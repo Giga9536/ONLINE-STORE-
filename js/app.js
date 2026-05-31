@@ -171,35 +171,42 @@ function triggerProductDetailsRender() {
 
     let mediaHtml = '';
     if (product.media && product.media.length > 1) {
-        let mainMediaHtml = `<div id="main-media-box" style="width:100%; max-height:400px; display:flex; justify-content:center;">
-                                <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain;">
-                             </div>`;
-        
-        let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; overflow-x: auto; padding-bottom: 5px; justify-content: center; align-items:center;">';
-        
+        // स्लाइडर: सभी media items को slides में convert करो
+        let slidesHtml = '';
         product.media.forEach((med, idx) => {
             let pathStr = String(med.url).toLowerCase();
-            // ✅ एडवांस डीप-मैचिंग रूल: टाइप या स्ट्रिंग के आधार पर वीडियो थंबनेल को 100% सटीक रेंडर करना
-            if (med.type === 'video' || pathStr.includes('.mp4') || pathStr.includes('video')) {
-                thumbnailsHtml += `
-                    <div style="width: 60px; height: 75px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
-                         onclick="document.getElementById('main-media-box').innerHTML='<video src=\\'${med.url}\\' controls autoplay style=\\'width:100%; max-height:400px; object-fit:contain;\\'></video>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';">
-                         ▶️
-                    </div>`;
-            } else {
-                thumbnailsHtml += `
-                    <img src="${med.url}" 
-                         alt="thumb-${idx}" 
-                         style="width: 60px; height: 75px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff;"
-                         onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url}\\' style=\\'width:100%; max-height:400px; object-fit:contain\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
-                         onerror="this.src='images/Gemini.jpg';"
-                    >`;
-            }
+            let isVideo = med.type === 'video' || pathStr.includes('.mp4') || pathStr.includes('video');
+            let mediaContent = isVideo
+                ? `<video src="${med.url}" controls style="width:100%; max-height:420px; object-fit:contain; display:block; border-radius:8px;"></video>`
+                : `<img src="${med.url}" alt="slide-${idx}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:420px; object-fit:contain; display:block; border-radius:8px;">`;
+
+            slidesHtml += `<div class="gallery-slide" id="slide-${idx}" style="display:${idx === 0 ? 'block' : 'none'};">${mediaContent}</div>`;
         });
-        thumbnailsHtml += '</div>';
-        mediaHtml = mainMediaHtml + thumbnailsHtml;
+
+        // Dot indicators बनाओ
+        let dotsHtml = '<div class="gallery-dots" id="gallery-dots">';
+        product.media.forEach((med, idx) => {
+            let pathStr = String(med.url).toLowerCase();
+            let isVideo = med.type === 'video' || pathStr.includes('.mp4') || pathStr.includes('video');
+            let icon = isVideo ? '▶' : '';
+            dotsHtml += `<span class="gallery-dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx}, ${product.media.length})">${icon}</span>`;
+        });
+        dotsHtml += '</div>';
+
+        // Arrow buttons
+        let arrowsHtml = `
+            <button class="gallery-arrow left-arrow" onclick="slideGallery(-1, ${product.media.length})">&#8249;</button>
+            <button class="gallery-arrow right-arrow" onclick="slideGallery(1, ${product.media.length})">&#8250;</button>
+        `;
+
+        mediaHtml = `<div class="gallery-wrapper" id="gallery-wrapper">
+            ${slidesHtml}
+            ${arrowsHtml}
+            ${dotsHtml}
+        </div>`;
+
     } else {
-        mediaHtml = `<img src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain; border-radius: 8px;">`;
+        mediaHtml = `<img src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:420px; object-fit:contain; border-radius: 8px;">`;
     }
 
     let purePrice = typeof product.price === 'string' ? parseFloat(product.price.replace(/[^\d.]/g, '')) : parseFloat(product.price);
@@ -550,3 +557,33 @@ function updateCartCount() {
 function saveCartToStorage() { localStorage.setItem('cart', JSON.stringify(cart)); }
 function loadCartFromStorage() { const savedCart = localStorage.getItem('cart'); if (savedCart) cart = JSON.parse(savedCart); }
 function loadOrdersFromStorage() { const savedOrders = localStorage.getItem('orders'); if (savedOrders) orderHistory = JSON.parse(savedOrders); }
+
+// =============================================
+// Gallery Slider Functions (Dot Navigation)
+// =============================================
+let currentSlideIndex = 0;
+
+function goToSlide(index, total) {
+    // पुराना slide छुपाओ
+    const oldSlide = document.getElementById('slide-' + currentSlideIndex);
+    if (oldSlide) oldSlide.style.display = 'none';
+
+    // पुराना dot deactivate करो
+    const oldDot = document.querySelectorAll('.gallery-dot')[currentSlideIndex];
+    if (oldDot) oldDot.classList.remove('active');
+
+    // नया index set करो
+    currentSlideIndex = (index + total) % total;
+
+    // नया slide दिखाओ
+    const newSlide = document.getElementById('slide-' + currentSlideIndex);
+    if (newSlide) newSlide.style.display = 'block';
+
+    // नया dot activate करो
+    const newDot = document.querySelectorAll('.gallery-dot')[currentSlideIndex];
+    if (newDot) newDot.classList.add('active');
+}
+
+function slideGallery(direction, total) {
+    goToSlide(currentSlideIndex + direction, total);
+}
