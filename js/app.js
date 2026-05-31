@@ -37,7 +37,6 @@ function checkPincodeService(pin) {
 
 // सुरक्षित तरीके से CSV की एक लाइन को एरे में बदलने का यूनिवर्सल फंक्शन
 function parseCSVLine(line) {
-    // ✅ Improved: handles "" escaped quotes inside quoted fields
     const result = [];
     let current = '';
     let inQuotes = false;
@@ -46,48 +45,48 @@ function parseCSVLine(line) {
         const char = line[i];
         if (char === '"') {
             if (inQuotes && line[i + 1] === '"') {
-                // "" inside quotes = escaped double-quote character
-                current += '"';
+                current += '"'; // "" = escaped quote
                 i++;
             } else {
                 inQuotes = !inQuotes;
             }
         } else if (char === ',' && !inQuotes) {
-            result.push(current);
+            result.push(current.trim());
             current = '';
         } else {
             current += char;
         }
     }
-    result.push(current);
-    return result.map(v => v.trim());
+    result.push(current.trim());
+    return result;
 }
 
 function parseFullCSV(csvText) {
-    // ✅ Multi-line cell support: Google Sheets wraps cells with 
- inside in quotes
+    // Handles multi-line cells: quoted fields with \n inside
     const rows = [];
-    let current = '';
+    let currentRow = '';
     let inQuotes = false;
 
     for (let i = 0; i < csvText.length; i++) {
         const char = csvText[i];
+
         if (char === '"') {
             if (inQuotes && csvText[i + 1] === '"') {
-                current += '"';
+                currentRow += '""'; // keep escaped quote for parseCSVLine
                 i++;
             } else {
                 inQuotes = !inQuotes;
+                currentRow += char; // keep quote char
             }
-        } else if ((char === '\n' || (char === '\r' && csvText[i+1] === '\n')) && !inQuotes) {
-            if (char === '\r') i++; // skip \n after \r
-            rows.push(parseCSVLine(current));
-            current = '';
+        } else if ((char === '\r' || char === '\n') && !inQuotes) {
+            if (char === '\r' && csvText[i + 1] === '\n') i++;
+            if (currentRow.trim()) rows.push(parseCSVLine(currentRow));
+            currentRow = '';
         } else {
-            current += char;
+            currentRow += char;
         }
     }
-    if (current.trim()) rows.push(parseCSVLine(current));
+    if (currentRow.trim()) rows.push(parseCSVLine(currentRow));
     return rows;
 }
 
