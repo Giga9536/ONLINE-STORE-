@@ -236,7 +236,7 @@ function triggerProductDetailsRender() {
     });
 
     detailContainer.innerHTML = `
-        <div style="grid-column: span 2; text-align: right; margin-bottom: 1rem;">
+        <div style="text-align: right; margin-bottom: 1rem;">
             <a href="cart.html" class="details-page-cart">
                 🛒 View Cart <span id="details-cart-count" class="cart-count">${totalCartItems}</span>
             </a>
@@ -276,12 +276,12 @@ function triggerProductDetailsRender() {
             </div>
         </div>
 
-        <div class="bestseller-section" style="grid-column: span 2;">
+        <div class="bestseller-section" style="width: 100%;">
             <h3 class="bestseller-title">🔥 Our Best Sellers</h3>
             <div class="bestseller-slider">${bestsellerCardsHtml}</div>
         </div>
 
-        <div class="reviews-section" style="grid-column: span 2;">
+        <div class="reviews-section" style="width: 100%;">
             <h3 class="bestseller-title" style="border-left-color: #27ae60;">🌟 Customer Reviews (Feedback)</h3>
             
             <div class="review-box">
