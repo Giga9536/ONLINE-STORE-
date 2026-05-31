@@ -58,6 +58,7 @@ function parseCSVLine(line) {
 
 async function loadProducts() {
     try {
+        // आपकी लाइव गूगल शीट आईडी बिल्कुल सही अक्षरों में यहाँ फिक्स है
         const sheetId = '1dAUsZm2emo96kRbFH6exyMHyK5HPVy9mHaqhY49c0nM';
         const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
 
@@ -79,25 +80,33 @@ async function loadProducts() {
             const product = {};
             
             headers.forEach((header, index) => {
-                product[header] = rowData[index] || '';
+                let cleanKey = header.trim();
+                product[cleanKey] = rowData[index] ? rowData[index].trim() : '';
             });
             
-            if (product.id) {
-                product.id = parseInt(product.id);
+            let pId = product.id || product.ID || '';
+            let pName = product.name || product.Name || '';
+
+            if (pId && pName && pName.trim() !== '') {
+                product.id = parseInt(pId);
+                product.name = pName;
                 
-                // मजबूत मीडिया गैलरी एरे सिंकर
+                // मीडिया गैलरी एरे सिंकर - सभी स्पेलिंग्स पूरी तरह शुद्ध हैं
                 product.media = [];
-                if (product.image) product.media.push({ "type": "image", "url": product.image });
-                if (product.image2) product.media.push({ "type": "image", "url": product.image2 });
-                
-                let img3Val = product.image3 || product.mage3 || '';
-                if (img3Val) product.media.push({ "type": "image", "url": img3Val });
-                
-                if (product.image4) product.media.push({ "type": "image", "url": product.image4 });
-                
-                // वीडियो डेटा को साफ़ करके स्पेशल 'video' टैग असाइन करना
-                if (product.video) {
-                    product.media.push({ "type": "video", "url": product.video.trim() });
+                if (product.image) {
+                    product.media.push({ "type": "image", "url": product.image });
+                }
+                if (product.image2) {
+                    product.media.push({ "type": "image", "url": product.image2 });
+                }
+                if (product.image3) {
+                    product.media.push({ "type": "image", "url": product.image3 });
+                }
+                if (product.image4) {
+                    product.media.push({ "type": "image", "url": product.image4 });
+                }
+                if (product.video && product.video !== '') {
+                    product.media.push({ "type": "video", "url": product.video });
                 }
                 
                 productsData.push(product);
@@ -106,8 +115,8 @@ async function loadProducts() {
 
         window.allProductsList = productsData;
 
-        // होमपेज ग्रिड रेंडरर
-        const productContainer = document.getElementById('product-list');
+        // होमपेज का डबल आईडी सपोर्ट रेंडरर
+        const productContainer = document.getElementById('product-list') || document.getElementById('product-container');
         if (productContainer) {
             productContainer.innerHTML = '';
             productsData.forEach(product => {
@@ -147,6 +156,11 @@ async function loadProducts() {
                 `;
                 productContainer.innerHTML += productCard;
             });
+            
+            const loadingTextEl = document.querySelector('.container p') || document.querySelector('#product-container p');
+            if (loadingTextEl && (loadingTextEl.textContent.includes('Loading') || loadingTextEl.textContent.includes('loading'))) {
+                loadingTextEl.style.display = 'none';
+            }
         }
     } catch (error) {
         console.error("Error loading products layout from Google Sheets:", error);
@@ -170,27 +184,28 @@ function triggerProductDetailsRender() {
     if (!detailContainer || !product) return;
 
     let mediaHtml = '';
-    if (product.media && product.media.length > 1) {
+    if (product.media && product.media.length > 0) {
         let mainMediaHtml = `<div id="main-media-box" style="width:100%; max-height:400px; display:flex; justify-content:center;">
-                                <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain;">
+                                <img id="main-detail-img" src="${product.image}" alt="${product.name}" onerror="this.src='images/Gemini.jpg';" style="width:100%; max-height:400px; object-fit:contain; border-radius:8px;">
                              </div>`;
         
-        let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 0.5rem; margin-top: 1rem; overflow-x: auto; padding-bottom: 5px; justify-content: center; align-items:center;">';
+        // स्वाइपेबल मोबाइल थंबनेल स्लाइडर कंटेनर (5वीं स्लाइड को सुरक्षित रखने के लिए)
+        let thumbnailsHtml = '<div class="thumbnail-slider-container" style="display: flex; gap: 8px; margin-top: 1rem; overflow-x: auto; white-space: nowrap; padding: 5px; justify-content: flex-start; align-items: center; max-width: 100%; width: 100%; -webkit-overflow-scrolling: touch;">';
         
         product.media.forEach((med, idx) => {
             let pathStr = String(med.url).toLowerCase();
             if (med.type === 'video' || pathStr.includes('.mp4') || pathStr.includes('video')) {
                 thumbnailsHtml += `
-                    <div style="width: 60px; height: 75px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white;"
-                         onclick="document.getElementById('main-media-box').innerHTML='<video src=\\'${med.url}\\' controls autoplay style=\\'width:100%; max-height:400px; object-fit:contain;\\'></video>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';">
+                    <div style="width: 60px; height: 75px; min-width: 60px; max-width: 60px; border: 2px solid #ddd; border-radius: 4px; cursor: pointer; background: #2c3e50; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:white; flex-shrink: 0;"
+                         onclick="document.getElementById('main-media-box').innerHTML='<video src=\\'${med.url}\\' controls autoplay style=\\'width:100%; max-height:400px; object-fit:contain; border-radius:8px;\\'></video>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';">
                          ▶️
                     </div>`;
             } else {
                 thumbnailsHtml += `
                     <img src="${med.url}" 
                          alt="thumb-${idx}" 
-                         style="width: 60px; height: 75px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff;"
-                         onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url}\\' style=\\'width:100%; max-height:400px; object-fit:contain\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
+                         style="width: 60px; height: 75px; min-width: 60px; max-width: 60px; object-fit: cover; border: 2px solid ${idx === 0 ? '#3498db' : '#ddd'}; border-radius: 4px; cursor: pointer; background: #fff; flex-shrink: 0;"
+                         onclick="document.getElementById('main-media-box').innerHTML='<img id=\\'main-detail-img\\' src=\\'${med.url}\\' style=\\'width:100%; max-height:400px; object-fit:contain; border-radius:8px;\\'>'; this.parentElement.querySelectorAll('div, img').forEach(i=>i.style.borderColor='#ddd'); this.style.borderColor='#3498db';"
                          onerror="this.src='images/Gemini.jpg';"
                     >`;
             }
