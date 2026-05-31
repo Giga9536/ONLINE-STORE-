@@ -193,15 +193,11 @@ function triggerProductDetailsRender() {
         });
         dotsHtml += '</div>';
 
-        // Arrow buttons
-        let arrowsHtml = `
-            <button class="gallery-arrow left-arrow" onclick="slideGallery(-1, ${product.media.length})">&#8249;</button>
-            <button class="gallery-arrow right-arrow" onclick="slideGallery(1, ${product.media.length})">&#8250;</button>
-        `;
-
-        mediaHtml = `<div class="gallery-wrapper" id="gallery-wrapper">
+        mediaHtml = `<div class="gallery-wrapper" id="gallery-wrapper" 
+            data-total="${product.media.length}"
+            ontouchstart="handleTouchStart(event)"
+            ontouchend="handleTouchEnd(event)">
             ${slidesHtml}
-            ${arrowsHtml}
             ${dotsHtml}
         </div>`;
 
@@ -328,7 +324,23 @@ function triggerProductDetailsRender() {
                 <button id="view-more-reviews-btn" class="view-more-btn" onclick="toggleReviewsSlider()">View More Reviews 🔽</button>
             </div>
         </div>
+
+        <!-- Sticky Bottom Bar -->
+        <div class="sticky-bottom-bar" id="sticky-bar">
+            <button class="sticky-add-btn" onclick="addToCart(${product.id})">
+                🛒 Add to Cart
+            </button>
+            <button class="sticky-whatsapp-btn" onclick="buyDirectOnWhatsApp(${product.id})">
+                💬 Buy on WhatsApp
+            </button>
+        </div>
     `;
+
+    // Sticky bar को body में move करो ताकि सही fixed position मिले
+    const stickyBar = document.getElementById('sticky-bar');
+    if (stickyBar) {
+        document.body.appendChild(stickyBar);
+    }
 }
 
 function displayCart() {
@@ -559,31 +571,43 @@ function loadCartFromStorage() { const savedCart = localStorage.getItem('cart');
 function loadOrdersFromStorage() { const savedOrders = localStorage.getItem('orders'); if (savedOrders) orderHistory = JSON.parse(savedOrders); }
 
 // =============================================
-// Gallery Slider Functions (Dot Navigation)
+// Gallery Slider Functions (Touch + Dot Navigation)
 // =============================================
 let currentSlideIndex = 0;
+let touchStartX = 0;
+let touchEndX = 0;
 
 function goToSlide(index, total) {
-    // पुराना slide छुपाओ
     const oldSlide = document.getElementById('slide-' + currentSlideIndex);
     if (oldSlide) oldSlide.style.display = 'none';
 
-    // पुराना dot deactivate करो
     const oldDot = document.querySelectorAll('.gallery-dot')[currentSlideIndex];
     if (oldDot) oldDot.classList.remove('active');
 
-    // नया index set करो
     currentSlideIndex = (index + total) % total;
 
-    // नया slide दिखाओ
     const newSlide = document.getElementById('slide-' + currentSlideIndex);
     if (newSlide) newSlide.style.display = 'block';
 
-    // नया dot activate करो
     const newDot = document.querySelectorAll('.gallery-dot')[currentSlideIndex];
     if (newDot) newDot.classList.add('active');
 }
 
-function slideGallery(direction, total) {
-    goToSlide(currentSlideIndex + direction, total);
+function handleTouchStart(e) {
+    touchStartX = e.changedTouches[0].screenX;
+}
+
+function handleTouchEnd(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    const wrapper = e.currentTarget;
+    const total = parseInt(wrapper.getAttribute('data-total')) || 1;
+
+    if (Math.abs(diff) > 40) {          // कम से कम 40px swipe होनी चाहिए
+        if (diff > 0) {
+            goToSlide(currentSlideIndex + 1, total);  // left swipe → next
+        } else {
+            goToSlide(currentSlideIndex - 1, total);  // right swipe → prev
+        }
+    }
 }
